@@ -330,15 +330,17 @@ def demo_command():
     
     if result.data_points:
         table = Table(title="📊 Decoded Sample Data")
-        table.add_column("Parameter", style="cyan")
+        table.add_column("Symbol", style="cyan")
+        table.add_column("Name", style="green")
         table.add_column("Value", style="yellow")
         table.add_column("Unit", style="blue")
         table.add_column("Description", style="dim")
         
         for dp in result.data_points:
             table.add_row(
+                dp.symbol_code,
                 dp.symbol_name,
-                str(dp.parsed_value),
+                str(dp.raw_value), 
                 dp.unit,
                 dp.symbol_description
             )

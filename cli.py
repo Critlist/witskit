@@ -386,7 +386,6 @@ def _show_available_units():
     rprint("[dim]💡 Example: witskit convert 2500 PSI KPA --precision 2")
 
 
-# Add the rest of the commands from original cli.py (symbols, validate, demo)
 @app.command("symbols")
 def symbols_command(
     search: Optional[str] = typer.Option(None, "--search", "-s", help="Search symbols by name or description"),
@@ -602,4 +601,4 @@ def demo_command():
 
 
 if __name__ == "__main__":
-    app() 
+    app()

@@ -158,6 +158,7 @@ class TestUnitConverter:
         """Test getting conversion factors."""
         # Should return known factors
         factor = UnitConverter.get_conversion_factor(WITSUnits.KPA, WITSUnits.PSI)
+        assert factor is not None
         assert abs(factor - 0.145038) < 0.000001
         
         # Should return 1.0 for same unit

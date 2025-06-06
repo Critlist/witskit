@@ -7,7 +7,7 @@ and decoded drilling data with full type safety and validation.
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 from .symbols import WITSSymbol
 
@@ -86,14 +86,10 @@ class DecodedData(BaseModel):
     timestamp: datetime = Field(..., description="Data timestamp")
     source: Optional[str] = Field(None, description="Data source identifier")
     
-    class Config:
-        # Allow WITSSymbol model to be used as a field type
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     
-    def __init__(self, **data):
-        """Initialize and parse the value according to symbol data type."""
-        super().__init__(**data)
-        # Parse the value after initialization when all fields are available
+    def model_post_init(self, __context):
+        """Parse the value after model initialization when all fields are available."""
         if self.raw_value and self.raw_value.strip():
             try:
                 if self.symbol.data_type.value == 'A':  # ASCII
@@ -135,8 +131,7 @@ class DecodedFrame(BaseModel):
     data_points: List[DecodedData] = Field(default_factory=list, description="Decoded data points")
     errors: List[str] = Field(default_factory=list, description="Parsing errors")
     
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     
     @property
     def timestamp(self) -> datetime:

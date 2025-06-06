@@ -1,6 +1,6 @@
 # 🛠️ WitsKit
 
-**WitsKit** is a Python toolkit for decoding and working with WITS (Wellsite Information Transfer Standard) data. If you've ever been stuck cleaning up toolface logs at 3AM in a rattling trailer, this one's for you.
+**WitsKit** is a Python toolkit for decoding and working with WITS (Wellsite Information Transfer Standard) data.
 
 ---
 

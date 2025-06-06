@@ -15,7 +15,7 @@
 
 - 🧠 You get the *full* WITS symbol database, not someone's half-finished Excel copy
 - 🔍 CLI lets you find, filter, and explore symbols without opening the spec (again)
-- 📏 Works in both metric and FPS—because we don't all live in the same unit system
+- 📏 Works in both metric and FPS—because a boat sank and now we have 2 standards
 - 🧱 Modular and testable, built with real-world telemetry in mind
 - 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
 

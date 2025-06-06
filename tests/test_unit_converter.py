@@ -11,15 +11,15 @@ Tests all drilling industry unit conversions including:
 """
 
 import pytest
-from models.unit_converter import UnitConverter, ConversionError
-from models.unit_converter import (
+from witskit.models.unit_converter import UnitConverter, ConversionError
+from witskit.models.unit_converter import (
     convert_drilling_rate,
     convert_pressure, 
     convert_flow_rate,
     convert_mud_density,
     convert_temperature
 )
-from models.symbols import WITSUnits
+from witskit.models.symbols import WITSUnits
 
 
 class TestUnitConverter:

@@ -2,18 +2,14 @@
 Tests for WITS decoder functionality.
 """
 
-from typing import Dict
+from typing import Dict, Literal, Any
 import pytest
 from datetime import datetime
 
-# Import our modules with relative imports since we're in tests
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from models.symbols import WITSSymbol, WITSDataType, WITSUnits, get_symbol_by_code
-from models.wits_frame import WITSFrame, DecodedData, DecodedFrame
-from decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame
+# Import our modules with proper package imports
+from witskit.models.symbols import WITSSymbol, WITSDataType, WITSUnits, get_symbol_by_code
+from witskit.models.wits_frame import WITSFrame, DecodedData, DecodedFrame
+from witskit.decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame
 
 
 class TestWITSFrame:

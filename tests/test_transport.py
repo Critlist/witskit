@@ -8,10 +8,10 @@ from io import StringIO
 import socket
 from typing import Generator, NoReturn, Optional
 
-from transport.base import BaseTransport
-from transport.tcp_reader import TCPReader
-from transport.serial_reader import SerialReader
-from transport.file_reader import FileReader
+from witskit.transport.base import BaseTransport
+from witskit.transport.tcp_reader import TCPReader
+from witskit.transport.serial_reader import SerialReader
+from witskit.transport.file_reader import FileReader
 
 
 class MockTransport(BaseTransport):

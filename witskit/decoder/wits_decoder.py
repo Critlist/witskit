@@ -9,20 +9,14 @@ from datetime import datetime
 from typing import List, Literal, Optional, Tuple, Union
 from loguru import logger
 
-from models.symbols import WITSSymbol
-from models.wits_frame import DecodedData, DecodedFrame
-
 try:
     # Try relative imports first (when used as package)
     from ..models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
     from ..models.symbols import get_symbol_by_code, WITS_SYMBOLS
 except ImportError:
-    # Fall back to direct imports (when running tests)
-    import sys
-    import os
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from models.wits_frame import WITSFrame, DecodedData, DecodedFrame
-    from models.symbols import WITSSymbol, get_symbol_by_code, WITS_SYMBOLS
+    # Fall back to absolute imports (when running tests)
+    from witskit.models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
+    from witskit.models.symbols import get_symbol_by_code, WITS_SYMBOLS
 
 
 class WITSDecoder:

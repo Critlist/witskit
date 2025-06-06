@@ -13,28 +13,28 @@ from rich import print as rprint
 import json
 from datetime import datetime
 
-from models.symbols import WITSSymbol, WITSUnits
-from models.wits_frame import DecodedFrame
+from .models.symbols import WITSSymbol, WITSUnits
+from .models.wits_frame import DecodedFrame
 
 try:
-    from decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
-    from models.symbols import WITS_SYMBOLS
-    from models.unit_converter import UnitConverter, ConversionError
-    from models.symbols import WITSUnits
-    from transport.tcp_reader import TCPReader
-    from transport.serial_reader import SerialReader
-    from transport.file_reader import FileReader
+    from .decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
+    from .models.symbols import WITS_SYMBOLS
+    from .models.unit_converter import UnitConverter, ConversionError
+    from .models.symbols import WITSUnits
+    from .transport.tcp_reader import TCPReader
+    from .transport.serial_reader import SerialReader
+    from .transport.file_reader import FileReader
 except ImportError:
     import sys
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
-    from models.symbols import WITS_SYMBOLS
-    from models.unit_converter import UnitConverter, ConversionError
-    from models.symbols import WITSUnits
-    from transport.tcp_reader import TCPReader
-    from transport.serial_reader import SerialReader
-    from transport.file_reader import FileReader
+    from .decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
+    from .models.symbols import WITS_SYMBOLS
+    from .models.unit_converter import UnitConverter, ConversionError
+    from .models.symbols import WITSUnits
+    from .transport.tcp_reader import TCPReader
+    from .transport.serial_reader import SerialReader
+    from .transport.file_reader import FileReader
 
 app = typer.Typer(
     name="witskit",
@@ -400,14 +400,14 @@ def symbols_command(
     search: Optional[str] = typer.Option(None, "--search", "-s", help="Search symbols by name or description"),
     record_type: Optional[int] = typer.Option(None, "--record", "-r", help="Filter by record type"),
     list_records: bool = typer.Option(False, "--list-records", "-l", help="List all available record types")
-):
+) -> None:
     """
     List available WITS symbols with their definitions.
     
     This command provides access to the complete WITS specification with 742+ symbols
     across 20+ record types including drilling, logging, and completion data.
     """
-    from models.symbols import get_record_types, get_symbols_by_record_type, search_symbols, get_record_description
+    from .models.symbols import get_record_types, get_symbols_by_record_type, search_symbols, get_record_description
     
     if list_records:
         # Show all record types
@@ -454,31 +454,33 @@ def symbols_command(
         return
     
     # Filter symbols
-    if search and record_type:
-        # Search within specific record type
-        record_symbols: Dict[str, WITSSymbol] = get_symbols_by_record_type(record_type)
-        search_lower: str = search.lower()
-        symbols_to_show = {
-            code: symbol for code, symbol in record_symbols.items()
-            if (search_lower in symbol.name.lower() or 
-                search_lower in symbol.description.lower() or
-                search_lower in code)
-        }
-        title: str = f"Record {record_type} Symbols matching '{search}'"
-    elif search:
-        symbols_to_show = search_symbols(search)
-        title = f"All Symbols matching '{search}'"
+    if search:
+        # First search across all symbols
+        symbols_to_show: Dict[str, WITSSymbol] = search_symbols(search)
+        
+        # If record_type is specified, filter further by record type
+        if record_type:
+            symbols_to_show = {
+                code: symbol for code, symbol in symbols_to_show.items()
+                if symbol.record_type == record_type
+            }
+            title = f"Record {record_type} Symbols matching '{search}'"
+        else:
+            title: str = f"All Symbols matching '{search}'"
     elif record_type:
         symbols_to_show = get_symbols_by_record_type(record_type)
         title = f"Record {record_type}: {get_record_description(record_type)}"
     else:
-        symbols_to_show: dict[str, WITSSymbol] = WITS_SYMBOLS
+        symbols_to_show = WITS_SYMBOLS
         title = "All WITS Symbols"
     
     if not symbols_to_show:
         rprint("[yellow]⚠️ No symbols found matching criteria")
-        rprint("[dim]Try using --list-records to see available record types")
+        if search:
+            rprint("[dim]Try a different search term or use broader keywords")
+        rprint("[dim]Use --list-records to see available record types")
         return
+    
     
     # Create table
     table = Table(title=f"📊 {title} ({len(symbols_to_show)} found)")
@@ -541,7 +543,7 @@ def validate_command(
         frame_data: str = data.replace('\\n', '\n')
     
     try:
-        from decoder.wits_decoder import validate_wits_frame
+        from .decoder.wits_decoder import validate_wits_frame
         
         is_valid = validate_wits_frame(frame_data)
         if is_valid:

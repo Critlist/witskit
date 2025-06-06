@@ -192,3 +192,21 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# WITS Data Files and Outputs
+#  Real-world WITS communication data files (may contain sensitive drilling data)
+inboundPolarisWITS.txt
+outboundEMwits.txt
+*PolarisWITS.txt
+*EMwits.txt
+*.json
+*.bak
+# WITS Analysis Output Files
+#  Generated analysis results and reports
+real_wits_analysis_*.json
+enhanced_wits_analysis_*.json
+*_analysis_*.json
+
+# Test Output Files
+test_real_wits.py
+*_SUMMARY.md

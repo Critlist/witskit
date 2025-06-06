@@ -11,15 +11,16 @@ from rich.console import Console
 from rich.table import Table
 from rich import print as rprint
 import json
+from datetime import datetime
 
 try:
-    from decoder.wits_decoder import WITSDecoder, decode_frame
+    from decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
     from models.symbols import WITS_SYMBOLS
 except ImportError:
     import sys
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from decoder.wits_decoder import WITSDecoder, decode_frame
+    from decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
     from models.symbols import WITS_SYMBOLS
 
 app = typer.Typer(
@@ -64,16 +65,62 @@ def decode_command(
         source = "cli_input"
     
     try:
-        # Decode the frame
-        result = decode_frame(
-            frame_data, 
-            use_metric_units=metric, 
-            strict_mode=strict, 
-            source=source
-        )
+        # Check if file contains multiple frames
+        frames = split_multiple_frames(frame_data)
+        
+        if len(frames) > 1:
+            # Multiple frames - use decode_file
+            results = decode_file(
+                frame_data, 
+                use_metric_units=metric, 
+                strict_mode=strict, 
+                source=source
+            )
+            # Combine all data points for display
+            all_data_points = []
+            all_errors = []
+            for result in results:
+                all_data_points.extend(result.data_points)
+                all_errors.extend(result.errors)
+            
+            # Create a combined result object for display
+            class CombinedResult:
+                def __init__(self, data_points, errors, source):
+                    self.data_points = data_points
+                    self.errors = errors
+                    self.source = source
+                    self.timestamp = datetime.now()
+                
+                def to_dict(self):
+                    return {
+                        'timestamp': self.timestamp.isoformat(),
+                        'source': self.source,
+                        'frames': len(results),
+                        'data': {
+                            dp.symbol_code: {
+                                'name': dp.symbol_name,
+                                'description': dp.symbol_description,
+                                'value': dp.parsed_value,
+                                'raw_value': dp.raw_value,
+                                'unit': dp.unit
+                            }
+                            for dp in self.data_points
+                        },
+                        'errors': self.errors
+                    }
+            
+            result = CombinedResult(all_data_points, all_errors, source)
+        else:
+            # Single frame - use existing logic
+            result = decode_frame(
+                frame_data, 
+                use_metric_units=metric, 
+                strict_mode=strict, 
+                source=source
+            )
         
         # Output results
-        if format == "json":
+        if format == "json" or output:
             output_data = result.to_dict()
             if output:
                 with open(output, 'w') as f:

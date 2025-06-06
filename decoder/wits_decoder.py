@@ -228,3 +228,77 @@ def get_available_symbols() -> dict[str, WITSSymbol]:
         Dictionary mapping symbol codes to WITSSymbol objects
     """
     return WITS_SYMBOLS.copy()
+
+
+def split_multiple_frames(data: str) -> List[str]:
+    """
+    Split a string containing multiple WITS frames into individual frames.
+    
+    Args:
+        data: Raw string potentially containing multiple WITS frames
+        
+    Returns:
+        List of individual WITS frame strings
+    """
+    frames = []
+    lines = data.strip().split('\n')
+    current_frame = []
+    
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+            
+        if line.startswith('&&'):
+            # Start of new frame
+            if current_frame:  # Save previous frame if exists
+                frames.append('\n'.join(current_frame))
+            current_frame = [line]
+        elif line.startswith('!!'):
+            # End of current frame
+            current_frame.append(line)
+            frames.append('\n'.join(current_frame))
+            current_frame = []
+        elif current_frame:  # Data line within a frame
+            current_frame.append(line)
+    
+    # Handle case where last frame doesn't end with !!
+    if current_frame and current_frame[0].startswith('&&'):
+        frames.append('\n'.join(current_frame))
+    
+    return frames
+
+
+def decode_file(file_data: str, 
+                use_metric_units: bool = True, 
+                strict_mode: bool = False,
+                source: Optional[str] = None) -> List[DecodedFrame]:
+    """
+    Decode a file containing one or more WITS frames.
+    
+    Args:
+        file_data: Raw file content
+        use_metric_units: If True, use metric units, otherwise use FPS units
+        strict_mode: If True, raise errors for unknown symbols
+        source: Optional source identifier
+        
+    Returns:
+        List of DecodedFrame objects
+    """
+    decoder = WITSDecoder(use_metric_units=use_metric_units, strict_mode=strict_mode)
+    frames = split_multiple_frames(file_data)
+    
+    if not frames:
+        raise ValueError("No valid WITS frames found in data")
+    
+    results = []
+    for i, frame_data in enumerate(frames):
+        try:
+            decoded = decoder.decode_frame(frame_data, source or f"frame_{i+1}")
+            results.append(decoded)
+        except Exception as e:
+            logger.error(f"Failed to decode frame {i+1}: {str(e)}")
+            if strict_mode:
+                raise
+    
+    return results

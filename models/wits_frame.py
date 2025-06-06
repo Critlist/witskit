@@ -46,7 +46,7 @@ class WITSFrame(BaseModel):
     @property
     def data_lines(self) -> List[str]:
         """Extract data lines (excluding start && and end !! markers)."""
-        lines = self.raw_data.strip().split('\n')
+        lines: List[str] = self.raw_data.strip().split('\n')
         return [line.strip() for line in lines[1:-1] if line.strip()]
     
     def parse_data_line(self, line: str) -> tuple[str, str]:
@@ -90,31 +90,25 @@ class DecodedData(BaseModel):
         # Allow WITSSymbol model to be used as a field type
         arbitrary_types_allowed = True
     
-    @field_validator('parsed_value', mode='before')
-    @classmethod
-    def parse_value_by_type(cls, v, info):
-        """Parse the raw value according to the symbol's data type."""
-        if 'symbol' not in values or 'raw_value' not in values:
-            return v
-            
-        symbol = values['symbol']
-        raw_value = values['raw_value']
-        
-        if not raw_value or raw_value.strip() == '':
-            return None
-            
-        try:
-            if symbol.data_type.value == 'A':  # ASCII
-                return raw_value
-            elif symbol.data_type.value == 'F':  # Float
-                return float(raw_value)
-            elif symbol.data_type.value in ['S', 'L']:  # Integer types
-                return int(float(raw_value))  # Handle decimal integers
-            else:
-                return raw_value
-        except (ValueError, TypeError):
-            # If parsing fails, keep as string
-            return raw_value
+    def __init__(self, **data):
+        """Initialize and parse the value according to symbol data type."""
+        super().__init__(**data)
+        # Parse the value after initialization when all fields are available
+        if self.raw_value and self.raw_value.strip():
+            try:
+                if self.symbol.data_type.value == 'A':  # ASCII
+                    self.parsed_value = self.raw_value
+                elif self.symbol.data_type.value == 'F':  # Float
+                    self.parsed_value = float(self.raw_value)
+                elif self.symbol.data_type.value in ['S', 'L']:  # Integer types
+                    self.parsed_value = int(float(self.raw_value))  # Handle decimal integers
+                else:
+                    self.parsed_value = self.raw_value
+            except (ValueError, TypeError):
+                # If parsing fails, keep as string
+                self.parsed_value = self.raw_value
+        else:
+            self.parsed_value = None
     
     @property
     def symbol_name(self) -> str:

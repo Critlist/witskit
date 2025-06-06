@@ -1,1 +1,230 @@
+"""
+WITS decoder for parsing raw WITS frames into structured data.
 
+This module provides the main decoder functionality for converting
+WITS ASCII frames into typed Python objects with full validation.
+"""
+
+from datetime import datetime
+from typing import List, Optional, Tuple, Union
+from loguru import logger
+
+try:
+    # Try relative imports first (when used as package)
+    from ..models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
+    from ..models.symbols import get_symbol_by_code, WITS_SYMBOLS
+except ImportError:
+    # Fall back to direct imports (when running tests)
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from models.wits_frame import WITSFrame, DecodedData, DecodedFrame
+    from models.symbols import WITSSymbol, get_symbol_by_code, WITS_SYMBOLS
+
+
+class WITSDecoder:
+    """
+    Main WITS decoder class for parsing and validating WITS data frames.
+    
+    Supports WITS Level 0 (ASCII) format with extensible symbol definitions.
+    """
+    
+    def __init__(self, use_metric_units: bool = True, strict_mode: bool = False):
+        """
+        Initialize the WITS decoder.
+        
+        Args:
+            use_metric_units: If True, use metric units, otherwise use FPS units
+            strict_mode: If True, raise errors for unknown symbols, otherwise log warnings
+        """
+        self.use_metric_units = use_metric_units
+        self.strict_mode = strict_mode
+        
+    def decode_frame(self, raw_frame: str, source: Optional[str] = None) -> DecodedFrame:
+        """
+        Decode a complete WITS frame into structured data.
+        
+        Args:
+            raw_frame: Raw WITS frame string (with && and !! markers)
+            source: Optional source identifier for the frame
+            
+        Returns:
+            DecodedFrame containing all decoded data points and any errors
+            
+        Raises:
+            ValueError: If frame format is invalid and strict_mode is True
+        """
+        try:
+            # Create and validate the WITS frame
+            wits_frame = WITSFrame(raw_data=raw_frame, source=source)
+            
+            decoded_frame = DecodedFrame(frame=wits_frame)
+            
+            # Process each data line
+            for line in wits_frame.data_lines:
+                try:
+                    data_point = self._decode_data_line(line, wits_frame.timestamp, source)
+                    if data_point:
+                        decoded_frame.data_points.append(data_point)
+                except Exception as e:
+                    error_msg = f"Error decoding line '{line}': {str(e)}"
+                    decoded_frame.errors.append(error_msg)
+                    logger.warning(error_msg)
+                    
+                    if self.strict_mode:
+                        raise ValueError(error_msg) from e
+            
+            logger.debug(f"Decoded WITS frame with {len(decoded_frame.data_points)} data points "
+                        f"and {len(decoded_frame.errors)} errors")
+            
+            return decoded_frame
+            
+        except Exception as e:
+            if self.strict_mode:
+                raise
+            # Return a frame with just the error
+            error_frame = DecodedFrame(
+                frame=WITSFrame(raw_data=raw_frame, source=source),
+                errors=[f"Frame decoding failed: {str(e)}"]
+            )
+            return error_frame
+    
+    def _decode_data_line(self, line: str, timestamp: datetime, source: Optional[str]) -> Optional[DecodedData]:
+        """
+        Decode a single WITS data line.
+        
+        Args:
+            line: Single data line from WITS frame (e.g., "01083650.40")
+            timestamp: Timestamp for the data point
+            source: Source identifier
+            
+        Returns:
+            DecodedData object or None if line couldn't be decoded
+        """
+        if not line.strip():
+            return None
+            
+        try:
+            # Parse the line into symbol code and value
+            if len(line) < 4:
+                raise ValueError(f"Line too short: {line}")
+                
+            symbol_code = line[:4]
+            raw_value = line[4:].strip()
+            
+            if not symbol_code.isdigit():
+                raise ValueError(f"Invalid symbol code: {symbol_code}")
+            
+            # Look up the symbol definition
+            symbol = get_symbol_by_code(symbol_code)
+            if not symbol:
+                if self.strict_mode:
+                    raise ValueError(f"Unknown symbol code: {symbol_code}")
+                else:
+                    logger.warning(f"Unknown symbol code: {symbol_code}, skipping")
+                    return None
+            
+            # Determine the unit to use
+            unit = symbol.metric_units.value if self.use_metric_units else symbol.fps_units.value
+            
+            # Create the decoded data point
+            decoded_data = DecodedData(
+                symbol=symbol,
+                raw_value=raw_value,
+                unit=unit,
+                timestamp=timestamp,
+                source=source
+            )
+            
+            logger.debug(f"Decoded {symbol_code} ({symbol.name}): {raw_value} -> {decoded_data.parsed_value} {unit}")
+            
+            return decoded_data
+            
+        except Exception as e:
+            logger.error(f"Failed to decode line '{line}': {str(e)}")
+            raise
+    
+    def decode_multiple_frames(self, frame_data: List[str], source: Optional[str] = None) -> List[DecodedFrame]:
+        """
+        Decode multiple WITS frames.
+        
+        Args:
+            frame_data: List of raw WITS frame strings
+            source: Optional source identifier
+            
+        Returns:
+            List of DecodedFrame objects
+        """
+        results = []
+        for i, frame in enumerate(frame_data):
+            try:
+                decoded = self.decode_frame(frame, source)
+                results.append(decoded)
+            except Exception as e:
+                logger.error(f"Failed to decode frame {i}: {str(e)}")
+                if self.strict_mode:
+                    raise
+        
+        return results
+    
+    def validate_frame_format(self, raw_frame: str) -> Tuple[bool, Optional[str]]:
+        """
+        Validate the basic format of a WITS frame without full decoding.
+        
+        Args:
+            raw_frame: Raw WITS frame string
+            
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        try:
+            WITSFrame(raw_data=raw_frame)
+            return True, None
+        except ValueError as e:
+            return False, str(e)
+
+
+# Convenience functions for direct usage
+def decode_frame(raw_frame: str, 
+                use_metric_units: bool = True, 
+                strict_mode: bool = False,
+                source: Optional[str] = None) -> DecodedFrame:
+    """
+    Convenience function to decode a single WITS frame.
+    
+    Args:
+        raw_frame: Raw WITS frame string
+        use_metric_units: If True, use metric units, otherwise use FPS units
+        strict_mode: If True, raise errors for unknown symbols
+        source: Optional source identifier
+        
+    Returns:
+        DecodedFrame containing decoded data points
+    """
+    decoder = WITSDecoder(use_metric_units=use_metric_units, strict_mode=strict_mode)
+    return decoder.decode_frame(raw_frame, source)
+
+
+def validate_wits_frame(raw_frame: str) -> bool:
+    """
+    Convenience function to validate WITS frame format.
+    
+    Args:
+        raw_frame: Raw WITS frame string
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    decoder = WITSDecoder()
+    is_valid, _ = decoder.validate_frame_format(raw_frame)
+    return is_valid
+
+
+def get_available_symbols() -> dict[str, WITSSymbol]:
+    """
+    Get all available WITS symbols.
+    
+    Returns:
+        Dictionary mapping symbol codes to WITSSymbol objects
+    """
+    return WITS_SYMBOLS.copy()

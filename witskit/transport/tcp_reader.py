@@ -1,5 +1,5 @@
 import socket
-from typing import Any, Generator
+from typing import Generator, Optional
 from .base import BaseTransport
 
 
@@ -7,7 +7,7 @@ class TCPReader(BaseTransport):
     def __init__(self, host: str, port: int) -> None:
         self.host: str = host
         self.port: int = port
-        self.socket = None
+        self.socket: Optional[socket.socket] = None
 
     def stream(self) -> Generator[str, None, None]:
         """Stream WITS frames from TCP connection."""

@@ -118,11 +118,12 @@ class TestTCPReader:
     def test_tcp_reader_close(self) -> None:
         """Test TCP reader close functionality."""
         reader = TCPReader("localhost", 1234)
-        reader.socket = Mock()
+        mock_socket = Mock()
+        reader.socket = mock_socket
         
         reader.close()
         
-        reader.socket.close.assert_called_once()
+        mock_socket.close.assert_called_once()
         assert reader.socket is None
 
 
@@ -165,11 +166,12 @@ class TestFileReader:
     def test_file_reader_close(self) -> None:
         """Test file reader close functionality."""
         reader = FileReader("test.wits")
-        reader._file = Mock()
+        mock_file = Mock()
+        reader._file = mock_file
         
         reader.close()
         
-        reader._file.close.assert_called_once()
+        mock_file.close.assert_called_once()
         assert reader._file is None
 
 
@@ -210,7 +212,7 @@ class TestSerialReader:
         reader = SerialReader("/dev/ttyUSB0")
         
         # Get first two frames from stream
-        stream_gen: Generator[str, socket.Any, NoReturn] = reader.stream()
+        stream_gen: Generator[str, None, None] = reader.stream()
         frames: list[str] = [next(stream_gen), next(stream_gen)]
         
         assert len(frames) == 2

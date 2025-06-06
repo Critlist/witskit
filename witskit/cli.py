@@ -5,7 +5,7 @@ A CLI tool for decoding, processing, and analyzing WITS drilling data.
 """
 
 import typer
-from typing import Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
@@ -114,7 +114,7 @@ def decode_command(
                     self.source = source
                     self.timestamp: datetime = datetime.now()
                 
-                def to_dict(self):# -> dict[str, Any]:
+                def to_dict(self) -> dict[str, Any]:
                     return {
                         'timestamp': self.timestamp.isoformat(),
                         'source': self.source,
@@ -135,7 +135,7 @@ def decode_command(
             result = CombinedResult(all_data_points, all_errors, source)
         else:
             # Single frame - use existing logic
-            result: DecodedFrame = decode_frame(
+            result = decode_frame(
                 frame_data, 
                 use_metric_units=metric, 
                 strict_mode=strict, 

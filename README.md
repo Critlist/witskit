@@ -87,13 +87,17 @@ Each frame must include:
 Multiple frames can be included in a single file.
 
 Validate or debug:
-```bash
+```
+
+bash
 python cli.py validate "&&\n01083650.40\n!!"
+
 ```
 
 ## 🧱 Project Layout
 
 ```
+
 witskit/
 ├── models/           # Symbol metadata, Pydantic schemas
 ├── decoder/          # WITS frame parsing
@@ -134,6 +138,7 @@ pytest tests/ -v
 ## 🤝 Contributing
 
 This project uses:
+
 - Python 3.11+
 - pydantic for type validation
 - typer for CLI

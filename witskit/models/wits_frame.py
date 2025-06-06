@@ -26,7 +26,7 @@ class WITSFrame(BaseModel):
     
     @field_validator('raw_data')
     @classmethod
-    def validate_wits_format(cls, v):# -> Any:
+    def validate_wits_format(cls, v: str) -> str:
         """Validate basic WITS frame format."""
         if not v.strip():
             raise ValueError("WITS frame cannot be empty")
@@ -88,7 +88,7 @@ class DecodedData(BaseModel):
     
     model_config = ConfigDict(arbitrary_types_allowed=True)
     
-    def model_post_init(self, __context) -> None:
+    def model_post_init(self, __context: Any) -> None:
         """Parse the value after model initialization when all fields are available."""
         if self.raw_value and str(self.raw_value).strip():
             try:

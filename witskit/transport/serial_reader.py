@@ -1,5 +1,5 @@
 
-from typing import Any, Generator, Literal, NoReturn
+from typing import Generator
 import serial
 from .base import BaseTransport
 
@@ -7,8 +7,8 @@ class SerialReader(BaseTransport):
     def __init__(self, port: str, baudrate: int = 9600) -> None:
         self.serial = serial.Serial(port, baudrate=baudrate, timeout=1)
 
-    def stream(self) -> Generator[str, Any, NoReturn]:
-        buffer= ""
+    def stream(self) -> Generator[str, None, None]:
+        buffer = ""
         while True:
             chunk: str = self.serial.read(1024).decode("utf-8", errors="ignore")
             buffer += chunk

@@ -66,7 +66,7 @@ class TestWITSDecoder:
     """Test the main WITS decoder functionality."""
     
     @pytest.fixture
-    def sample_frame(self) -> Literal['&&\n01083650.40\n011323.38\n012012.5\n!!']:
+    def sample_frame(self) -> str:
         """Sample WITS frame for testing."""
         return """&&
 01083650.40

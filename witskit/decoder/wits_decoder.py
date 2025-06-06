@@ -122,7 +122,7 @@ class WITSDecoder:
                     return None
             
             # Determine the unit to use
-            unit: Literal['M'] | Literal['F'] | Literal['MM'] | Literal['IN'] | Literal['KPA'] | Literal['PSI'] | Literal['BAR'] | Literal['L/M'] | Literal['GPM'] | Literal['M3/M'] | Literal['BPM'] | Literal['KGM3'] | Literal['PPG'] | Literal['DEGC'] | Literal['DEGF'] | Literal['M/HR'] | Literal['F/HR'] | Literal['M/S'] | Literal['FPM'] | Literal['KDN'] | Literal['KLB'] | Literal['KG/M'] | Literal['LB/F'] | Literal['KNM'] | Literal['KFLB'] | Literal['M3'] | Literal['BBL'] | Literal['DEG'] | Literal['DGHM'] | Literal['DGHF'] | Literal['SEC'] | Literal['MIN'] | Literal['HR'] | Literal['KPH'] | Literal['MPH'] | Literal['OHMM'] | Literal['MMHO'] | Literal['RPM'] | Literal['SPM'] | Literal['%'] | Literal['API'] | Literal['----'] = symbol.metric_units.value if self.use_metric_units else symbol.fps_units.value
+            unit: str = symbol.metric_units.value if self.use_metric_units else symbol.fps_units.value
             
             # Create the decoded data point
             decoded_data = DecodedData(

@@ -5,7 +5,7 @@ The most comprehensive Python SDK for processing WITS (Wellsite Information Tran
 data in the oil & gas drilling industry.
 
 This package provides:
-- 742+ symbols across 20+ record types from the official WITS specification
+- 724 symbols across 20+ record types from the official WITS specification
 - Type-safe Pydantic models with comprehensive validation
 - Fast parsing with optimized regex patterns
 - Flexible units supporting both metric and FPS systems

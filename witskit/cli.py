@@ -404,7 +404,7 @@ def symbols_command(
     """
     List available WITS symbols with their definitions.
     
-    This command provides access to the complete WITS specification with 742+ symbols
+    This command provides access to the complete WITS specification with 724 symbols
     across 20+ record types including drilling, logging, and completion data.
     """
     from .models.symbols import get_record_types, get_symbols_by_record_type, search_symbols, get_record_description

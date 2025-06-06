@@ -108,7 +108,7 @@ def decode_command(
             
             # Create a combined result object for display
             class CombinedResult:
-                def __init__(self, data_points, errors, source) -> None:
+                def __init__(self, data_points: list, errors: list, source: str) -> None:
                     self.data_points = data_points
                     self.errors = errors
                     self.source = source
@@ -383,7 +383,7 @@ def _show_available_units() -> None:
                 else:
                     desc, system = "Degrees Fahrenheit", "FPS"
             else:
-                desc: Literal['M'] | Literal['F'] | Literal['MM'] | Literal['IN'] | Literal['KPA'] | Literal['PSI'] | Literal['BAR'] | Literal['L/M'] | Literal['GPM'] | Literal['M3/M'] | Literal['BPM'] | Literal['KGM3'] | Literal['PPG'] | Literal['DEGC'] | Literal['DEGF'] | Literal['M/HR'] | Literal['F/HR'] | Literal['M/S'] | Literal['FPM'] | Literal['KDN'] | Literal['KLB'] | Literal['KG/M'] | Literal['LB/F'] | Literal['KNM'] | Literal['KFLB'] | Literal['M3'] | Literal['BBL'] | Literal['DEG'] | Literal['DGHM'] | Literal['DGHF'] | Literal['SEC'] | Literal['MIN'] | Literal['HR'] | Literal['KPH'] | Literal['MPH'] | Literal['OHMM'] | Literal['MMHO'] | Literal['RPM'] | Literal['SPM'] | Literal['%'] | Literal['API'] | Literal['----'] = unit.value
+                desc: str = unit.value
                 system = "Both" if unit == WITSUnits.UNITLESS else "Mixed"
             
             table.add_row(unit.name, desc, system)

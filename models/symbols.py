@@ -120,7 +120,7 @@ class WITSSymbol(BaseModel):
 
 
 # Record type descriptions
-RECORD_DESCRIPTIONS = {
+RECORD_DESCRIPTIONS: Dict[int, str] = {
     1: "General Time-Based",
     2: "Drilling - Depth Based",
     3: "Drilling - Connections",
@@ -144,7 +144,7 @@ RECORD_DESCRIPTIONS = {
 }
 
 # WITS Record 1 symbols - General Time-Based
-WITS_RECORD_1_SYMBOLS = {
+WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
     "0101": WITSSymbol(
         code="0101",
         name="WID",

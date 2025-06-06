@@ -5,13 +5,16 @@ A CLI tool for decoding, processing, and analyzing WITS drilling data.
 """
 
 import typer
-from typing import Optional
+from typing import Literal, Optional
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 from rich import print as rprint
 import json
 from datetime import datetime
+
+from models.symbols import WITSSymbol, WITSUnits
+from models.wits_frame import DecodedFrame
 
 try:
     from decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
@@ -132,7 +135,7 @@ def decode_command(
             result = CombinedResult(all_data_points, all_errors, source)
         else:
             # Single frame - use existing logic
-            result = decode_frame(
+            result: DecodedFrame = decode_frame(
                 frame_data, 
                 use_metric_units=metric, 
                 strict_mode=strict, 
@@ -147,10 +150,10 @@ def decode_command(
             for dp in result.data_points:
                 try:
                     # Get the symbol definition to determine target unit
-                    symbol = WITS_SYMBOLS.get(dp.symbol_code)
+                    symbol: WITSSymbol | None = WITS_SYMBOLS.get(dp.symbol_code)
                     if symbol:
                         current_unit = getattr(WITSUnits, dp.unit, None) if dp.unit != "UNITLESS" else WITSUnits.UNITLESS
-                        target_unit = symbol.metric_units if convert_to_metric else symbol.fps_units
+                        target_unit: WITSUnits = symbol.metric_units if convert_to_metric else symbol.fps_units
                         
                         if current_unit and target_unit and current_unit != target_unit:
                             if UnitConverter.is_convertible(current_unit, target_unit):
@@ -164,7 +167,7 @@ def decode_command(
                     conversion_errors.append(f"Failed to convert {dp.symbol_code}: {str(e)}")
             
             if converted_count > 0:
-                units_type = "metric" if convert_to_metric else "FPS"
+                units_type: Literal['metric'] | Literal['FPS'] = "metric" if convert_to_metric else "FPS"
                 rprint(f"✅ [green]Converted {converted_count} values to {units_type} units")
             
             if conversion_errors:

@@ -2,6 +2,7 @@
 Tests for WITS decoder functionality.
 """
 
+from typing import Dict
 import pytest
 from datetime import datetime
 
@@ -18,7 +19,7 @@ from decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame
 class TestWITSFrame:
     """Test WITS frame validation and parsing."""
     
-    def test_valid_frame(self):
+    def test_valid_frame(self) -> None:
         """Test parsing a valid WITS frame."""
         raw_frame = """&&
 01083650.40
@@ -49,7 +50,7 @@ class TestWITSFrame:
         with pytest.raises(ValueError):
             WITSFrame(raw_data="&&\n!!", source="test")
     
-    def test_parse_data_line(self):
+    def test_parse_data_line(self) -> None:
         """Test parsing individual data lines."""
         frame = WITSFrame(raw_data="&&\n01083650.40\n!!", source="test")
         
@@ -69,7 +70,7 @@ class TestWITSDecoder:
     """Test the main WITS decoder functionality."""
     
     @pytest.fixture
-    def sample_frame(self):
+    def sample_frame(self) -> Literal['&&\n01083650.40\n011323.38\n012012.5\n!!']:
         """Sample WITS frame for testing."""
         return """&&
 01083650.40
@@ -77,17 +78,17 @@ class TestWITSDecoder:
 012012.5
 !!"""
     
-    def test_decode_frame_basic(self, sample_frame):
+    def test_decode_frame_basic(self, sample_frame) -> None:
         """Test basic frame decoding."""
         decoder = WITSDecoder()
-        result = decoder.decode_frame(sample_frame, source="test")
+        result: DecodedFrame = decoder.decode_frame(sample_frame, source="test")
         
         assert isinstance(result, DecodedFrame)
         assert result.source == "test"
         assert len(result.data_points) >= 1  # Should decode at least some symbols
         assert len(result.errors) == 0 or len(result.errors) > 0  # Some symbols might be unknown
     
-    def test_decode_known_symbols(self):
+    def test_decode_known_symbols(self) -> None:
         """Test decoding with known symbols."""
         # Use symbols we know exist
         frame = """&&
@@ -96,19 +97,19 @@ class TestWITSDecoder:
 !!"""
         
         decoder = WITSDecoder(strict_mode=False)
-        result = decoder.decode_frame(frame)
+        result: DecodedFrame = decoder.decode_frame(frame)
         
         # Should have decoded data points
         assert len(result.data_points) >= 0
         
         # Check if we got the depth bit symbol
-        depth_data = result.get_value("0108")
+        depth_data: DecodedData | None = result.get_value("0108")
         if depth_data:
             assert depth_data.symbol_code == "0108"
             assert depth_data.parsed_value == 3650.40
             assert depth_data.symbol_name == "DBTM"
     
-    def test_unit_selection(self):
+    def test_unit_selection(self) -> None:
         """Test metric vs FPS unit selection."""
         frame = """&&
 01083650.40
@@ -116,17 +117,17 @@ class TestWITSDecoder:
         
         # Test metric units
         decoder_metric = WITSDecoder(use_metric_units=True)
-        result_metric = decoder_metric.decode_frame(frame)
+        result_metric: DecodedFrame = decoder_metric.decode_frame(frame)
         
         # Test FPS units
         decoder_fps = WITSDecoder(use_metric_units=False) 
-        result_fps = decoder_fps.decode_frame(frame)
+        result_fps: DecodedFrame = decoder_fps.decode_frame(frame)
         
         # Both should decode but potentially with different units
         assert isinstance(result_metric, DecodedFrame)
         assert isinstance(result_fps, DecodedFrame)
     
-    def test_strict_mode(self):
+    def test_strict_mode(self) -> None:
         """Test strict mode behavior."""
         frame_with_unknown = """&&
 99999999.99
@@ -134,7 +135,7 @@ class TestWITSDecoder:
         
         # Non-strict mode should handle unknown symbols gracefully
         decoder_lenient = WITSDecoder(strict_mode=False)
-        result = decoder_lenient.decode_frame(frame_with_unknown)
+        result: DecodedFrame = decoder_lenient.decode_frame(frame_with_unknown)
         assert isinstance(result, DecodedFrame)
         
         # Strict mode might raise errors for unknown symbols
@@ -148,14 +149,14 @@ class TestWITSDecoder:
             # This is also acceptable in strict mode
             pass
     
-    def test_convenience_functions(self):
+    def test_convenience_functions(self) -> None:
         """Test convenience functions."""
         frame = """&&
 01083650.40
 !!"""
         
         # Test decode_frame function
-        result = decode_frame(frame, source="convenience_test")
+        result: DecodedFrame = decode_frame(frame, source="convenience_test")
         assert isinstance(result, DecodedFrame)
         assert result.source == "convenience_test"
         
@@ -167,21 +168,21 @@ class TestWITSDecoder:
 class TestSymbolLookup:
     """Test symbol lookup functionality."""
     
-    def test_get_symbol_by_code(self):
+    def test_get_symbol_by_code(self) -> None:
         """Test getting symbols by code."""
         # Test known symbol
-        symbol = get_symbol_by_code("0108")
+        symbol: WITSSymbol | None = get_symbol_by_code("0108")
         if symbol:  # Might be None if not defined
             assert symbol.code == "0108"
             assert symbol.name == "DBTM"
             assert symbol.description == "Depth Bit (meas)"
         
         # Test unknown symbol
-        unknown = get_symbol_by_code("9999")
+        unknown: WITSSymbol | None = get_symbol_by_code("9999")
         assert unknown is None
 
 
-def test_integration():
+def test_integration() -> None:
     """Integration test with realistic WITS data."""
     # Example WITS frame with multiple data points
     realistic_frame = """&&
@@ -191,7 +192,7 @@ def test_integration():
 !!"""
     
     decoder = WITSDecoder(use_metric_units=True, strict_mode=False)
-    result = decoder.decode_frame(realistic_frame, source="integration_test")
+    result: DecodedFrame = decoder.decode_frame(realistic_frame, source="integration_test")
     
     # Basic checks
     assert isinstance(result, DecodedFrame)
@@ -199,11 +200,11 @@ def test_integration():
     assert result.timestamp is not None
     
     # Should have some data points or errors
-    total_items = len(result.data_points) + len(result.errors)
+    total_items: int = len(result.data_points) + len(result.errors)
     assert total_items > 0
     
     # Test conversion to dict
-    result_dict = result.to_dict()
+    result_dict: Dict[str, Any] = result.to_dict()
     assert "timestamp" in result_dict
     assert "source" in result_dict
     assert "data" in result_dict

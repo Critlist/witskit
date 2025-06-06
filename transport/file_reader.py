@@ -1,4 +1,5 @@
-from typing import Generator
+from io import TextIOWrapper
+from typing import Generator, Literal, LiteralString
 from .base import BaseTransport
 
 
@@ -8,14 +9,14 @@ class FileReader(BaseTransport):
     Useful for testing and processing recorded WITS data.
     """
     
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str) -> None:
         """
         Initialize FileReader with path to WITS log file.
         
         Args:
             file_path: Path to the .wits log file
         """
-        self.file_path = file_path
+        self.file_path: str = file_path
         self._file = None
 
     def stream(self) -> Generator[str, None, None]:
@@ -26,21 +27,21 @@ class FileReader(BaseTransport):
             Complete WITS frames as strings
         """
         with open(self.file_path, 'r', encoding='utf-8', errors='ignore') as file:
-            self._file = file
-            buffer = ""
+            self._file: TextIOWrapper[_WrappedBuffer] = file
+            buffer: Literal[''] = ""
             
             for line in file:
                 buffer += line
                 
                 # Look for complete frames
                 while "&&" in buffer and "!!" in buffer:
-                    start = buffer.index("&&")
-                    end = buffer.index("!!") + 2
-                    frame = buffer[start:end]
+                    start: int = buffer.index("&&")
+                    end: int = buffer.index("!!") + 2
+                    frame: LiteralString = buffer[start:end]
                     yield frame
                     buffer = buffer[end:]
 
-    def close(self):
+    def close(self) -> None:
         """Close the file if it's open."""
         if self._file:
             self._file.close()

@@ -10,7 +10,7 @@ from .tcp_reader import TCPReader
 from .serial_reader import SerialReader
 from .file_reader import FileReader
 
-__all__ = [
+__all__: list[str] = [
     "BaseTransport",
     "TCPReader", 
     "SerialReader",

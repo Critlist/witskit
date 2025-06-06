@@ -21,7 +21,7 @@ from .decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame
 from .models.symbols import WITSSymbol, WITS_SYMBOLS, get_symbol_by_code, search_symbols
 from .models.wits_frame import WITSFrame, DecodedData, DecodedFrame
 
-__all__ = [
+__all__: list[str] = [
     # Core decoder functionality
     "WITSDecoder",
     "decode_frame", 

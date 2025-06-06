@@ -4,9 +4,9 @@ from .base import BaseTransport
 
 
 class TCPReader(BaseTransport):
-    def __init__(self, host: str, port: int):
-        self.host = host
-        self.port = port
+    def __init__(self, host: str, port: int) -> None:
+        self.host: str = host
+        self.port: int = port
         self.socket = None
 
     def stream(self) -> Generator[str, None, None]:
@@ -17,23 +17,23 @@ class TCPReader(BaseTransport):
         buffer = ""
         while True:
             try:
-                chunk = self.socket.recv(1024).decode("utf-8", errors="ignore")
+                chunk: str = self.socket.recv(1024).decode("utf-8", errors="ignore")
                 if not chunk:  # Connection closed
                     break
                     
                 buffer += chunk
                 while "&&" in buffer and "!!" in buffer:
-                    start = buffer.index("&&")
-                    end = buffer.index("!!") + 2
+                    start: int = buffer.index("&&")
+                    end: int = buffer.index("!!") + 2
                     yield buffer[start:end]
-                    buffer = buffer[end:]
+                    buffer: str = buffer[end:]
             except ConnectionResetError:
                 break
             except Exception as e:
                 print(f"TCP connection error: {e}")
                 break
 
-    def close(self):
+    def close(self) -> None:
         """Close the TCP connection."""
         if self.socket:
             self.socket.close()

@@ -105,12 +105,12 @@ class UnitConverter:
             return cls.fahrenheit_to_celsius(value)
             
         # Handle direct conversions
-        conversion_key = (from_unit, to_unit)
+        conversion_key: tuple[Literal[WITSUnits.METERS, WITSUnits.FEET, WITSUnits.MILLIMETERS, WITSUnits.INCHES, WITSUnits.KPA, WITSUnits.PSI, WITSUnits.BAR, WITSUnits.LPM, WITSUnits.GPM, WITSUnits.M3PM, WITSUnits.BPM, WITSUnits.KGM3, WITSUnits.PPG, WITSUnits.MHR, WITSUnits.FHR, WITSUnits.MS, WITSUnits.FPM, WITSUnits.KDN, WITSUnits.KLB, WITSUnits.KGM, WITSUnits.LBF, WITSUnits.KNM, WITSUnits.KFLB, WITSUnits.M3, WITSUnits.BBL, WITSUnits.DEG, WITSUnits.DGHM, WITSUnits.DGHF, WITSUnits.SEC, WITSUnits.MIN, WITSUnits.HR, WITSUnits.KPH, WITSUnits.MPH, WITSUnits.OHMM, WITSUnits.MMHO, WITSUnits.RPM, WITSUnits.SPM, WITSUnits.PERCENT, WITSUnits.API, WITSUnits.UNITLESS, WITSUnits.DEGC, WITSUnits.DEGF], WITSUnits] = (from_unit, to_unit)
         if conversion_key in cls.CONVERSION_FACTORS:
             return value * cls.CONVERSION_FACTORS[conversion_key]
             
         # Handle reverse conversions
-        reverse_key = (to_unit, from_unit)
+        reverse_key: tuple[WITSUnits, Literal[WITSUnits.METERS, WITSUnits.FEET, WITSUnits.MILLIMETERS, WITSUnits.INCHES, WITSUnits.KPA, WITSUnits.PSI, WITSUnits.BAR, WITSUnits.LPM, WITSUnits.GPM, WITSUnits.M3PM, WITSUnits.BPM, WITSUnits.KGM3, WITSUnits.PPG, WITSUnits.MHR, WITSUnits.FHR, WITSUnits.MS, WITSUnits.FPM, WITSUnits.KDN, WITSUnits.KLB, WITSUnits.KGM, WITSUnits.LBF, WITSUnits.KNM, WITSUnits.KFLB, WITSUnits.M3, WITSUnits.BBL, WITSUnits.DEG, WITSUnits.DGHM, WITSUnits.DGHF, WITSUnits.SEC, WITSUnits.MIN, WITSUnits.HR, WITSUnits.KPH, WITSUnits.MPH, WITSUnits.OHMM, WITSUnits.MMHO, WITSUnits.RPM, WITSUnits.SPM, WITSUnits.PERCENT, WITSUnits.API, WITSUnits.UNITLESS, WITSUnits.DEGC, WITSUnits.DEGF]] = (to_unit, from_unit)
         if reverse_key in cls.CONVERSION_FACTORS:
             return value / cls.CONVERSION_FACTORS[reverse_key]
             
@@ -149,11 +149,11 @@ class UnitConverter:
         if from_unit == to_unit:
             return 1.0
             
-        conversion_key = (from_unit, to_unit)
+        conversion_key: tuple[WITSUnits, WITSUnits] = (from_unit, to_unit)
         if conversion_key in cls.CONVERSION_FACTORS:
             return cls.CONVERSION_FACTORS[conversion_key]
             
-        reverse_key = (to_unit, from_unit)
+        reverse_key: tuple[WITSUnits, WITSUnits] = (to_unit, from_unit)
         if reverse_key in cls.CONVERSION_FACTORS:
             return 1.0 / cls.CONVERSION_FACTORS[reverse_key]
             

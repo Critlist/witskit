@@ -6,7 +6,7 @@ WITS ASCII frames into typed Python objects with full validation.
 """
 
 from datetime import datetime
-from typing import List, Optional, Tuple, Union
+from typing import List, Literal, Optional, Tuple, Union
 from loguru import logger
 
 from models.symbols import WITSSymbol
@@ -40,8 +40,8 @@ class WITSDecoder:
             use_metric_units: If True, use metric units, otherwise use FPS units
             strict_mode: If True, raise errors for unknown symbols, otherwise log warnings
         """
-        self.use_metric_units = use_metric_units
-        self.strict_mode = strict_mode
+        self.use_metric_units: bool = use_metric_units
+        self.strict_mode: bool = strict_mode
         
     def decode_frame(self, raw_frame: str, source: Optional[str] = None) -> DecodedFrame:
         """
@@ -128,7 +128,7 @@ class WITSDecoder:
                     return None
             
             # Determine the unit to use
-            unit = symbol.metric_units.value if self.use_metric_units else symbol.fps_units.value
+            unit: Literal['M'] | Literal['F'] | Literal['MM'] | Literal['IN'] | Literal['KPA'] | Literal['PSI'] | Literal['BAR'] | Literal['L/M'] | Literal['GPM'] | Literal['M3/M'] | Literal['BPM'] | Literal['KGM3'] | Literal['PPG'] | Literal['DEGC'] | Literal['DEGF'] | Literal['M/HR'] | Literal['F/HR'] | Literal['M/S'] | Literal['FPM'] | Literal['KDN'] | Literal['KLB'] | Literal['KG/M'] | Literal['LB/F'] | Literal['KNM'] | Literal['KFLB'] | Literal['M3'] | Literal['BBL'] | Literal['DEG'] | Literal['DGHM'] | Literal['DGHF'] | Literal['SEC'] | Literal['MIN'] | Literal['HR'] | Literal['KPH'] | Literal['MPH'] | Literal['OHMM'] | Literal['MMHO'] | Literal['RPM'] | Literal['SPM'] | Literal['%'] | Literal['API'] | Literal['----'] = symbol.metric_units.value if self.use_metric_units else symbol.fps_units.value
             
             # Create the decoded data point
             decoded_data = DecodedData(
@@ -250,7 +250,7 @@ def split_multiple_frames(data: str) -> List[str]:
     current_frame = []
     
     for line in lines:
-        line = line.strip()
+        line: str = line.strip()
         if not line:
             continue
             

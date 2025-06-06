@@ -138,7 +138,7 @@ def decode_command(
             conversion_errors = []
             converted_count = 0
             
-            for dp in result.data_points:
+                        for dp in result.data_points:
                 try:
                     # Get the symbol definition to determine target unit
                     symbol = WITS_SYMBOLS.get(dp.symbol_code)
@@ -386,7 +386,6 @@ def _show_available_units():
     rprint("[dim]💡 Example: witskit convert 2500 PSI KPA --precision 2")
 
 
-# Add the rest of the commands from original cli.py (symbols, validate, demo)
 @app.command("symbols")
 def symbols_command(
     search: Optional[str] = typer.Option(None, "--search", "-s", help="Search symbols by name or description"),
@@ -398,12 +397,29 @@ def symbols_command(
     
     This command provides access to the complete WITS specification with 742+ symbols
     across 20+ record types including drilling, logging, and completion data.
-    """
-    from models.symbols import get_record_types, get_symbols_by_record_type, search_symbols, get_record_description
     
+    Examples:
+    \b
+        # List all available record types
+        witskit symbols --list-records
+        
+        # Search for depth-related symbols
+        witskit symbols --search depth
+        
+        # Show symbols for record type 1 (General Time-Based)
+        witskit symbols --record 1
+        
+        # Search within a specific record type
+        witskit symbols --record 8 --search resistivity
+    """
+    from models.symbols import (get_record_types, get_record_description, 
+                                get_symbols_by_record_type, search_symbols)
+    
+    # List all record types
     if list_records:
-        # Show all record types
-        table = Table(title="📋 WITS Record Types")
+        rprint("📊 [bold cyan]WITS Record Types\n")
+        
+        table = Table(title="Available WITS Record Types")
         table.add_column("Record", style="cyan", width=8)
         table.add_column("Description", style="white", width=40)
         table.add_column("Symbols", style="green", width=8)
@@ -602,4 +618,4 @@ def demo_command():
 
 
 if __name__ == "__main__":
-    app() 
+    app()

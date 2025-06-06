@@ -25,6 +25,8 @@ class WITSUnits(str, Enum):
     # Length units
     METERS = "M"
     FEET = "F"
+    MILLIMETERS = "MM"  # Millimeters
+    INCHES = "IN"       # Inches
     
     # Pressure units
     KPA = "KPA"      # Kilopascals
@@ -34,6 +36,8 @@ class WITSUnits(str, Enum):
     # Flow rate units
     LPM = "L/M"      # Liters per minute
     GPM = "GPM"      # Gallons per minute
+    M3PM = "M3/M"    # Cubic meters per minute
+    BPM = "BPM"      # Barrels per minute
     
     # Density units
     KGM3 = "KGM3"    # Kg per cubic meter
@@ -46,10 +50,16 @@ class WITSUnits(str, Enum):
     # Rate units
     MHR = "M/HR"     # Meters per hour
     FHR = "F/HR"     # Feet per hour
+    MS = "M/S"       # Meters per second
+    FPM = "FPM"      # Feet per minute
     
     # Weight/Force units
     KDN = "KDN"      # Kilodecanewtons
     KLB = "KLB"      # Kilopounds
+    
+    # Mass per length units
+    KGM = "KG/M"     # Kilograms per meter
+    LBF = "LB/F"     # Pounds per foot
     
     # Torque units
     KNM = "KNM"      # Kilonewton-meters
@@ -59,11 +69,29 @@ class WITSUnits(str, Enum):
     M3 = "M3"        # Cubic meters
     BBL = "BBL"      # Barrels
     
+    # Angular units
+    DEG = "DEG"      # Degrees
+    DGHM = "DGHM"    # Degrees per hundred meters
+    DGHF = "DGHF"    # Degrees per hundred feet
+    
+    # Time units
+    SEC = "SEC"      # Seconds
+    MIN = "MIN"      # Minutes
+    HR = "HR"        # Hours
+    
+    # Speed units
+    KPH = "KPH"      # Kilometers per hour
+    MPH = "MPH"      # Miles per hour
+    
+    # Electrical units
+    OHMM = "OHMM"    # Ohm-meters
+    MMHO = "MMHO"    # Millimhos
+    
     # Other units
     RPM = "RPM"      # Revolutions per minute
     SPM = "SPM"      # Strokes per minute
     PERCENT = "%"    # Percentage
-    MMHO = "MMHO"    # Millimhos
+    API = "API"      # API units (gamma ray)
     
     # Unitless
     UNITLESS = "----"
@@ -978,8 +1006,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Elapsed Time Bottom-Slips",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=3,
         item_number=12
     ),
@@ -989,8 +1017,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Elapsed Time In-Slips",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=3,
         item_number=13
     ),
@@ -1000,8 +1028,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Elapsed Time Slips-Bottom",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=3,
         item_number=14
     ),
@@ -1011,8 +1039,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Elapsed Time Pumps-Off",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=3,
         item_number=15
     ),
@@ -1022,8 +1050,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Running Speed - up (max)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=3,
         item_number=16
     ),
@@ -1033,8 +1061,8 @@ WITS_RECORD_3_SYMBOLS = {
         description="Running Speed - down (max)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=3,
         item_number=17
     ),
@@ -1822,8 +1850,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Elapsed Time In-Slips",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=6,
         item_number=15
     ),
@@ -1833,8 +1861,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Elapsed Time Out-of-Slips",
         data_type=WITSDataType.INTEGER,
         length=2,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.SEC,
+        fps_units=WITSUnits.SEC,
         record_type=6,
         item_number=16
     ),
@@ -1844,8 +1872,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Running Speed -up (max)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=6,
         item_number=17
     ),
@@ -1855,8 +1883,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Running Speed -up (avg)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=6,
         item_number=18
     ),
@@ -1866,8 +1894,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Running Speed -down (max)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=6,
         item_number=19
     ),
@@ -1877,8 +1905,8 @@ WITS_RECORD_6_SYMBOLS = {
         description="Running Speed -down (avg)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.MS,
+        fps_units=WITSUnits.FPM,
         record_type=6,
         item_number=20
     ),
@@ -2123,8 +2151,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Inclination",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DEG,
+        fps_units=WITSUnits.DEG,
         record_type=7,
         item_number=13
     ),
@@ -2134,8 +2162,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Azimuth (uncorrected)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DEG,
+        fps_units=WITSUnits.DEG,
         record_type=7,
         item_number=14
     ),
@@ -2145,8 +2173,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Azimuth (corrected)",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DEG,
+        fps_units=WITSUnits.DEG,
         record_type=7,
         item_number=15
     ),
@@ -2156,8 +2184,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Magnetic Toolface",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DEG,
+        fps_units=WITSUnits.DEG,
         record_type=7,
         item_number=16
     ),
@@ -2167,8 +2195,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Gravity Toolface",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DEG,
+        fps_units=WITSUnits.DEG,
         record_type=7,
         item_number=17
     ),
@@ -2200,8 +2228,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Dog Leg Severity",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DGHM,
+        fps_units=WITSUnits.DGHF,
         record_type=7,
         item_number=20
     ),
@@ -2211,8 +2239,8 @@ WITS_RECORD_7_SYMBOLS = {
         description="Svy Rate of Walk",
         data_type=WITSDataType.FLOAT,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.DGHM,
+        fps_units=WITSUnits.DGHF,
         record_type=7,
         item_number=21
     ),
@@ -6116,8 +6144,8 @@ WITS_RECORD_18_SYMBOLS = {
         description="DST Tool Time",
         data_type=WITSDataType.LONG,
         length=4,
-        metric_units=WITSUnits.UNITLESS,
-        fps_units=WITSUnits.UNITLESS,
+        metric_units=WITSUnits.HR,
+        fps_units=WITSUnits.HR,
         record_type=18,
         item_number=13
     ),

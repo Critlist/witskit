@@ -18,6 +18,9 @@ try:
     from models.symbols import WITS_SYMBOLS
     from models.unit_converter import UnitConverter, ConversionError
     from models.symbols import WITSUnits
+    from transport.tcp_reader import TCPReader
+    from transport.serial_reader import SerialReader
+    from transport.file_reader import FileReader
 except ImportError:
     import sys
     import os
@@ -26,6 +29,9 @@ except ImportError:
     from models.symbols import WITS_SYMBOLS
     from models.unit_converter import UnitConverter, ConversionError
     from models.symbols import WITSUnits
+    from transport.tcp_reader import TCPReader
+    from transport.serial_reader import SerialReader
+    from transport.file_reader import FileReader
 
 app = typer.Typer(
     name="witskit",
@@ -546,6 +552,143 @@ def validate_command(
         raise typer.Exit(1)
 
 
+@app.command("stream")
+def stream_command(
+    source: str = typer.Argument(..., help="Data source: tcp://host:port, serial:///dev/ttyUSB0, or file://path/to/file.wits"),
+    metric: bool = typer.Option(True, "--metric/--fps", help="Use metric units (default) or FPS units"),
+    strict: bool = typer.Option(False, "--strict", help="Enable strict mode (fail on unknown symbols)"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Output file for JSON results"),
+    format: str = typer.Option("table", "--format", "-f", help="Output format: table, json, or raw"),
+    baudrate: int = typer.Option(9600, "--baudrate", "-b", help="Baud rate for serial connections"),
+    max_frames: Optional[int] = typer.Option(None, "--max-frames", "-n", help="Maximum number of frames to process"),
+):
+    """
+    Stream and decode WITS data from various sources.
+    
+    Examples:
+    \b
+        # Stream from TCP server
+        witskit stream tcp://192.168.1.100:12345
+        
+        # Stream from serial port
+        witskit stream serial:///dev/ttyUSB0 --baudrate 19200
+        
+        # Stream from file (for testing)
+        witskit stream file://sample.wits
+        
+        # Limit to 10 frames and save as JSON
+        witskit stream tcp://localhost:12345 --max-frames 10 --output results.json
+    """
+    
+    # Parse the source URL
+    reader = None
+    try:
+        if source.startswith("tcp://"):
+            # Parse tcp://host:port
+            url_part = source[6:]  # Remove 'tcp://'
+            if ':' not in url_part:
+                raise ValueError("TCP source must include port: tcp://host:port")
+            host, port_str = url_part.rsplit(':', 1)
+            port = int(port_str)
+            reader = TCPReader(host, port)
+            rprint(f"🌐 [cyan]Connecting to TCP {host}:{port}...[/cyan]")
+            
+        elif source.startswith("serial://"):
+            # Parse serial:///dev/ttyUSB0
+            port = source[9:]  # Remove 'serial://'
+            reader = SerialReader(port, baudrate)
+            rprint(f"🔌 [cyan]Opening serial port {port} at {baudrate} baud...[/cyan]")
+            
+        elif source.startswith("file://"):
+            # Parse file://path/to/file.wits
+            file_path = source[7:]  # Remove 'file://'
+            if not Path(file_path).exists():
+                raise ValueError(f"File not found: {file_path}")
+            reader = FileReader(file_path)
+            rprint(f"📁 [cyan]Reading from file {file_path}...[/cyan]")
+            
+        else:
+            raise ValueError("Source must start with tcp://, serial://, or file://")
+        
+        # Stream and process frames
+        frame_count = 0
+        all_results = []
+        
+        try:
+            for frame in reader.stream():
+                if max_frames and frame_count >= max_frames:
+                    break
+                    
+                try:
+                    result = decode_frame(
+                        frame, 
+                        use_metric_units=metric, 
+                        strict_mode=strict, 
+                        source=source
+                    )
+                    
+                    frame_count += 1
+                    all_results.append(result)
+                    
+                    # Display based on format
+                    if format == "json":
+                        rprint(json.dumps(result.to_dict(), indent=2))
+                    elif format == "raw":
+                        rprint(f"\n🔄 Frame {frame_count}:")
+                        for dp in result.data_points:
+                            rprint(f"  {dp.symbol_code}: {dp.parsed_value} {dp.unit}")
+                    else:  # table format
+                        rprint(f"\n🔄 [bold]Frame {frame_count}[/bold] - {result.timestamp.strftime('%H:%M:%S')}")
+                        if result.data_points:
+                            table = Table()
+                            table.add_column("Symbol", style="cyan")
+                            table.add_column("Name", style="green")
+                            table.add_column("Value", style="yellow")
+                            table.add_column("Unit", style="blue")
+                            
+                            for dp in result.data_points:
+                                table.add_row(
+                                    dp.symbol_code,
+                                    dp.symbol_name,
+                                    str(dp.parsed_value),
+                                    dp.unit
+                                )
+                            console.print(table)
+                        
+                        if result.errors:
+                            rprint(f"⚠️ [yellow]Errors: {', '.join(result.errors)}[/yellow]")
+                    
+                except Exception as e:
+                    rprint(f"❌ [red]Frame {frame_count + 1} decode error: {e}[/red]")
+                    continue
+        
+        except KeyboardInterrupt:
+            rprint(f"\n⏹️ [yellow]Stopped by user after {frame_count} frames[/yellow]")
+        
+        finally:
+            reader.close()
+            
+        # Save output if requested
+        if output and all_results:
+            output_data = {
+                'source': source,
+                'frames_processed': frame_count,
+                'timestamp': datetime.now().isoformat(),
+                'frames': [result.to_dict() for result in all_results]
+            }
+            with open(output, 'w') as f:
+                json.dump(output_data, f, indent=2)
+            rprint(f"\n💾 [green]Saved {frame_count} frames to {output}[/green]")
+        
+        rprint(f"\n✅ [green]Processed {frame_count} frames total[/green]")
+        
+    except Exception as e:
+        rprint(f"❌ [red]Error: {e}[/red]")
+        if reader:
+            reader.close()
+        raise typer.Exit(1)
+
+
 @app.command("demo")
 def demo_command():
     """
@@ -596,6 +739,13 @@ def demo_command():
             rprint(f"⚠️ [yellow]{len(result.errors)} warnings/errors:")
             for error in result.errors:
                 rprint(f"[yellow]  • {error}")
+        
+        rprint("\n🎯 [bold]Try these commands:[/bold]")
+        rprint("• [cyan]witskit decode 'sample.wits'[/cyan] - Decode from file")
+        rprint("• [cyan]witskit stream file://sample.wits[/cyan] - Stream from file")
+        rprint("• [cyan]witskit stream tcp://localhost:12345[/cyan] - Stream from TCP")
+        rprint("• [cyan]witskit symbols --search depth[/cyan] - Search symbols")
+        rprint("• [cyan]witskit convert 3650.40 M F[/cyan] - Convert meters to feet")
     else:
         rprint("❌ [red]No data could be decoded")
 

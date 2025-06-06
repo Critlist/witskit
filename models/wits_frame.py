@@ -46,7 +46,7 @@ class WITSFrame(BaseModel):
     @property
     def data_lines(self) -> List[str]:
         """Extract data lines (excluding start && and end !! markers)."""
-        lines: List[str] = self.raw_data.strip().split('\n')
+        lines: List[str] = str(self.raw_data).strip().split('\n')
         return [line.strip() for line in lines[1:-1] if line.strip()]
     
     def parse_data_line(self, line: str) -> tuple[str, str]:
@@ -90,19 +90,19 @@ class DecodedData(BaseModel):
     
     def model_post_init(self, __context):
         """Parse the value after model initialization when all fields are available."""
-        if self.raw_value and self.raw_value.strip():
+        if self.raw_value and str(self.raw_value).strip():
             try:
                 if self.symbol.data_type.value == 'A':  # ASCII
-                    self.parsed_value = self.raw_value
+                    self.parsed_value = str(self.raw_value)
                 elif self.symbol.data_type.value == 'F':  # Float
                     self.parsed_value = float(self.raw_value)
                 elif self.symbol.data_type.value in ['S', 'L']:  # Integer types
                     self.parsed_value = int(float(self.raw_value))  # Handle decimal integers
                 else:
-                    self.parsed_value = self.raw_value
+                    self.parsed_value = str(self.raw_value)
             except (ValueError, TypeError):
                 # If parsing fails, keep as string
-                self.parsed_value = self.raw_value
+                self.parsed_value = str(self.raw_value)
         else:
             self.parsed_value = None
     
@@ -114,7 +114,7 @@ class DecodedData(BaseModel):
     @property
     def symbol_description(self) -> str:
         """Get the symbol's description."""
-        return self.symbol.description
+        return str(self.symbol.description)
     
     @property
     def symbol_code(self) -> str:

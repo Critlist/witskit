@@ -33,7 +33,7 @@ class UnitConverter:
     """
     
     # Conversion factors: metric_unit -> fps_unit multiplier
-    CONVERSION_FACTORS = {
+    CONVERSION_FACTORS: Dict[tuple[WITSUnits, WITSUnits], float] = {
         # Rate conversions (drilling speeds)
         (WITSUnits.MHR, WITSUnits.FHR): 3.28084,  # meters/hour to feet/hour
         
@@ -197,7 +197,7 @@ class UnitConverter:
         Returns:
             Unit category string
         """
-        unit_categories = {
+        unit_categories: Dict[WITSUnits, str] = {
             # Pressure units
             WITSUnits.KPA: "pressure",
             WITSUnits.PSI: "pressure", 

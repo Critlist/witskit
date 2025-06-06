@@ -9,6 +9,9 @@ from datetime import datetime
 from typing import List, Optional, Tuple, Union
 from loguru import logger
 
+from models.symbols import WITSSymbol
+from models.wits_frame import DecodedData, DecodedFrame
+
 try:
     # Try relative imports first (when used as package)
     from ..models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
@@ -63,11 +66,11 @@ class WITSDecoder:
             # Process each data line
             for line in wits_frame.data_lines:
                 try:
-                    data_point = self._decode_data_line(line, wits_frame.timestamp, source)
+                    data_point: DecodedData | None = self._decode_data_line(line, wits_frame.timestamp, source)
                     if data_point:
                         decoded_frame.data_points.append(data_point)
                 except Exception as e:
-                    error_msg = f"Error decoding line '{line}': {str(e)}"
+                    error_msg: str = f"Error decoding line '{line}': {str(e)}"
                     decoded_frame.errors.append(error_msg)
                     logger.warning(error_msg)
                     
@@ -109,14 +112,14 @@ class WITSDecoder:
             if len(line) < 4:
                 raise ValueError(f"Line too short: {line}")
                 
-            symbol_code = line[:4]
-            raw_value = line[4:].strip()
+            symbol_code: str = line[:4]
+            raw_value: str = line[4:].strip()
             
             if not symbol_code.isdigit():
                 raise ValueError(f"Invalid symbol code: {symbol_code}")
             
             # Look up the symbol definition
-            symbol = get_symbol_by_code(symbol_code)
+            symbol: WITSSymbol | None = get_symbol_by_code(symbol_code)
             if not symbol:
                 if self.strict_mode:
                     raise ValueError(f"Unknown symbol code: {symbol_code}")
@@ -158,7 +161,7 @@ class WITSDecoder:
         results = []
         for i, frame in enumerate(frame_data):
             try:
-                decoded = self.decode_frame(frame, source)
+                decoded: DecodedFrame = self.decode_frame(frame, source)
                 results.append(decoded)
             except Exception as e:
                 logger.error(f"Failed to decode frame {i}: {str(e)}")
@@ -182,6 +185,8 @@ class WITSDecoder:
             return True, None
         except ValueError as e:
             return False, str(e)
+
+
 
 
 # Convenience functions for direct usage
@@ -241,7 +246,7 @@ def split_multiple_frames(data: str) -> List[str]:
         List of individual WITS frame strings
     """
     frames = []
-    lines = data.strip().split('\n')
+    lines: List[str] = data.strip().split('\n')
     current_frame = []
     
     for line in lines:
@@ -253,7 +258,7 @@ def split_multiple_frames(data: str) -> List[str]:
             # Start of new frame
             if current_frame:  # Save previous frame if exists
                 frames.append('\n'.join(current_frame))
-            current_frame = [line]
+            current_frame: List[str] = [line]
         elif line.startswith('!!'):
             # End of current frame
             current_frame.append(line)
@@ -267,6 +272,7 @@ def split_multiple_frames(data: str) -> List[str]:
         frames.append('\n'.join(current_frame))
     
     return frames
+
 
 
 def decode_file(file_data: str, 
@@ -286,7 +292,7 @@ def decode_file(file_data: str,
         List of DecodedFrame objects
     """
     decoder = WITSDecoder(use_metric_units=use_metric_units, strict_mode=strict_mode)
-    frames = split_multiple_frames(file_data)
+    frames: List[str] = split_multiple_frames(file_data)
     
     if not frames:
         raise ValueError("No valid WITS frames found in data")
@@ -294,7 +300,7 @@ def decode_file(file_data: str,
     results = []
     for i, frame_data in enumerate(frames):
         try:
-            decoded = decoder.decode_frame(frame_data, source or f"frame_{i+1}")
+            decoded: DecodedFrame = decoder.decode_frame(frame_data, source or f"frame_{i+1}")
             results.append(decoded)
         except Exception as e:
             logger.error(f"Failed to decode frame {i+1}: {str(e)}")

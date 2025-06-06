@@ -5,7 +5,7 @@ A CLI tool for decoding, processing, and analyzing WITS drilling data.
 """
 
 import typer
-from typing import Literal, Optional
+from typing import Dict, List, Literal, Optional
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
@@ -80,7 +80,7 @@ def decode_command(
     # Check if data is a file path
     if Path(data).exists():
         with open(data, 'r') as f:
-            frame_data = f.read()
+            frame_data: str = f.read()
         source = str(data)
     else:
         # Treat as direct WITS data
@@ -89,11 +89,11 @@ def decode_command(
     
     try:
         # Check if file contains multiple frames
-        frames = split_multiple_frames(frame_data)
+        frames: List[str] = split_multiple_frames(frame_data)
         
         if len(frames) > 1:
             # Multiple frames - use decode_file
-            results = decode_file(
+            results: List[DecodedFrame] = decode_file(
                 frame_data, 
                 use_metric_units=metric, 
                 strict_mode=strict, 
@@ -108,13 +108,13 @@ def decode_command(
             
             # Create a combined result object for display
             class CombinedResult:
-                def __init__(self, data_points, errors, source):
+                def __init__(self, data_points, errors, source) -> None:
                     self.data_points = data_points
                     self.errors = errors
                     self.source = source
-                    self.timestamp = datetime.now()
+                    self.timestamp: datetime = datetime.now()
                 
-                def to_dict(self):
+                def to_dict(self):# -> dict[str, Any]:
                     return {
                         'timestamp': self.timestamp.isoformat(),
                         'source': self.source,
@@ -159,7 +159,7 @@ def decode_command(
                             if UnitConverter.is_convertible(current_unit, target_unit):
                                 # Ensure the parsed value is a float
                                 if isinstance(dp.parsed_value, (int, float)):
-                                    converted_value = UnitConverter.convert_value(float(dp.parsed_value), current_unit, target_unit)
+                                    converted_value: float = UnitConverter.convert_value(float(dp.parsed_value), current_unit, target_unit)
                                     dp.parsed_value = converted_value
                                     dp.unit = target_unit.value
                                     converted_count += 1
@@ -291,10 +291,10 @@ def convert_command(
             raise typer.Exit(1)
         
         # Perform conversion
-        result = UnitConverter.convert_value(value, from_wits_unit, to_wits_unit)
+        result: float = UnitConverter.convert_value(value, from_wits_unit, to_wits_unit)
         
         # Format result
-        formatted_result = round(result, precision)
+        formatted_result: float = round(result, precision)
         
         # Display result
         table = Table(title="🔄 Unit Conversion Result")
@@ -312,7 +312,7 @@ def convert_command(
         
         # Show formula if requested
         if show_formula:
-            factor = UnitConverter.get_conversion_factor(from_wits_unit, to_wits_unit)
+            factor: float | None = UnitConverter.get_conversion_factor(from_wits_unit, to_wits_unit)
             if factor:
                 if factor == 1.0:
                     rprint(f"\n[dim]Formula: {from_unit} = {to_unit} (same unit)")
@@ -326,7 +326,7 @@ def convert_command(
                         rprint(f"[dim]Calculation: {value} × {factor} = {formatted_result}")
         
         # Show category info
-        category = UnitConverter.get_unit_category(from_wits_unit)
+        category: str = UnitConverter.get_unit_category(from_wits_unit)
         rprint(f"\n[dim]Category: {category}")
         
     except ConversionError as e:
@@ -337,12 +337,12 @@ def convert_command(
         raise typer.Exit(1)
 
 
-def _show_available_units():
+def _show_available_units() -> None:
     """Display all available units organized by category."""
     rprint("🔧 [bold cyan]Available WITS Units\n")
     
     # Group units by category
-    unit_categories = {
+    unit_categories: Dict[str, List[WITSUnits]] = {
         "Drilling Rates": [WITSUnits.MHR, WITSUnits.FHR],
         "Pressures": [WITSUnits.KPA, WITSUnits.PSI, WITSUnits.BAR],
         "Flow Rates": [WITSUnits.LPM, WITSUnits.GPM, WITSUnits.M3PM, WITSUnits.BPM],
@@ -383,7 +383,7 @@ def _show_available_units():
                 else:
                     desc, system = "Degrees Fahrenheit", "FPS"
             else:
-                desc = unit.value
+                desc: Literal['M'] | Literal['F'] | Literal['MM'] | Literal['IN'] | Literal['KPA'] | Literal['PSI'] | Literal['BAR'] | Literal['L/M'] | Literal['GPM'] | Literal['M3/M'] | Literal['BPM'] | Literal['KGM3'] | Literal['PPG'] | Literal['DEGC'] | Literal['DEGF'] | Literal['M/HR'] | Literal['F/HR'] | Literal['M/S'] | Literal['FPM'] | Literal['KDN'] | Literal['KLB'] | Literal['KG/M'] | Literal['LB/F'] | Literal['KNM'] | Literal['KFLB'] | Literal['M3'] | Literal['BBL'] | Literal['DEG'] | Literal['DGHM'] | Literal['DGHF'] | Literal['SEC'] | Literal['MIN'] | Literal['HR'] | Literal['KPH'] | Literal['MPH'] | Literal['OHMM'] | Literal['MMHO'] | Literal['RPM'] | Literal['SPM'] | Literal['%'] | Literal['API'] | Literal['----'] = unit.value
                 system = "Both" if unit == WITSUnits.UNITLESS else "Mixed"
             
             table.add_row(unit.name, desc, system)
@@ -418,7 +418,7 @@ def symbols_command(
         table.add_column("Category", style="yellow", width=15)
         
         # Categorize records for better organization
-        categories = {
+        categories: Dict[str, list[int]] = {
             "Drilling": [1, 2, 3, 4],
             "Tripping": [5, 6],
             "Surveying": [7],
@@ -436,7 +436,7 @@ def symbols_command(
                 category_map[record] = cat
         
         for rt in sorted(get_record_types()):
-            symbols_count = len(get_symbols_by_record_type(rt))
+            symbols_count: int = len(get_symbols_by_record_type(rt))
             category = category_map.get(rt, "Other")
             table.add_row(
                 str(rt),
@@ -447,8 +447,8 @@ def symbols_command(
         
         console.print(table)
         
-        total_symbols = len(WITS_SYMBOLS)
-        total_records = len(get_record_types())
+        total_symbols: int = len(WITS_SYMBOLS)
+        total_records: int = len(get_record_types())
         rprint(f"\n📈 [bold green]Total: {total_records} record types, {total_symbols} symbols")
         rprint(f"[dim]Use --record <number> to see symbols for a specific record type")
         return
@@ -456,15 +456,15 @@ def symbols_command(
     # Filter symbols
     if search and record_type:
         # Search within specific record type
-        record_symbols = get_symbols_by_record_type(record_type)
-        search_lower = search.lower()
+        record_symbols: Dict[str, WITSSymbol] = get_symbols_by_record_type(record_type)
+        search_lower: str = search.lower()
         symbols_to_show = {
             code: symbol for code, symbol in record_symbols.items()
             if (search_lower in symbol.name.lower() or 
                 search_lower in symbol.description.lower() or
                 search_lower in code)
         }
-        title = f"Record {record_type} Symbols matching '{search}'"
+        title: str = f"Record {record_type} Symbols matching '{search}'"
     elif search:
         symbols_to_show = search_symbols(search)
         title = f"All Symbols matching '{search}'"
@@ -472,7 +472,7 @@ def symbols_command(
         symbols_to_show = get_symbols_by_record_type(record_type)
         title = f"Record {record_type}: {get_record_description(record_type)}"
     else:
-        symbols_to_show = WITS_SYMBOLS
+        symbols_to_show: dict[str, WITSSymbol] = WITS_SYMBOLS
         title = "All WITS Symbols"
     
     if not symbols_to_show:
@@ -491,7 +491,7 @@ def symbols_command(
     table.add_column("Description", style="dim", width=45)
     
     for code, symbol in sorted(symbols_to_show.items()):
-        description = symbol.description
+        description: str = symbol.description
         if len(description) > 40:
             description = description[:37] + "..."
             
@@ -536,9 +536,9 @@ def validate_command(
     # Check if data is a file path
     if Path(data).exists():
         with open(data, 'r') as f:
-            frame_data = f.read()
+            frame_data: str = f.read()
     else:
-        frame_data = data.replace('\\n', '\n')
+        frame_data: str = data.replace('\\n', '\n')
     
     try:
         from decoder.wits_decoder import validate_wits_frame
@@ -564,7 +564,7 @@ def stream_command(
     format: str = typer.Option("table", "--format", "-f", help="Output format: table, json, or raw"),
     baudrate: int = typer.Option(9600, "--baudrate", "-b", help="Baud rate for serial connections"),
     max_frames: Optional[int] = typer.Option(None, "--max-frames", "-n", help="Maximum number of frames to process"),
-):
+) -> None:
     """
     Stream and decode WITS data from various sources.
     
@@ -588,7 +588,7 @@ def stream_command(
     try:
         if source.startswith("tcp://"):
             # Parse tcp://host:port
-            url_part = source[6:]  # Remove 'tcp://'
+            url_part: str = source[6:]  # Remove 'tcp://'
             if ':' not in url_part:
                 raise ValueError("TCP source must include port: tcp://host:port")
             host, port_str = url_part.rsplit(':', 1)
@@ -604,7 +604,7 @@ def stream_command(
             
         elif source.startswith("file://"):
             # Parse file://path/to/file.wits
-            file_path = source[7:]  # Remove 'file://'
+            file_path: str = source[7:]  # Remove 'file://'
             if not Path(file_path).exists():
                 raise ValueError(f"File not found: {file_path}")
             reader = FileReader(file_path)
@@ -623,7 +623,7 @@ def stream_command(
                     break
                     
                 try:
-                    result = decode_frame(
+                    result: DecodedFrame = decode_frame(
                         frame, 
                         use_metric_units=metric, 
                         strict_mode=strict, 
@@ -693,7 +693,7 @@ def stream_command(
 
 
 @app.command("demo")
-def demo_command():
+def demo_command() -> None:
     """
     Run a demonstration with sample WITS data.
     """
@@ -715,7 +715,7 @@ def demo_command():
     rprint()
     
     # Decode it
-    result = decode_frame(sample_frame, source="demo")
+    result: DecodedFrame = decode_frame(sample_frame, source="demo")
     
     if result.data_points:
         table = Table(title="📊 Decoded Sample Data")

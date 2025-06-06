@@ -201,6 +201,7 @@ outboundEMwits.txt
 *EMwits.txt
 *.json
 *.bak
+data/
 # WITS Analysis Output Files
 #  Generated analysis results and reports
 real_wits_analysis_*.json

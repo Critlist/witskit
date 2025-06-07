@@ -14,87 +14,85 @@ from pydantic import BaseModel
 
 class WITSDataType(str, Enum):
     """WITS data types as defined in the specification."""
-
-    ASCII = "A"  # ASCII string
-    FLOAT = "F"  # Floating point
-    INTEGER = "S"  # Short integer (2 bytes)
-    LONG = "L"  # Long integer (4 bytes)
+    ASCII = "A"      # ASCII string
+    FLOAT = "F"      # Floating point
+    INTEGER = "S"    # Short integer (2 bytes)
+    LONG = "L"       # Long integer (4 bytes)
 
 
 class WITSUnits(str, Enum):
     """All units used in WITS data across all record types."""
-
     # Length units
     METERS = "M"
     FEET = "F"
     MILLIMETERS = "MM"  # Millimeters
-    INCHES = "IN"  # Inches
-
+    INCHES = "IN"       # Inches
+    
     # Pressure units
-    KPA = "KPA"  # Kilopascals
-    PSI = "PSI"  # Pounds per square inch
-    BAR = "BAR"  # Bar
-
+    KPA = "KPA"      # Kilopascals
+    PSI = "PSI"      # Pounds per square inch
+    BAR = "BAR"      # Bar
+    
     # Flow rate units
-    LPM = "L/M"  # Liters per minute
-    GPM = "GPM"  # Gallons per minute
-    M3PM = "M3/M"  # Cubic meters per minute
-    BPM = "BPM"  # Barrels per minute
-
+    LPM = "L/M"      # Liters per minute
+    GPM = "GPM"      # Gallons per minute
+    M3PM = "M3/M"    # Cubic meters per minute
+    BPM = "BPM"      # Barrels per minute
+    
     # Density units
-    KGM3 = "KGM3"  # Kg per cubic meter
-    PPG = "PPG"  # Pounds per gallon
-
+    KGM3 = "KGM3"    # Kg per cubic meter
+    PPG = "PPG"      # Pounds per gallon
+    
     # Temperature units
-    DEGC = "DEGC"  # Degrees Celsius
-    DEGF = "DEGF"  # Degrees Fahrenheit
-
+    DEGC = "DEGC"    # Degrees Celsius
+    DEGF = "DEGF"    # Degrees Fahrenheit
+    
     # Rate units
-    MHR = "M/HR"  # Meters per hour
-    FHR = "F/HR"  # Feet per hour
-    MS = "M/S"  # Meters per second
-    FPM = "FPM"  # Feet per minute
-
+    MHR = "M/HR"     # Meters per hour
+    FHR = "F/HR"     # Feet per hour
+    MS = "M/S"       # Meters per second
+    FPM = "FPM"      # Feet per minute
+    
     # Weight/Force units
-    KDN = "KDN"  # Kilodecanewtons
-    KLB = "KLB"  # Kilopounds
-
+    KDN = "KDN"      # Kilodecanewtons
+    KLB = "KLB"      # Kilopounds
+    
     # Mass per length units
-    KGM = "KG/M"  # Kilograms per meter
-    LBF = "LB/F"  # Pounds per foot
-
+    KGM = "KG/M"     # Kilograms per meter
+    LBF = "LB/F"     # Pounds per foot
+    
     # Torque units
-    KNM = "KNM"  # Kilonewton-meters
-    KFLB = "KFLB"  # Kilo foot-pounds
-
+    KNM = "KNM"      # Kilonewton-meters
+    KFLB = "KFLB"    # Kilo foot-pounds
+    
     # Volume units
-    M3 = "M3"  # Cubic meters
-    BBL = "BBL"  # Barrels
-
+    M3 = "M3"        # Cubic meters
+    BBL = "BBL"      # Barrels
+    
     # Angular units
-    DEG = "DEG"  # Degrees
-    DGHM = "DGHM"  # Degrees per hundred meters
-    DGHF = "DGHF"  # Degrees per hundred feet
-
+    DEG = "DEG"      # Degrees
+    DGHM = "DGHM"    # Degrees per hundred meters
+    DGHF = "DGHF"    # Degrees per hundred feet
+    
     # Time units
-    SEC = "SEC"  # Seconds
-    MIN = "MIN"  # Minutes
-    HR = "HR"  # Hours
-
+    SEC = "SEC"      # Seconds
+    MIN = "MIN"      # Minutes
+    HR = "HR"        # Hours
+    
     # Speed units
-    KPH = "KPH"  # Kilometers per hour
-    MPH = "MPH"  # Miles per hour
-
+    KPH = "KPH"      # Kilometers per hour
+    MPH = "MPH"      # Miles per hour
+    
     # Electrical units
-    OHMM = "OHMM"  # Ohm-meters
-    MMHO = "MMHO"  # Millimhos
-
+    OHMM = "OHMM"    # Ohm-meters
+    MMHO = "MMHO"    # Millimhos
+    
     # Other units
-    RPM = "RPM"  # Revolutions per minute
-    SPM = "SPM"  # Strokes per minute
-    PERCENT = "%"  # Percentage
-    API = "API"  # API units (gamma ray)
-
+    RPM = "RPM"      # Revolutions per minute
+    SPM = "SPM"      # Strokes per minute
+    PERCENT = "%"    # Percentage
+    API = "API"      # API units (gamma ray)
+    
     # Unitless
     UNITLESS = "----"
 
@@ -102,11 +100,11 @@ class WITSUnits(str, Enum):
 class WITSSymbol(BaseModel):
     """
     Represents a WITS symbol definition.
-
+    
     Each symbol corresponds to a specific drilling parameter with
     metadata about its data type, units, and description.
     """
-
+    
     code: str
     name: str
     description: str
@@ -116,7 +114,7 @@ class WITSSymbol(BaseModel):
     fps_units: WITSUnits
     record_type: int
     item_number: int
-
+    
     class Config:
         frozen = True  # Make immutable
 
@@ -156,7 +154,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=1,
+        item_number=1
     ),
     "0102": WITSSymbol(
         code="0102",
@@ -167,7 +165,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=2,
+        item_number=2
     ),
     "0103": WITSSymbol(
         code="0103",
@@ -178,7 +176,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=3,
+        item_number=3
     ),
     "0104": WITSSymbol(
         code="0104",
@@ -189,7 +187,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=4,
+        item_number=4
     ),
     "0105": WITSSymbol(
         code="0105",
@@ -200,7 +198,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=5,
+        item_number=5
     ),
     "0106": WITSSymbol(
         code="0106",
@@ -211,7 +209,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=6,
+        item_number=6
     ),
     "0107": WITSSymbol(
         code="0107",
@@ -222,7 +220,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=7,
+        item_number=7
     ),
     "0108": WITSSymbol(
         code="0108",
@@ -233,7 +231,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=8,
+        item_number=8
     ),
     "0109": WITSSymbol(
         code="0109",
@@ -244,7 +242,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=9,
+        item_number=9
     ),
     "0110": WITSSymbol(
         code="0110",
@@ -255,7 +253,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=10,
+        item_number=10
     ),
     "0111": WITSSymbol(
         code="0111",
@@ -266,7 +264,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=11,
+        item_number=11
     ),
     "0112": WITSSymbol(
         code="0112",
@@ -277,7 +275,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=12,
+        item_number=12
     ),
     "0113": WITSSymbol(
         code="0113",
@@ -288,7 +286,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.MHR,
         fps_units=WITSUnits.FHR,
         record_type=1,
-        item_number=13,
+        item_number=13
     ),
     "0114": WITSSymbol(
         code="0114",
@@ -299,7 +297,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=1,
-        item_number=14,
+        item_number=14
     ),
     "0115": WITSSymbol(
         code="0115",
@@ -310,7 +308,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=1,
-        item_number=15,
+        item_number=15
     ),
     "0116": WITSSymbol(
         code="0116",
@@ -321,7 +319,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=1,
-        item_number=16,
+        item_number=16
     ),
     "0117": WITSSymbol(
         code="0117",
@@ -332,7 +330,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=1,
-        item_number=17,
+        item_number=17
     ),
     "0118": WITSSymbol(
         code="0118",
@@ -343,7 +341,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=1,
-        item_number=18,
+        item_number=18
     ),
     "0119": WITSSymbol(
         code="0119",
@@ -354,7 +352,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=1,
-        item_number=19,
+        item_number=19
     ),
     "0120": WITSSymbol(
         code="0120",
@@ -365,7 +363,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.RPM,
         fps_units=WITSUnits.RPM,
         record_type=1,
-        item_number=20,
+        item_number=20
     ),
     "0121": WITSSymbol(
         code="0121",
@@ -376,7 +374,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=1,
-        item_number=21,
+        item_number=21
     ),
     "0122": WITSSymbol(
         code="0122",
@@ -387,7 +385,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=1,
-        item_number=22,
+        item_number=22
     ),
     "0123": WITSSymbol(
         code="0123",
@@ -398,7 +396,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.SPM,
         fps_units=WITSUnits.SPM,
         record_type=1,
-        item_number=23,
+        item_number=23
     ),
     "0124": WITSSymbol(
         code="0124",
@@ -409,7 +407,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.SPM,
         fps_units=WITSUnits.SPM,
         record_type=1,
-        item_number=24,
+        item_number=24
     ),
     "0125": WITSSymbol(
         code="0125",
@@ -420,7 +418,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.SPM,
         fps_units=WITSUnits.SPM,
         record_type=1,
-        item_number=25,
+        item_number=25
     ),
     "0126": WITSSymbol(
         code="0126",
@@ -431,7 +429,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=1,
-        item_number=26,
+        item_number=26
     ),
     "0127": WITSSymbol(
         code="0127",
@@ -442,7 +440,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=1,
-        item_number=27,
+        item_number=27
     ),
     "0128": WITSSymbol(
         code="0128",
@@ -453,7 +451,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=1,
-        item_number=28,
+        item_number=28
     ),
     "0129": WITSSymbol(
         code="0129",
@@ -464,7 +462,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=1,
-        item_number=29,
+        item_number=29
     ),
     "0130": WITSSymbol(
         code="0130",
@@ -475,7 +473,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=1,
-        item_number=30,
+        item_number=30
     ),
     "0131": WITSSymbol(
         code="0131",
@@ -486,7 +484,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=1,
-        item_number=31,
+        item_number=31
     ),
     "0132": WITSSymbol(
         code="0132",
@@ -497,7 +495,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=1,
-        item_number=32,
+        item_number=32
     ),
     "0133": WITSSymbol(
         code="0133",
@@ -508,7 +506,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=1,
-        item_number=33,
+        item_number=33
     ),
     "0134": WITSSymbol(
         code="0134",
@@ -519,7 +517,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=1,
-        item_number=34,
+        item_number=34
     ),
     "0135": WITSSymbol(
         code="0135",
@@ -530,7 +528,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.MMHO,
         fps_units=WITSUnits.MMHO,
         record_type=1,
-        item_number=35,
+        item_number=35
     ),
     "0136": WITSSymbol(
         code="0136",
@@ -541,7 +539,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.MMHO,
         fps_units=WITSUnits.MMHO,
         record_type=1,
-        item_number=36,
+        item_number=36
     ),
     "0137": WITSSymbol(
         code="0137",
@@ -552,7 +550,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=37,
+        item_number=37
     ),
     "0138": WITSSymbol(
         code="0138",
@@ -563,7 +561,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=1,
-        item_number=38,
+        item_number=38
     ),
     "0139": WITSSymbol(
         code="0139",
@@ -574,7 +572,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=1,
-        item_number=39,
+        item_number=39
     ),
     "0140": WITSSymbol(
         code="0140",
@@ -585,7 +583,7 @@ WITS_RECORD_1_SYMBOLS: Dict[str, WITSSymbol] = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=1,
-        item_number=40,
+        item_number=40
     ),
 }
 
@@ -600,7 +598,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=1,
+        item_number=1
     ),
     "0202": WITSSymbol(
         code="0202",
@@ -611,7 +609,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=2,
+        item_number=2
     ),
     "0203": WITSSymbol(
         code="0203",
@@ -622,7 +620,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=3,
+        item_number=3
     ),
     "0204": WITSSymbol(
         code="0204",
@@ -633,7 +631,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=4,
+        item_number=4
     ),
     "0205": WITSSymbol(
         code="0205",
@@ -644,7 +642,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=5,
+        item_number=5
     ),
     "0206": WITSSymbol(
         code="0206",
@@ -655,7 +653,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=6,
+        item_number=6
     ),
     "0207": WITSSymbol(
         code="0207",
@@ -666,7 +664,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=7,
+        item_number=7
     ),
     "0208": WITSSymbol(
         code="0208",
@@ -677,7 +675,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=2,
-        item_number=8,
+        item_number=8
     ),
     "0209": WITSSymbol(
         code="0209",
@@ -688,7 +686,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=2,
-        item_number=9,
+        item_number=9
     ),
     "0210": WITSSymbol(
         code="0210",
@@ -699,7 +697,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.MHR,
         fps_units=WITSUnits.FHR,
         record_type=2,
-        item_number=10,
+        item_number=10
     ),
     "0211": WITSSymbol(
         code="0211",
@@ -710,7 +708,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=2,
-        item_number=11,
+        item_number=11
     ),
     "0212": WITSSymbol(
         code="0212",
@@ -721,7 +719,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=2,
-        item_number=12,
+        item_number=12
     ),
     "0213": WITSSymbol(
         code="0213",
@@ -732,7 +730,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=2,
-        item_number=13,
+        item_number=13
     ),
     "0214": WITSSymbol(
         code="0214",
@@ -743,7 +741,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=2,
-        item_number=14,
+        item_number=14
     ),
     "0215": WITSSymbol(
         code="0215",
@@ -754,7 +752,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.RPM,
         fps_units=WITSUnits.RPM,
         record_type=2,
-        item_number=15,
+        item_number=15
     ),
     "0216": WITSSymbol(
         code="0216",
@@ -765,7 +763,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=16,
+        item_number=16
     ),
     "0217": WITSSymbol(
         code="0217",
@@ -776,7 +774,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=2,
-        item_number=17,
+        item_number=17
     ),
     "0218": WITSSymbol(
         code="0218",
@@ -787,7 +785,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=2,
-        item_number=18,
+        item_number=18
     ),
     "0219": WITSSymbol(
         code="0219",
@@ -798,7 +796,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=2,
-        item_number=19,
+        item_number=19
     ),
     "0220": WITSSymbol(
         code="0220",
@@ -809,7 +807,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=2,
-        item_number=20,
+        item_number=20
     ),
     "0221": WITSSymbol(
         code="0221",
@@ -820,7 +818,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=2,
-        item_number=21,
+        item_number=21
     ),
     "0222": WITSSymbol(
         code="0222",
@@ -831,7 +829,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=2,
-        item_number=22,
+        item_number=22
     ),
     "0223": WITSSymbol(
         code="0223",
@@ -842,7 +840,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=23,
+        item_number=23
     ),
     "0225": WITSSymbol(
         code="0225",
@@ -853,7 +851,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=25,
+        item_number=25
     ),
     "0226": WITSSymbol(
         code="0226",
@@ -864,7 +862,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=2,
-        item_number=26,
+        item_number=26
     ),
     "0227": WITSSymbol(
         code="0227",
@@ -875,7 +873,7 @@ WITS_RECORD_2_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=2,
-        item_number=27,
+        item_number=27
     ),
 }
 
@@ -890,7 +888,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=1,
+        item_number=1
     ),
     "0302": WITSSymbol(
         code="0302",
@@ -901,7 +899,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=2,
+        item_number=2
     ),
     "0303": WITSSymbol(
         code="0303",
@@ -912,7 +910,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=3,
+        item_number=3
     ),
     "0304": WITSSymbol(
         code="0304",
@@ -923,7 +921,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=4,
+        item_number=4
     ),
     "0305": WITSSymbol(
         code="0305",
@@ -934,7 +932,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=5,
+        item_number=5
     ),
     "0306": WITSSymbol(
         code="0306",
@@ -945,7 +943,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=6,
+        item_number=6
     ),
     "0307": WITSSymbol(
         code="0307",
@@ -956,7 +954,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=3,
-        item_number=7,
+        item_number=7
     ),
     "0308": WITSSymbol(
         code="0308",
@@ -967,7 +965,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=3,
-        item_number=8,
+        item_number=8
     ),
     "0309": WITSSymbol(
         code="0309",
@@ -978,7 +976,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=3,
-        item_number=9,
+        item_number=9
     ),
     "0310": WITSSymbol(
         code="0310",
@@ -989,7 +987,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=3,
-        item_number=10,
+        item_number=10
     ),
     "0311": WITSSymbol(
         code="0311",
@@ -1000,7 +998,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=3,
-        item_number=11,
+        item_number=11
     ),
     "0312": WITSSymbol(
         code="0312",
@@ -1011,7 +1009,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=3,
-        item_number=12,
+        item_number=12
     ),
     "0313": WITSSymbol(
         code="0313",
@@ -1022,7 +1020,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=3,
-        item_number=13,
+        item_number=13
     ),
     "0314": WITSSymbol(
         code="0314",
@@ -1033,7 +1031,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=3,
-        item_number=14,
+        item_number=14
     ),
     "0315": WITSSymbol(
         code="0315",
@@ -1044,7 +1042,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=3,
-        item_number=15,
+        item_number=15
     ),
     "0316": WITSSymbol(
         code="0316",
@@ -1055,7 +1053,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=3,
-        item_number=16,
+        item_number=16
     ),
     "0317": WITSSymbol(
         code="0317",
@@ -1066,7 +1064,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=3,
-        item_number=17,
+        item_number=17
     ),
     "0318": WITSSymbol(
         code="0318",
@@ -1077,7 +1075,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=3,
-        item_number=18,
+        item_number=18
     ),
     "0319": WITSSymbol(
         code="0319",
@@ -1088,7 +1086,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=3,
-        item_number=19,
+        item_number=19
     ),
     "0320": WITSSymbol(
         code="0320",
@@ -1099,7 +1097,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=3,
-        item_number=20,
+        item_number=20
     ),
     "0321": WITSSymbol(
         code="0321",
@@ -1110,7 +1108,7 @@ WITS_RECORD_3_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=3,
-        item_number=21,
+        item_number=21
     ),
 }
 
@@ -1125,7 +1123,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=1,
+        item_number=1
     ),
     "0401": WITSSymbol(
         code="0401",
@@ -1136,7 +1134,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=1,
+        item_number=1
     ),
     "0402": WITSSymbol(
         code="0402",
@@ -1147,7 +1145,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=2,
+        item_number=2
     ),
     "0402": WITSSymbol(
         code="0402",
@@ -1158,7 +1156,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=2,
+        item_number=2
     ),
     "0403": WITSSymbol(
         code="0403",
@@ -1169,7 +1167,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=3,
+        item_number=3
     ),
     "0403": WITSSymbol(
         code="0403",
@@ -1180,7 +1178,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=3,
+        item_number=3
     ),
     "0404": WITSSymbol(
         code="0404",
@@ -1191,7 +1189,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=4,
+        item_number=4
     ),
     "0404": WITSSymbol(
         code="0404",
@@ -1202,7 +1200,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=4,
+        item_number=4
     ),
     "0405": WITSSymbol(
         code="0405",
@@ -1213,7 +1211,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=5,
+        item_number=5
     ),
     "0405": WITSSymbol(
         code="0405",
@@ -1224,7 +1222,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=5,
+        item_number=5
     ),
     "0406": WITSSymbol(
         code="0406",
@@ -1235,7 +1233,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=6,
+        item_number=6
     ),
     "0406": WITSSymbol(
         code="0406",
@@ -1246,7 +1244,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=6,
+        item_number=6
     ),
     "0407": WITSSymbol(
         code="0407",
@@ -1257,7 +1255,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=7,
+        item_number=7
     ),
     "0407": WITSSymbol(
         code="0407",
@@ -1268,7 +1266,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=7,
+        item_number=7
     ),
     "0408": WITSSymbol(
         code="0408",
@@ -1279,7 +1277,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=8,
+        item_number=8
     ),
     "0408": WITSSymbol(
         code="0408",
@@ -1290,7 +1288,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=8,
+        item_number=8
     ),
     "0409": WITSSymbol(
         code="0409",
@@ -1301,7 +1299,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=9,
+        item_number=9
     ),
     "0409": WITSSymbol(
         code="0409",
@@ -1312,7 +1310,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=9,
+        item_number=9
     ),
     "0410": WITSSymbol(
         code="0410",
@@ -1323,7 +1321,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=10,
+        item_number=10
     ),
     "0410": WITSSymbol(
         code="0410",
@@ -1334,7 +1332,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=10,
+        item_number=10
     ),
     "0411": WITSSymbol(
         code="0411",
@@ -1345,7 +1343,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=11,
+        item_number=11
     ),
     "0411": WITSSymbol(
         code="0411",
@@ -1356,7 +1354,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=11,
+        item_number=11
     ),
     "0412": WITSSymbol(
         code="0412",
@@ -1367,7 +1365,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=4,
-        item_number=12,
+        item_number=12
     ),
     "0412": WITSSymbol(
         code="0412",
@@ -1378,7 +1376,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=12,
+        item_number=12
     ),
     "0413": WITSSymbol(
         code="0413",
@@ -1389,7 +1387,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=4,
-        item_number=13,
+        item_number=13
     ),
     "0413": WITSSymbol(
         code="0413",
@@ -1400,7 +1398,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=13,
+        item_number=13
     ),
     "0414": WITSSymbol(
         code="0414",
@@ -1411,7 +1409,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=14,
+        item_number=14
     ),
     "0414": WITSSymbol(
         code="0414",
@@ -1422,7 +1420,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=4,
-        item_number=14,
+        item_number=14
     ),
     "0415": WITSSymbol(
         code="0415",
@@ -1433,7 +1431,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=15,
+        item_number=15
     ),
     "0415": WITSSymbol(
         code="0415",
@@ -1444,7 +1442,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=4,
-        item_number=15,
+        item_number=15
     ),
     "0416": WITSSymbol(
         code="0416",
@@ -1455,7 +1453,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=16,
+        item_number=16
     ),
     "0416": WITSSymbol(
         code="0416",
@@ -1466,7 +1464,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=16,
+        item_number=16
     ),
     "0417": WITSSymbol(
         code="0417",
@@ -1477,7 +1475,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=17,
+        item_number=17
     ),
     "0417": WITSSymbol(
         code="0417",
@@ -1488,7 +1486,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=17,
+        item_number=17
     ),
     "0418": WITSSymbol(
         code="0418",
@@ -1499,7 +1497,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=18,
+        item_number=18
     ),
     "0418": WITSSymbol(
         code="0418",
@@ -1510,7 +1508,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=4,
-        item_number=18,
+        item_number=18
     ),
     "0419": WITSSymbol(
         code="0419",
@@ -1521,7 +1519,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=19,
+        item_number=19
     ),
     "0420": WITSSymbol(
         code="0420",
@@ -1532,7 +1530,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=20,
+        item_number=20
     ),
     "0421": WITSSymbol(
         code="0421",
@@ -1543,7 +1541,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=21,
+        item_number=21
     ),
     "0422": WITSSymbol(
         code="0422",
@@ -1554,7 +1552,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=4,
-        item_number=22,
+        item_number=22
     ),
     "0423": WITSSymbol(
         code="0423",
@@ -1565,7 +1563,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=4,
-        item_number=23,
+        item_number=23
     ),
     "0424": WITSSymbol(
         code="0424",
@@ -1576,7 +1574,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=24,
+        item_number=24
     ),
     "0425": WITSSymbol(
         code="0425",
@@ -1587,7 +1585,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=25,
+        item_number=25
     ),
     "0426": WITSSymbol(
         code="0426",
@@ -1598,7 +1596,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=26,
+        item_number=26
     ),
     "0427": WITSSymbol(
         code="0427",
@@ -1609,7 +1607,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=27,
+        item_number=27
     ),
     "0428": WITSSymbol(
         code="0428",
@@ -1620,7 +1618,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=28,
+        item_number=28
     ),
     "0429": WITSSymbol(
         code="0429",
@@ -1631,7 +1629,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=29,
+        item_number=29
     ),
     "0430": WITSSymbol(
         code="0430",
@@ -1642,7 +1640,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=4,
-        item_number=30,
+        item_number=30
     ),
     "0431": WITSSymbol(
         code="0431",
@@ -1653,7 +1651,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=4,
-        item_number=31,
+        item_number=31
     ),
     "0432": WITSSymbol(
         code="0432",
@@ -1664,7 +1662,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=4,
-        item_number=32,
+        item_number=32
     ),
     "0433": WITSSymbol(
         code="0433",
@@ -1675,7 +1673,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=4,
-        item_number=33,
+        item_number=33
     ),
     "0434": WITSSymbol(
         code="0434",
@@ -1686,7 +1684,7 @@ WITS_RECORD_4_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=4,
-        item_number=34,
+        item_number=34
     ),
 }
 
@@ -1701,7 +1699,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=1,
+        item_number=1
     ),
     "0602": WITSSymbol(
         code="0602",
@@ -1712,7 +1710,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=2,
+        item_number=2
     ),
     "0603": WITSSymbol(
         code="0603",
@@ -1723,7 +1721,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=3,
+        item_number=3
     ),
     "0604": WITSSymbol(
         code="0604",
@@ -1734,7 +1732,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=4,
+        item_number=4
     ),
     "0605": WITSSymbol(
         code="0605",
@@ -1745,7 +1743,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=5,
+        item_number=5
     ),
     "0606": WITSSymbol(
         code="0606",
@@ -1756,7 +1754,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=6,
+        item_number=6
     ),
     "0607": WITSSymbol(
         code="0607",
@@ -1767,7 +1765,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=7,
+        item_number=7
     ),
     "0608": WITSSymbol(
         code="0608",
@@ -1778,7 +1776,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=6,
-        item_number=8,
+        item_number=8
     ),
     "0609": WITSSymbol(
         code="0609",
@@ -1789,7 +1787,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=6,
-        item_number=9,
+        item_number=9
     ),
     "0610": WITSSymbol(
         code="0610",
@@ -1800,7 +1798,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=6,
-        item_number=10,
+        item_number=10
     ),
     "0611": WITSSymbol(
         code="0611",
@@ -1811,7 +1809,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=6,
-        item_number=11,
+        item_number=11
     ),
     "0612": WITSSymbol(
         code="0612",
@@ -1822,7 +1820,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=12,
+        item_number=12
     ),
     "0613": WITSSymbol(
         code="0613",
@@ -1833,7 +1831,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=13,
+        item_number=13
     ),
     "0614": WITSSymbol(
         code="0614",
@@ -1844,7 +1842,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=6,
-        item_number=14,
+        item_number=14
     ),
     "0615": WITSSymbol(
         code="0615",
@@ -1855,7 +1853,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=6,
-        item_number=15,
+        item_number=15
     ),
     "0616": WITSSymbol(
         code="0616",
@@ -1866,7 +1864,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.SEC,
         fps_units=WITSUnits.SEC,
         record_type=6,
-        item_number=16,
+        item_number=16
     ),
     "0617": WITSSymbol(
         code="0617",
@@ -1877,7 +1875,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=6,
-        item_number=17,
+        item_number=17
     ),
     "0618": WITSSymbol(
         code="0618",
@@ -1888,7 +1886,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=6,
-        item_number=18,
+        item_number=18
     ),
     "0619": WITSSymbol(
         code="0619",
@@ -1899,7 +1897,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=6,
-        item_number=19,
+        item_number=19
     ),
     "0620": WITSSymbol(
         code="0620",
@@ -1910,7 +1908,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.MS,
         fps_units=WITSUnits.FPM,
         record_type=6,
-        item_number=20,
+        item_number=20
     ),
     "0621": WITSSymbol(
         code="0621",
@@ -1921,7 +1919,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=6,
-        item_number=21,
+        item_number=21
     ),
     "0622": WITSSymbol(
         code="0622",
@@ -1932,7 +1930,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=6,
-        item_number=22,
+        item_number=22
     ),
     "0623": WITSSymbol(
         code="0623",
@@ -1943,7 +1941,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=6,
-        item_number=23,
+        item_number=23
     ),
     "0624": WITSSymbol(
         code="0624",
@@ -1954,7 +1952,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=6,
-        item_number=24,
+        item_number=24
     ),
     "0625": WITSSymbol(
         code="0625",
@@ -1965,7 +1963,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=6,
-        item_number=25,
+        item_number=25
     ),
     "0626": WITSSymbol(
         code="0626",
@@ -1976,7 +1974,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=6,
-        item_number=26,
+        item_number=26
     ),
     "0627": WITSSymbol(
         code="0627",
@@ -1987,7 +1985,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=6,
-        item_number=27,
+        item_number=27
     ),
     "0628": WITSSymbol(
         code="0628",
@@ -1998,7 +1996,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=6,
-        item_number=28,
+        item_number=28
     ),
     "0629": WITSSymbol(
         code="0629",
@@ -2009,7 +2007,7 @@ WITS_RECORD_6_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=6,
-        item_number=29,
+        item_number=29
     ),
 }
 
@@ -2024,7 +2022,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=1,
+        item_number=1
     ),
     "0702": WITSSymbol(
         code="0702",
@@ -2035,7 +2033,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=2,
+        item_number=2
     ),
     "0703": WITSSymbol(
         code="0703",
@@ -2046,7 +2044,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=3,
+        item_number=3
     ),
     "0704": WITSSymbol(
         code="0704",
@@ -2057,7 +2055,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=4,
+        item_number=4
     ),
     "0705": WITSSymbol(
         code="0705",
@@ -2068,7 +2066,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=5,
+        item_number=5
     ),
     "0706": WITSSymbol(
         code="0706",
@@ -2079,7 +2077,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=6,
+        item_number=6
     ),
     "0707": WITSSymbol(
         code="0707",
@@ -2090,7 +2088,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=7,
+        item_number=7
     ),
     "0708": WITSSymbol(
         code="0708",
@@ -2101,7 +2099,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=7,
-        item_number=8,
+        item_number=8
     ),
     "0709": WITSSymbol(
         code="0709",
@@ -2112,7 +2110,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=7,
-        item_number=9,
+        item_number=9
     ),
     "0710": WITSSymbol(
         code="0710",
@@ -2123,7 +2121,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=10,
+        item_number=10
     ),
     "0711": WITSSymbol(
         code="0711",
@@ -2134,7 +2132,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=7,
-        item_number=11,
+        item_number=11
     ),
     "0712": WITSSymbol(
         code="0712",
@@ -2145,7 +2143,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=7,
-        item_number=12,
+        item_number=12
     ),
     "0713": WITSSymbol(
         code="0713",
@@ -2156,7 +2154,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DEG,
         fps_units=WITSUnits.DEG,
         record_type=7,
-        item_number=13,
+        item_number=13
     ),
     "0714": WITSSymbol(
         code="0714",
@@ -2167,7 +2165,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DEG,
         fps_units=WITSUnits.DEG,
         record_type=7,
-        item_number=14,
+        item_number=14
     ),
     "0715": WITSSymbol(
         code="0715",
@@ -2178,7 +2176,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DEG,
         fps_units=WITSUnits.DEG,
         record_type=7,
-        item_number=15,
+        item_number=15
     ),
     "0716": WITSSymbol(
         code="0716",
@@ -2189,7 +2187,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DEG,
         fps_units=WITSUnits.DEG,
         record_type=7,
-        item_number=16,
+        item_number=16
     ),
     "0717": WITSSymbol(
         code="0717",
@@ -2200,7 +2198,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DEG,
         fps_units=WITSUnits.DEG,
         record_type=7,
-        item_number=17,
+        item_number=17
     ),
     "0718": WITSSymbol(
         code="0718",
@@ -2211,7 +2209,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=7,
-        item_number=18,
+        item_number=18
     ),
     "0719": WITSSymbol(
         code="0719",
@@ -2222,7 +2220,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=7,
-        item_number=19,
+        item_number=19
     ),
     "0720": WITSSymbol(
         code="0720",
@@ -2233,7 +2231,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DGHM,
         fps_units=WITSUnits.DGHF,
         record_type=7,
-        item_number=20,
+        item_number=20
     ),
     "0721": WITSSymbol(
         code="0721",
@@ -2244,7 +2242,7 @@ WITS_RECORD_7_SYMBOLS = {
         metric_units=WITSUnits.DGHM,
         fps_units=WITSUnits.DGHF,
         record_type=7,
-        item_number=21,
+        item_number=21
     ),
 }
 
@@ -2259,7 +2257,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=1,
+        item_number=1
     ),
     "0802": WITSSymbol(
         code="0802",
@@ -2270,7 +2268,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=2,
+        item_number=2
     ),
     "0803": WITSSymbol(
         code="0803",
@@ -2281,7 +2279,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=3,
+        item_number=3
     ),
     "0804": WITSSymbol(
         code="0804",
@@ -2292,7 +2290,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=4,
+        item_number=4
     ),
     "0805": WITSSymbol(
         code="0805",
@@ -2303,7 +2301,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=5,
+        item_number=5
     ),
     "0806": WITSSymbol(
         code="0806",
@@ -2314,7 +2312,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=6,
+        item_number=6
     ),
     "0807": WITSSymbol(
         code="0807",
@@ -2325,7 +2323,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=7,
+        item_number=7
     ),
     "0808": WITSSymbol(
         code="0808",
@@ -2336,7 +2334,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=8,
+        item_number=8
     ),
     "0809": WITSSymbol(
         code="0809",
@@ -2347,7 +2345,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=9,
+        item_number=9
     ),
     "0810": WITSSymbol(
         code="0810",
@@ -2358,7 +2356,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=10,
+        item_number=10
     ),
     "0811": WITSSymbol(
         code="0811",
@@ -2369,7 +2367,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=11,
+        item_number=11
     ),
     "0812": WITSSymbol(
         code="0812",
@@ -2380,7 +2378,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=12,
+        item_number=12
     ),
     "0813": WITSSymbol(
         code="0813",
@@ -2391,7 +2389,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=13,
+        item_number=13
     ),
     "0814": WITSSymbol(
         code="0814",
@@ -2402,7 +2400,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=14,
+        item_number=14
     ),
     "0815": WITSSymbol(
         code="0815",
@@ -2413,7 +2411,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=15,
+        item_number=15
     ),
     "0816": WITSSymbol(
         code="0816",
@@ -2424,7 +2422,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=16,
+        item_number=16
     ),
     "0817": WITSSymbol(
         code="0817",
@@ -2435,7 +2433,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=17,
+        item_number=17
     ),
     "0818": WITSSymbol(
         code="0818",
@@ -2446,7 +2444,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=18,
+        item_number=18
     ),
     "0819": WITSSymbol(
         code="0819",
@@ -2457,7 +2455,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=19,
+        item_number=19
     ),
     "0820": WITSSymbol(
         code="0820",
@@ -2468,7 +2466,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=20,
+        item_number=20
     ),
     "0821": WITSSymbol(
         code="0821",
@@ -2479,7 +2477,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=21,
+        item_number=21
     ),
     "0822": WITSSymbol(
         code="0822",
@@ -2490,7 +2488,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=22,
+        item_number=22
     ),
     "0823": WITSSymbol(
         code="0823",
@@ -2501,7 +2499,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=23,
+        item_number=23
     ),
     "0824": WITSSymbol(
         code="0824",
@@ -2512,7 +2510,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=24,
+        item_number=24
     ),
     "0825": WITSSymbol(
         code="0825",
@@ -2523,7 +2521,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=25,
+        item_number=25
     ),
     "0826": WITSSymbol(
         code="0826",
@@ -2534,7 +2532,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=26,
+        item_number=26
     ),
     "0827": WITSSymbol(
         code="0827",
@@ -2545,7 +2543,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=27,
+        item_number=27
     ),
     "0828": WITSSymbol(
         code="0828",
@@ -2556,7 +2554,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=28,
+        item_number=28
     ),
     "0829": WITSSymbol(
         code="0829",
@@ -2567,7 +2565,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=29,
+        item_number=29
     ),
     "0830": WITSSymbol(
         code="0830",
@@ -2578,7 +2576,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=30,
+        item_number=30
     ),
     "0831": WITSSymbol(
         code="0831",
@@ -2589,7 +2587,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=31,
+        item_number=31
     ),
     "0832": WITSSymbol(
         code="0832",
@@ -2600,7 +2598,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=32,
+        item_number=32
     ),
     "0833": WITSSymbol(
         code="0833",
@@ -2611,7 +2609,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=33,
+        item_number=33
     ),
     "0834": WITSSymbol(
         code="0834",
@@ -2622,7 +2620,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=34,
+        item_number=34
     ),
     "0835": WITSSymbol(
         code="0835",
@@ -2633,7 +2631,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=8,
-        item_number=35,
+        item_number=35
     ),
     "0836": WITSSymbol(
         code="0836",
@@ -2644,7 +2642,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=8,
-        item_number=36,
+        item_number=36
     ),
     "0837": WITSSymbol(
         code="0837",
@@ -2655,7 +2653,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=37,
+        item_number=37
     ),
     "0838": WITSSymbol(
         code="0838",
@@ -2666,7 +2664,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=38,
+        item_number=38
     ),
     "0839": WITSSymbol(
         code="0839",
@@ -2677,7 +2675,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=39,
+        item_number=39
     ),
     "0840": WITSSymbol(
         code="0840",
@@ -2688,7 +2686,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=40,
+        item_number=40
     ),
     "0841": WITSSymbol(
         code="0841",
@@ -2699,7 +2697,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=41,
+        item_number=41
     ),
     "0842": WITSSymbol(
         code="0842",
@@ -2710,7 +2708,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=42,
+        item_number=42
     ),
     "0843": WITSSymbol(
         code="0843",
@@ -2721,7 +2719,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=8,
-        item_number=43,
+        item_number=43
     ),
     "0844": WITSSymbol(
         code="0844",
@@ -2732,7 +2730,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=8,
-        item_number=44,
+        item_number=44
     ),
     "0845": WITSSymbol(
         code="0845",
@@ -2743,7 +2741,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=8,
-        item_number=45,
+        item_number=45
     ),
     "0846": WITSSymbol(
         code="0846",
@@ -2754,7 +2752,7 @@ WITS_RECORD_8_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=8,
-        item_number=46,
+        item_number=46
     ),
 }
 
@@ -2769,7 +2767,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=1,
+        item_number=1
     ),
     "0902": WITSSymbol(
         code="0902",
@@ -2780,7 +2778,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=2,
+        item_number=2
     ),
     "0903": WITSSymbol(
         code="0903",
@@ -2791,7 +2789,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=3,
+        item_number=3
     ),
     "0904": WITSSymbol(
         code="0904",
@@ -2802,7 +2800,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=4,
+        item_number=4
     ),
     "0905": WITSSymbol(
         code="0905",
@@ -2813,7 +2811,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=5,
+        item_number=5
     ),
     "0906": WITSSymbol(
         code="0906",
@@ -2824,7 +2822,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=6,
+        item_number=6
     ),
     "0907": WITSSymbol(
         code="0907",
@@ -2835,7 +2833,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=7,
+        item_number=7
     ),
     "0908": WITSSymbol(
         code="0908",
@@ -2846,7 +2844,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=9,
-        item_number=8,
+        item_number=8
     ),
     "0909": WITSSymbol(
         code="0909",
@@ -2857,7 +2855,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=9,
-        item_number=9,
+        item_number=9
     ),
     "0910": WITSSymbol(
         code="0910",
@@ -2868,7 +2866,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=9,
-        item_number=10,
+        item_number=10
     ),
     "0911": WITSSymbol(
         code="0911",
@@ -2879,7 +2877,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=9,
-        item_number=11,
+        item_number=11
     ),
     "0912": WITSSymbol(
         code="0912",
@@ -2890,7 +2888,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=12,
+        item_number=12
     ),
     "0913": WITSSymbol(
         code="0913",
@@ -2901,7 +2899,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=9,
-        item_number=13,
+        item_number=13
     ),
     "0914": WITSSymbol(
         code="0914",
@@ -2912,7 +2910,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=9,
-        item_number=14,
+        item_number=14
     ),
     "0915": WITSSymbol(
         code="0915",
@@ -2923,7 +2921,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=9,
-        item_number=15,
+        item_number=15
     ),
     "0916": WITSSymbol(
         code="0916",
@@ -2934,7 +2932,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=9,
-        item_number=16,
+        item_number=16
     ),
     "0917": WITSSymbol(
         code="0917",
@@ -2945,7 +2943,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=9,
-        item_number=17,
+        item_number=17
     ),
     "0918": WITSSymbol(
         code="0918",
@@ -2956,7 +2954,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.KNM,
         fps_units=WITSUnits.KFLB,
         record_type=9,
-        item_number=18,
+        item_number=18
     ),
     "0919": WITSSymbol(
         code="0919",
@@ -2967,7 +2965,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.RPM,
         fps_units=WITSUnits.RPM,
         record_type=9,
-        item_number=19,
+        item_number=19
     ),
     "0920": WITSSymbol(
         code="0920",
@@ -2978,7 +2976,7 @@ WITS_RECORD_9_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=9,
-        item_number=20,
+        item_number=20
     ),
 }
 
@@ -2993,7 +2991,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=1,
+        item_number=1
     ),
     "1002": WITSSymbol(
         code="1002",
@@ -3004,7 +3002,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=2,
+        item_number=2
     ),
     "1003": WITSSymbol(
         code="1003",
@@ -3015,7 +3013,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=3,
+        item_number=3
     ),
     "1004": WITSSymbol(
         code="1004",
@@ -3026,7 +3024,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=4,
+        item_number=4
     ),
     "1005": WITSSymbol(
         code="1005",
@@ -3037,7 +3035,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=5,
+        item_number=5
     ),
     "1006": WITSSymbol(
         code="1006",
@@ -3048,7 +3046,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=6,
+        item_number=6
     ),
     "1007": WITSSymbol(
         code="1007",
@@ -3059,7 +3057,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=7,
+        item_number=7
     ),
     "1008": WITSSymbol(
         code="1008",
@@ -3070,7 +3068,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=10,
-        item_number=8,
+        item_number=8
     ),
     "1009": WITSSymbol(
         code="1009",
@@ -3081,7 +3079,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=10,
-        item_number=9,
+        item_number=9
     ),
     "1010": WITSSymbol(
         code="1010",
@@ -3092,7 +3090,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=10,
-        item_number=10,
+        item_number=10
     ),
     "1011": WITSSymbol(
         code="1011",
@@ -3103,7 +3101,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=10,
-        item_number=11,
+        item_number=11
     ),
     "1012": WITSSymbol(
         code="1012",
@@ -3114,7 +3112,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=10,
-        item_number=12,
+        item_number=12
     ),
     "1013": WITSSymbol(
         code="1013",
@@ -3125,7 +3123,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=10,
-        item_number=13,
+        item_number=13
     ),
     "1014": WITSSymbol(
         code="1014",
@@ -3136,7 +3134,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=10,
-        item_number=14,
+        item_number=14
     ),
     "1015": WITSSymbol(
         code="1015",
@@ -3147,7 +3145,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=10,
-        item_number=15,
+        item_number=15
     ),
     "1016": WITSSymbol(
         code="1016",
@@ -3158,7 +3156,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=10,
-        item_number=16,
+        item_number=16
     ),
     "1017": WITSSymbol(
         code="1017",
@@ -3169,7 +3167,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=10,
-        item_number=17,
+        item_number=17
     ),
     "1018": WITSSymbol(
         code="1018",
@@ -3180,7 +3178,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=10,
-        item_number=18,
+        item_number=18
     ),
     "1019": WITSSymbol(
         code="1019",
@@ -3191,7 +3189,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=10,
-        item_number=19,
+        item_number=19
     ),
     "1020": WITSSymbol(
         code="1020",
@@ -3202,7 +3200,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=10,
-        item_number=20,
+        item_number=20
     ),
     "1021": WITSSymbol(
         code="1021",
@@ -3213,7 +3211,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=21,
+        item_number=21
     ),
     "1022": WITSSymbol(
         code="1022",
@@ -3224,7 +3222,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=22,
+        item_number=22
     ),
     "1023": WITSSymbol(
         code="1023",
@@ -3235,7 +3233,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=10,
-        item_number=23,
+        item_number=23
     ),
     "1024": WITSSymbol(
         code="1024",
@@ -3246,7 +3244,7 @@ WITS_RECORD_10_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=10,
-        item_number=24,
+        item_number=24
     ),
 }
 
@@ -3261,7 +3259,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=1,
+        item_number=1
     ),
     "1102": WITSSymbol(
         code="1102",
@@ -3272,7 +3270,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=2,
+        item_number=2
     ),
     "1103": WITSSymbol(
         code="1103",
@@ -3283,7 +3281,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=3,
+        item_number=3
     ),
     "1104": WITSSymbol(
         code="1104",
@@ -3294,7 +3292,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=4,
+        item_number=4
     ),
     "1105": WITSSymbol(
         code="1105",
@@ -3305,7 +3303,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=5,
+        item_number=5
     ),
     "1106": WITSSymbol(
         code="1106",
@@ -3316,7 +3314,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=6,
+        item_number=6
     ),
     "1107": WITSSymbol(
         code="1107",
@@ -3327,7 +3325,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=7,
+        item_number=7
     ),
     "1108": WITSSymbol(
         code="1108",
@@ -3338,7 +3336,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=11,
-        item_number=8,
+        item_number=8
     ),
     "1109": WITSSymbol(
         code="1109",
@@ -3349,7 +3347,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=11,
-        item_number=9,
+        item_number=9
     ),
     "1110": WITSSymbol(
         code="1110",
@@ -3360,7 +3358,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=10,
+        item_number=10
     ),
     "1111": WITSSymbol(
         code="1111",
@@ -3371,7 +3369,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=11,
+        item_number=11
     ),
     "1112": WITSSymbol(
         code="1112",
@@ -3382,7 +3380,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=12,
+        item_number=12
     ),
     "1113": WITSSymbol(
         code="1113",
@@ -3393,7 +3391,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=13,
+        item_number=13
     ),
     "1114": WITSSymbol(
         code="1114",
@@ -3404,7 +3402,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=11,
-        item_number=14,
+        item_number=14
     ),
     "1115": WITSSymbol(
         code="1115",
@@ -3415,7 +3413,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=15,
+        item_number=15
     ),
     "1116": WITSSymbol(
         code="1116",
@@ -3426,7 +3424,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=16,
+        item_number=16
     ),
     "1117": WITSSymbol(
         code="1117",
@@ -3437,7 +3435,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=17,
+        item_number=17
     ),
     "1118": WITSSymbol(
         code="1118",
@@ -3448,7 +3446,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=18,
+        item_number=18
     ),
     "1119": WITSSymbol(
         code="1119",
@@ -3459,7 +3457,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=19,
+        item_number=19
     ),
     "1120": WITSSymbol(
         code="1120",
@@ -3470,7 +3468,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=20,
+        item_number=20
     ),
     "1121": WITSSymbol(
         code="1121",
@@ -3481,7 +3479,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=21,
+        item_number=21
     ),
     "1122": WITSSymbol(
         code="1122",
@@ -3492,7 +3490,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=22,
+        item_number=22
     ),
     "1123": WITSSymbol(
         code="1123",
@@ -3503,7 +3501,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=23,
+        item_number=23
     ),
     "1124": WITSSymbol(
         code="1124",
@@ -3514,7 +3512,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=24,
+        item_number=24
     ),
     "1125": WITSSymbol(
         code="1125",
@@ -3525,7 +3523,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=25,
+        item_number=25
     ),
     "1126": WITSSymbol(
         code="1126",
@@ -3536,7 +3534,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=26,
+        item_number=26
     ),
     "1127": WITSSymbol(
         code="1127",
@@ -3547,7 +3545,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=27,
+        item_number=27
     ),
     "1128": WITSSymbol(
         code="1128",
@@ -3558,7 +3556,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=28,
+        item_number=28
     ),
     "1129": WITSSymbol(
         code="1129",
@@ -3569,7 +3567,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=29,
+        item_number=29
     ),
     "1130": WITSSymbol(
         code="1130",
@@ -3580,7 +3578,7 @@ WITS_RECORD_11_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=11,
-        item_number=30,
+        item_number=30
     ),
 }
 
@@ -3595,7 +3593,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=1,
+        item_number=1
     ),
     "1202": WITSSymbol(
         code="1202",
@@ -3606,7 +3604,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=2,
+        item_number=2
     ),
     "1203": WITSSymbol(
         code="1203",
@@ -3617,7 +3615,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=3,
+        item_number=3
     ),
     "1204": WITSSymbol(
         code="1204",
@@ -3628,7 +3626,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=4,
+        item_number=4
     ),
     "1205": WITSSymbol(
         code="1205",
@@ -3639,7 +3637,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=5,
+        item_number=5
     ),
     "1206": WITSSymbol(
         code="1206",
@@ -3650,7 +3648,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=6,
+        item_number=6
     ),
     "1207": WITSSymbol(
         code="1207",
@@ -3661,7 +3659,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=7,
+        item_number=7
     ),
     "1208": WITSSymbol(
         code="1208",
@@ -3672,7 +3670,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=12,
-        item_number=8,
+        item_number=8
     ),
     "1209": WITSSymbol(
         code="1209",
@@ -3683,7 +3681,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=12,
-        item_number=9,
+        item_number=9
     ),
     "1210": WITSSymbol(
         code="1210",
@@ -3694,7 +3692,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=10,
+        item_number=10
     ),
     "1211": WITSSymbol(
         code="1211",
@@ -3705,7 +3703,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=11,
+        item_number=11
     ),
     "1212": WITSSymbol(
         code="1212",
@@ -3716,7 +3714,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=12,
+        item_number=12
     ),
     "1213": WITSSymbol(
         code="1213",
@@ -3727,7 +3725,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=13,
+        item_number=13
     ),
     "1214": WITSSymbol(
         code="1214",
@@ -3738,7 +3736,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=14,
+        item_number=14
     ),
     "1215": WITSSymbol(
         code="1215",
@@ -3749,7 +3747,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=15,
+        item_number=15
     ),
     "1216": WITSSymbol(
         code="1216",
@@ -3760,7 +3758,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=16,
+        item_number=16
     ),
     "1217": WITSSymbol(
         code="1217",
@@ -3771,7 +3769,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=17,
+        item_number=17
     ),
     "1218": WITSSymbol(
         code="1218",
@@ -3782,7 +3780,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=18,
+        item_number=18
     ),
     "1219": WITSSymbol(
         code="1219",
@@ -3793,7 +3791,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=19,
+        item_number=19
     ),
     "1220": WITSSymbol(
         code="1220",
@@ -3804,7 +3802,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=20,
+        item_number=20
     ),
     "1221": WITSSymbol(
         code="1221",
@@ -3815,7 +3813,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=21,
+        item_number=21
     ),
     "1222": WITSSymbol(
         code="1222",
@@ -3826,7 +3824,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=22,
+        item_number=22
     ),
     "1223": WITSSymbol(
         code="1223",
@@ -3837,7 +3835,7 @@ WITS_RECORD_12_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=12,
-        item_number=23,
+        item_number=23
     ),
 }
 
@@ -3852,7 +3850,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=1,
+        item_number=1
     ),
     "1302": WITSSymbol(
         code="1302",
@@ -3863,7 +3861,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=2,
+        item_number=2
     ),
     "1303": WITSSymbol(
         code="1303",
@@ -3874,7 +3872,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=3,
+        item_number=3
     ),
     "1304": WITSSymbol(
         code="1304",
@@ -3885,7 +3883,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=4,
+        item_number=4
     ),
     "1305": WITSSymbol(
         code="1305",
@@ -3896,7 +3894,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=5,
+        item_number=5
     ),
     "1306": WITSSymbol(
         code="1306",
@@ -3907,7 +3905,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=6,
+        item_number=6
     ),
     "1307": WITSSymbol(
         code="1307",
@@ -3918,7 +3916,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=7,
+        item_number=7
     ),
     "1308": WITSSymbol(
         code="1308",
@@ -3929,7 +3927,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=13,
-        item_number=8,
+        item_number=8
     ),
     "1309": WITSSymbol(
         code="1309",
@@ -3940,7 +3938,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=13,
-        item_number=9,
+        item_number=9
     ),
     "1310": WITSSymbol(
         code="1310",
@@ -3951,7 +3949,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=10,
+        item_number=10
     ),
     "1311": WITSSymbol(
         code="1311",
@@ -3962,7 +3960,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=11,
+        item_number=11
     ),
     "1312": WITSSymbol(
         code="1312",
@@ -3973,7 +3971,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=12,
+        item_number=12
     ),
     "1313": WITSSymbol(
         code="1313",
@@ -3984,7 +3982,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=13,
+        item_number=13
     ),
     "1314": WITSSymbol(
         code="1314",
@@ -3995,7 +3993,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=14,
+        item_number=14
     ),
     "1315": WITSSymbol(
         code="1315",
@@ -4006,7 +4004,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=15,
+        item_number=15
     ),
     "1316": WITSSymbol(
         code="1316",
@@ -4017,7 +4015,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=16,
+        item_number=16
     ),
     "1317": WITSSymbol(
         code="1317",
@@ -4028,7 +4026,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=17,
+        item_number=17
     ),
     "1318": WITSSymbol(
         code="1318",
@@ -4039,7 +4037,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=18,
+        item_number=18
     ),
     "1319": WITSSymbol(
         code="1319",
@@ -4050,7 +4048,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=19,
+        item_number=19
     ),
     "1320": WITSSymbol(
         code="1320",
@@ -4061,7 +4059,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=20,
+        item_number=20
     ),
     "1321": WITSSymbol(
         code="1321",
@@ -4072,7 +4070,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=21,
+        item_number=21
     ),
     "1322": WITSSymbol(
         code="1322",
@@ -4083,7 +4081,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=22,
+        item_number=22
     ),
     "1323": WITSSymbol(
         code="1323",
@@ -4094,7 +4092,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=23,
+        item_number=23
     ),
     "1324": WITSSymbol(
         code="1324",
@@ -4105,7 +4103,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=24,
+        item_number=24
     ),
     "1325": WITSSymbol(
         code="1325",
@@ -4116,7 +4114,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=25,
+        item_number=25
     ),
     "1326": WITSSymbol(
         code="1326",
@@ -4127,7 +4125,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=26,
+        item_number=26
     ),
     "1327": WITSSymbol(
         code="1327",
@@ -4138,7 +4136,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=27,
+        item_number=27
     ),
     "1328": WITSSymbol(
         code="1328",
@@ -4149,7 +4147,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=28,
+        item_number=28
     ),
     "1329": WITSSymbol(
         code="1329",
@@ -4160,7 +4158,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=29,
+        item_number=29
     ),
     "1330": WITSSymbol(
         code="1330",
@@ -4171,7 +4169,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=30,
+        item_number=30
     ),
     "1331": WITSSymbol(
         code="1331",
@@ -4182,7 +4180,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=31,
+        item_number=31
     ),
     "1332": WITSSymbol(
         code="1332",
@@ -4193,7 +4191,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=32,
+        item_number=32
     ),
     "1333": WITSSymbol(
         code="1333",
@@ -4204,7 +4202,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=33,
+        item_number=33
     ),
     "1334": WITSSymbol(
         code="1334",
@@ -4215,7 +4213,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=34,
+        item_number=34
     ),
     "1335": WITSSymbol(
         code="1335",
@@ -4226,7 +4224,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=35,
+        item_number=35
     ),
     "1336": WITSSymbol(
         code="1336",
@@ -4237,7 +4235,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=36,
+        item_number=36
     ),
     "1337": WITSSymbol(
         code="1337",
@@ -4248,7 +4246,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=37,
+        item_number=37
     ),
     "1338": WITSSymbol(
         code="1338",
@@ -4259,7 +4257,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=38,
+        item_number=38
     ),
     "1339": WITSSymbol(
         code="1339",
@@ -4270,7 +4268,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=39,
+        item_number=39
     ),
     "1340": WITSSymbol(
         code="1340",
@@ -4281,7 +4279,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=40,
+        item_number=40
     ),
     "1341": WITSSymbol(
         code="1341",
@@ -4292,7 +4290,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=41,
+        item_number=41
     ),
     "1342": WITSSymbol(
         code="1342",
@@ -4303,7 +4301,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=42,
+        item_number=42
     ),
     "1343": WITSSymbol(
         code="1343",
@@ -4314,7 +4312,7 @@ WITS_RECORD_13_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=13,
-        item_number=43,
+        item_number=43
     ),
 }
 
@@ -4329,7 +4327,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=1,
+        item_number=1
     ),
     "1402": WITSSymbol(
         code="1402",
@@ -4340,7 +4338,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=2,
+        item_number=2
     ),
     "1403": WITSSymbol(
         code="1403",
@@ -4351,7 +4349,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=3,
+        item_number=3
     ),
     "1404": WITSSymbol(
         code="1404",
@@ -4362,7 +4360,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=4,
+        item_number=4
     ),
     "1405": WITSSymbol(
         code="1405",
@@ -4373,7 +4371,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=5,
+        item_number=5
     ),
     "1406": WITSSymbol(
         code="1406",
@@ -4384,7 +4382,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=6,
+        item_number=6
     ),
     "1407": WITSSymbol(
         code="1407",
@@ -4395,7 +4393,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=7,
+        item_number=7
     ),
     "1408": WITSSymbol(
         code="1408",
@@ -4406,7 +4404,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=14,
-        item_number=8,
+        item_number=8
     ),
     "1409": WITSSymbol(
         code="1409",
@@ -4417,7 +4415,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=14,
-        item_number=9,
+        item_number=9
     ),
     "1410": WITSSymbol(
         code="1410",
@@ -4428,7 +4426,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=14,
-        item_number=10,
+        item_number=10
     ),
     "1411": WITSSymbol(
         code="1411",
@@ -4439,7 +4437,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=14,
-        item_number=11,
+        item_number=11
     ),
     "1412": WITSSymbol(
         code="1412",
@@ -4450,7 +4448,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=14,
-        item_number=12,
+        item_number=12
     ),
     "1413": WITSSymbol(
         code="1413",
@@ -4461,7 +4459,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=14,
-        item_number=13,
+        item_number=13
     ),
     "1414": WITSSymbol(
         code="1414",
@@ -4472,7 +4470,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.MMHO,
         fps_units=WITSUnits.MMHO,
         record_type=14,
-        item_number=14,
+        item_number=14
     ),
     "1415": WITSSymbol(
         code="1415",
@@ -4483,7 +4481,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.MMHO,
         fps_units=WITSUnits.MMHO,
         record_type=14,
-        item_number=15,
+        item_number=15
     ),
     "1416": WITSSymbol(
         code="1416",
@@ -4494,7 +4492,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=16,
+        item_number=16
     ),
     "1417": WITSSymbol(
         code="1417",
@@ -4505,7 +4503,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=17,
+        item_number=17
     ),
     "1418": WITSSymbol(
         code="1418",
@@ -4516,7 +4514,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=14,
-        item_number=18,
+        item_number=18
     ),
     "1419": WITSSymbol(
         code="1419",
@@ -4527,7 +4525,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=14,
-        item_number=19,
+        item_number=19
     ),
     "1420": WITSSymbol(
         code="1420",
@@ -4538,7 +4536,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=14,
-        item_number=20,
+        item_number=20
     ),
     "1421": WITSSymbol(
         code="1421",
@@ -4549,7 +4547,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=14,
-        item_number=21,
+        item_number=21
     ),
     "1422": WITSSymbol(
         code="1422",
@@ -4560,7 +4558,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=22,
+        item_number=22
     ),
     "1423": WITSSymbol(
         code="1423",
@@ -4571,7 +4569,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=23,
+        item_number=23
     ),
     "1424": WITSSymbol(
         code="1424",
@@ -4582,7 +4580,7 @@ WITS_RECORD_14_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=14,
-        item_number=24,
+        item_number=24
     ),
 }
 
@@ -4597,7 +4595,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=1,
+        item_number=1
     ),
     "1502": WITSSymbol(
         code="1502",
@@ -4608,7 +4606,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=2,
+        item_number=2
     ),
     "1503": WITSSymbol(
         code="1503",
@@ -4619,7 +4617,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=3,
+        item_number=3
     ),
     "1504": WITSSymbol(
         code="1504",
@@ -4630,7 +4628,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=4,
+        item_number=4
     ),
     "1505": WITSSymbol(
         code="1505",
@@ -4641,7 +4639,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=5,
+        item_number=5
     ),
     "1506": WITSSymbol(
         code="1506",
@@ -4652,7 +4650,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=6,
+        item_number=6
     ),
     "1507": WITSSymbol(
         code="1507",
@@ -4663,7 +4661,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=7,
+        item_number=7
     ),
     "1508": WITSSymbol(
         code="1508",
@@ -4674,7 +4672,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=15,
-        item_number=8,
+        item_number=8
     ),
     "1509": WITSSymbol(
         code="1509",
@@ -4685,7 +4683,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=15,
-        item_number=9,
+        item_number=9
     ),
     "1510": WITSSymbol(
         code="1510",
@@ -4696,7 +4694,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=10,
+        item_number=10
     ),
     "1511": WITSSymbol(
         code="1511",
@@ -4707,7 +4705,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=11,
+        item_number=11
     ),
     "1512": WITSSymbol(
         code="1512",
@@ -4718,7 +4716,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=12,
+        item_number=12
     ),
     "1513": WITSSymbol(
         code="1513",
@@ -4729,7 +4727,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=13,
+        item_number=13
     ),
     "1514": WITSSymbol(
         code="1514",
@@ -4740,7 +4738,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=14,
+        item_number=14
     ),
     "1515": WITSSymbol(
         code="1515",
@@ -4751,7 +4749,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=15,
+        item_number=15
     ),
     "1516": WITSSymbol(
         code="1516",
@@ -4762,7 +4760,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=16,
+        item_number=16
     ),
     "1517": WITSSymbol(
         code="1517",
@@ -4773,7 +4771,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=17,
+        item_number=17
     ),
     "1518": WITSSymbol(
         code="1518",
@@ -4784,7 +4782,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=18,
+        item_number=18
     ),
     "1519": WITSSymbol(
         code="1519",
@@ -4795,7 +4793,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=19,
+        item_number=19
     ),
     "1520": WITSSymbol(
         code="1520",
@@ -4806,7 +4804,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=20,
+        item_number=20
     ),
     "1521": WITSSymbol(
         code="1521",
@@ -4817,7 +4815,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=21,
+        item_number=21
     ),
     "1522": WITSSymbol(
         code="1522",
@@ -4828,7 +4826,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=22,
+        item_number=22
     ),
     "1523": WITSSymbol(
         code="1523",
@@ -4839,7 +4837,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=23,
+        item_number=23
     ),
     "1524": WITSSymbol(
         code="1524",
@@ -4850,7 +4848,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=24,
+        item_number=24
     ),
     "1525": WITSSymbol(
         code="1525",
@@ -4861,7 +4859,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=25,
+        item_number=25
     ),
     "1526": WITSSymbol(
         code="1526",
@@ -4872,7 +4870,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=26,
+        item_number=26
     ),
     "1527": WITSSymbol(
         code="1527",
@@ -4883,7 +4881,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=27,
+        item_number=27
     ),
     "1528": WITSSymbol(
         code="1528",
@@ -4894,7 +4892,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=28,
+        item_number=28
     ),
     "1529": WITSSymbol(
         code="1529",
@@ -4905,7 +4903,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=29,
+        item_number=29
     ),
     "1530": WITSSymbol(
         code="1530",
@@ -4916,7 +4914,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=30,
+        item_number=30
     ),
     "1531": WITSSymbol(
         code="1531",
@@ -4927,7 +4925,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=31,
+        item_number=31
     ),
     "1532": WITSSymbol(
         code="1532",
@@ -4938,7 +4936,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=32,
+        item_number=32
     ),
     "1533": WITSSymbol(
         code="1533",
@@ -4949,7 +4947,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=33,
+        item_number=33
     ),
     "1534": WITSSymbol(
         code="1534",
@@ -4960,7 +4958,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=34,
+        item_number=34
     ),
     "1535": WITSSymbol(
         code="1535",
@@ -4971,7 +4969,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=35,
+        item_number=35
     ),
     "1536": WITSSymbol(
         code="1536",
@@ -4982,7 +4980,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=36,
+        item_number=36
     ),
     "1537": WITSSymbol(
         code="1537",
@@ -4993,7 +4991,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=37,
+        item_number=37
     ),
     "1538": WITSSymbol(
         code="1538",
@@ -5004,7 +5002,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=38,
+        item_number=38
     ),
     "1539": WITSSymbol(
         code="1539",
@@ -5015,7 +5013,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=39,
+        item_number=39
     ),
     "1540": WITSSymbol(
         code="1540",
@@ -5026,7 +5024,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=40,
+        item_number=40
     ),
     "1541": WITSSymbol(
         code="1541",
@@ -5037,7 +5035,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=41,
+        item_number=41
     ),
     "1542": WITSSymbol(
         code="1542",
@@ -5048,7 +5046,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=42,
+        item_number=42
     ),
     "1543": WITSSymbol(
         code="1543",
@@ -5059,7 +5057,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=43,
+        item_number=43
     ),
     "1544": WITSSymbol(
         code="1544",
@@ -5070,7 +5068,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=44,
+        item_number=44
     ),
     "1545": WITSSymbol(
         code="1545",
@@ -5081,7 +5079,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=45,
+        item_number=45
     ),
     "1546": WITSSymbol(
         code="1546",
@@ -5092,7 +5090,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=46,
+        item_number=46
     ),
     "1547": WITSSymbol(
         code="1547",
@@ -5103,7 +5101,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=47,
+        item_number=47
     ),
     "1548": WITSSymbol(
         code="1548",
@@ -5114,7 +5112,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=48,
+        item_number=48
     ),
     "1549": WITSSymbol(
         code="1549",
@@ -5125,7 +5123,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=49,
+        item_number=49
     ),
     "1550": WITSSymbol(
         code="1550",
@@ -5136,7 +5134,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=50,
+        item_number=50
     ),
     "1551": WITSSymbol(
         code="1551",
@@ -5147,7 +5145,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=51,
+        item_number=51
     ),
     "1552": WITSSymbol(
         code="1552",
@@ -5158,7 +5156,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=52,
+        item_number=52
     ),
     "1553": WITSSymbol(
         code="1553",
@@ -5169,7 +5167,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=15,
-        item_number=53,
+        item_number=53
     ),
     "1554": WITSSymbol(
         code="1554",
@@ -5180,7 +5178,7 @@ WITS_RECORD_15_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=15,
-        item_number=54,
+        item_number=54
     ),
 }
 
@@ -5195,7 +5193,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=1,
+        item_number=1
     ),
     "1602": WITSSymbol(
         code="1602",
@@ -5206,7 +5204,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=2,
+        item_number=2
     ),
     "1603": WITSSymbol(
         code="1603",
@@ -5217,7 +5215,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=3,
+        item_number=3
     ),
     "1604": WITSSymbol(
         code="1604",
@@ -5228,7 +5226,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=4,
+        item_number=4
     ),
     "1605": WITSSymbol(
         code="1605",
@@ -5239,7 +5237,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=5,
+        item_number=5
     ),
     "1606": WITSSymbol(
         code="1606",
@@ -5250,7 +5248,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=6,
+        item_number=6
     ),
     "1607": WITSSymbol(
         code="1607",
@@ -5261,7 +5259,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=7,
+        item_number=7
     ),
     "1608": WITSSymbol(
         code="1608",
@@ -5272,7 +5270,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=8,
+        item_number=8
     ),
     "1609": WITSSymbol(
         code="1609",
@@ -5283,7 +5281,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=16,
-        item_number=9,
+        item_number=9
     ),
     "1610": WITSSymbol(
         code="1610",
@@ -5294,7 +5292,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=16,
-        item_number=10,
+        item_number=10
     ),
     "1611": WITSSymbol(
         code="1611",
@@ -5305,7 +5303,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=16,
-        item_number=11,
+        item_number=11
     ),
     "1612": WITSSymbol(
         code="1612",
@@ -5316,7 +5314,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=16,
-        item_number=12,
+        item_number=12
     ),
     "1613": WITSSymbol(
         code="1613",
@@ -5327,7 +5325,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=13,
+        item_number=13
     ),
     "1614": WITSSymbol(
         code="1614",
@@ -5338,7 +5336,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=14,
+        item_number=14
     ),
     "1615": WITSSymbol(
         code="1615",
@@ -5349,7 +5347,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=15,
+        item_number=15
     ),
     "1616": WITSSymbol(
         code="1616",
@@ -5360,7 +5358,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=16,
+        item_number=16
     ),
     "1617": WITSSymbol(
         code="1617",
@@ -5371,7 +5369,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=17,
+        item_number=17
     ),
     "1618": WITSSymbol(
         code="1618",
@@ -5382,7 +5380,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=18,
+        item_number=18
     ),
     "1619": WITSSymbol(
         code="1619",
@@ -5393,7 +5391,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=19,
+        item_number=19
     ),
     "1620": WITSSymbol(
         code="1620",
@@ -5404,7 +5402,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=20,
+        item_number=20
     ),
     "1621": WITSSymbol(
         code="1621",
@@ -5415,7 +5413,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=21,
+        item_number=21
     ),
     "1622": WITSSymbol(
         code="1622",
@@ -5426,7 +5424,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=22,
+        item_number=22
     ),
     "1623": WITSSymbol(
         code="1623",
@@ -5437,7 +5435,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=23,
+        item_number=23
     ),
     "1624": WITSSymbol(
         code="1624",
@@ -5448,7 +5446,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=16,
-        item_number=24,
+        item_number=24
     ),
     "1625": WITSSymbol(
         code="1625",
@@ -5459,7 +5457,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=25,
+        item_number=25
     ),
     "1626": WITSSymbol(
         code="1626",
@@ -5470,7 +5468,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=26,
+        item_number=26
     ),
     "1627": WITSSymbol(
         code="1627",
@@ -5481,7 +5479,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=27,
+        item_number=27
     ),
     "1628": WITSSymbol(
         code="1628",
@@ -5492,7 +5490,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=28,
+        item_number=28
     ),
     "1629": WITSSymbol(
         code="1629",
@@ -5503,7 +5501,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=16,
-        item_number=29,
+        item_number=29
     ),
     "1630": WITSSymbol(
         code="1630",
@@ -5514,7 +5512,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=30,
+        item_number=30
     ),
     "1631": WITSSymbol(
         code="1631",
@@ -5525,7 +5523,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=31,
+        item_number=31
     ),
     "1632": WITSSymbol(
         code="1632",
@@ -5536,7 +5534,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=32,
+        item_number=32
     ),
     "1633": WITSSymbol(
         code="1633",
@@ -5547,7 +5545,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=33,
+        item_number=33
     ),
     "1634": WITSSymbol(
         code="1634",
@@ -5558,7 +5556,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=34,
+        item_number=34
     ),
     "1635": WITSSymbol(
         code="1635",
@@ -5569,7 +5567,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=35,
+        item_number=35
     ),
     "1636": WITSSymbol(
         code="1636",
@@ -5580,7 +5578,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=36,
+        item_number=36
     ),
     "1637": WITSSymbol(
         code="1637",
@@ -5591,7 +5589,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=37,
+        item_number=37
     ),
     "1638": WITSSymbol(
         code="1638",
@@ -5602,7 +5600,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=38,
+        item_number=38
     ),
     "1639": WITSSymbol(
         code="1639",
@@ -5613,7 +5611,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=39,
+        item_number=39
     ),
     "1640": WITSSymbol(
         code="1640",
@@ -5624,7 +5622,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=40,
+        item_number=40
     ),
     "1641": WITSSymbol(
         code="1641",
@@ -5635,7 +5633,7 @@ WITS_RECORD_16_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=16,
-        item_number=41,
+        item_number=41
     ),
 }
 
@@ -5650,7 +5648,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=1,
+        item_number=1
     ),
     "1702": WITSSymbol(
         code="1702",
@@ -5661,7 +5659,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=2,
+        item_number=2
     ),
     "1703": WITSSymbol(
         code="1703",
@@ -5672,7 +5670,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=3,
+        item_number=3
     ),
     "1704": WITSSymbol(
         code="1704",
@@ -5683,7 +5681,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=4,
+        item_number=4
     ),
     "1705": WITSSymbol(
         code="1705",
@@ -5694,7 +5692,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=5,
+        item_number=5
     ),
     "1706": WITSSymbol(
         code="1706",
@@ -5705,7 +5703,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=6,
+        item_number=6
     ),
     "1707": WITSSymbol(
         code="1707",
@@ -5716,7 +5714,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=7,
+        item_number=7
     ),
     "1708": WITSSymbol(
         code="1708",
@@ -5727,7 +5725,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=8,
+        item_number=8
     ),
     "1709": WITSSymbol(
         code="1709",
@@ -5738,7 +5736,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=9,
+        item_number=9
     ),
     "1710": WITSSymbol(
         code="1710",
@@ -5749,7 +5747,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=10,
+        item_number=10
     ),
     "1711": WITSSymbol(
         code="1711",
@@ -5760,7 +5758,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=11,
+        item_number=11
     ),
     "1712": WITSSymbol(
         code="1712",
@@ -5771,7 +5769,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=17,
-        item_number=12,
+        item_number=12
     ),
     "1713": WITSSymbol(
         code="1713",
@@ -5782,7 +5780,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=17,
-        item_number=13,
+        item_number=13
     ),
     "1714": WITSSymbol(
         code="1714",
@@ -5793,7 +5791,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=14,
+        item_number=14
     ),
     "1715": WITSSymbol(
         code="1715",
@@ -5804,7 +5802,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=15,
+        item_number=15
     ),
     "1716": WITSSymbol(
         code="1716",
@@ -5815,7 +5813,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=16,
+        item_number=16
     ),
     "1717": WITSSymbol(
         code="1717",
@@ -5826,7 +5824,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=17,
+        item_number=17
     ),
     "1718": WITSSymbol(
         code="1718",
@@ -5837,7 +5835,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=17,
-        item_number=18,
+        item_number=18
     ),
     "1719": WITSSymbol(
         code="1719",
@@ -5848,7 +5846,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=17,
-        item_number=19,
+        item_number=19
     ),
     "1720": WITSSymbol(
         code="1720",
@@ -5859,7 +5857,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=17,
-        item_number=20,
+        item_number=20
     ),
     "1721": WITSSymbol(
         code="1721",
@@ -5870,7 +5868,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=17,
-        item_number=21,
+        item_number=21
     ),
     "1722": WITSSymbol(
         code="1722",
@@ -5881,7 +5879,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=17,
-        item_number=22,
+        item_number=22
     ),
     "1723": WITSSymbol(
         code="1723",
@@ -5892,7 +5890,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=17,
-        item_number=23,
+        item_number=23
     ),
     "1724": WITSSymbol(
         code="1724",
@@ -5903,7 +5901,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=24,
+        item_number=24
     ),
     "1725": WITSSymbol(
         code="1725",
@@ -5914,7 +5912,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=17,
-        item_number=25,
+        item_number=25
     ),
     "1726": WITSSymbol(
         code="1726",
@@ -5925,7 +5923,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=26,
+        item_number=26
     ),
     "1727": WITSSymbol(
         code="1727",
@@ -5936,7 +5934,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=17,
-        item_number=27,
+        item_number=27
     ),
     "1728": WITSSymbol(
         code="1728",
@@ -5947,7 +5945,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=17,
-        item_number=28,
+        item_number=28
     ),
     "1729": WITSSymbol(
         code="1729",
@@ -5958,7 +5956,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=17,
-        item_number=29,
+        item_number=29
     ),
     "1730": WITSSymbol(
         code="1730",
@@ -5969,7 +5967,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=17,
-        item_number=30,
+        item_number=30
     ),
     "1731": WITSSymbol(
         code="1731",
@@ -5980,7 +5978,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=17,
-        item_number=31,
+        item_number=31
     ),
     "1732": WITSSymbol(
         code="1732",
@@ -5991,7 +5989,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=32,
+        item_number=32
     ),
     "1733": WITSSymbol(
         code="1733",
@@ -6002,7 +6000,7 @@ WITS_RECORD_17_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=17,
-        item_number=33,
+        item_number=33
     ),
 }
 
@@ -6017,7 +6015,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=1,
+        item_number=1
     ),
     "1802": WITSSymbol(
         code="1802",
@@ -6028,7 +6026,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=2,
+        item_number=2
     ),
     "1803": WITSSymbol(
         code="1803",
@@ -6039,7 +6037,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=3,
+        item_number=3
     ),
     "1804": WITSSymbol(
         code="1804",
@@ -6050,7 +6048,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=4,
+        item_number=4
     ),
     "1805": WITSSymbol(
         code="1805",
@@ -6061,7 +6059,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=5,
+        item_number=5
     ),
     "1806": WITSSymbol(
         code="1806",
@@ -6072,7 +6070,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=6,
+        item_number=6
     ),
     "1807": WITSSymbol(
         code="1807",
@@ -6083,7 +6081,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=7,
+        item_number=7
     ),
     "1808": WITSSymbol(
         code="1808",
@@ -6094,7 +6092,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=8,
+        item_number=8
     ),
     "1809": WITSSymbol(
         code="1809",
@@ -6105,7 +6103,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=18,
-        item_number=9,
+        item_number=9
     ),
     "1810": WITSSymbol(
         code="1810",
@@ -6116,7 +6114,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=18,
-        item_number=10,
+        item_number=10
     ),
     "1811": WITSSymbol(
         code="1811",
@@ -6127,7 +6125,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=18,
-        item_number=11,
+        item_number=11
     ),
     "1812": WITSSymbol(
         code="1812",
@@ -6138,7 +6136,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=18,
-        item_number=12,
+        item_number=12
     ),
     "1813": WITSSymbol(
         code="1813",
@@ -6149,7 +6147,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.HR,
         fps_units=WITSUnits.HR,
         record_type=18,
-        item_number=13,
+        item_number=13
     ),
     "1814": WITSSymbol(
         code="1814",
@@ -6160,7 +6158,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=14,
+        item_number=14
     ),
     "1815": WITSSymbol(
         code="1815",
@@ -6171,7 +6169,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=18,
-        item_number=15,
+        item_number=15
     ),
     "1816": WITSSymbol(
         code="1816",
@@ -6182,7 +6180,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=18,
-        item_number=16,
+        item_number=16
     ),
     "1817": WITSSymbol(
         code="1817",
@@ -6193,7 +6191,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=18,
-        item_number=17,
+        item_number=17
     ),
     "1818": WITSSymbol(
         code="1818",
@@ -6204,7 +6202,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=18,
-        item_number=18,
+        item_number=18
     ),
     "1819": WITSSymbol(
         code="1819",
@@ -6215,7 +6213,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=18,
-        item_number=19,
+        item_number=19
     ),
     "1820": WITSSymbol(
         code="1820",
@@ -6226,7 +6224,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=20,
+        item_number=20
     ),
     "1821": WITSSymbol(
         code="1821",
@@ -6237,7 +6235,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=21,
+        item_number=21
     ),
     "1822": WITSSymbol(
         code="1822",
@@ -6248,7 +6246,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=22,
+        item_number=22
     ),
     "1823": WITSSymbol(
         code="1823",
@@ -6259,7 +6257,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=18,
-        item_number=23,
+        item_number=23
     ),
     "1824": WITSSymbol(
         code="1824",
@@ -6270,7 +6268,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=24,
+        item_number=24
     ),
     "1825": WITSSymbol(
         code="1825",
@@ -6281,7 +6279,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.M3,
         fps_units=WITSUnits.BBL,
         record_type=18,
-        item_number=25,
+        item_number=25
     ),
     "1826": WITSSymbol(
         code="1826",
@@ -6292,7 +6290,7 @@ WITS_RECORD_18_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=18,
-        item_number=26,
+        item_number=26
     ),
 }
 
@@ -6307,7 +6305,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=1,
+        item_number=1
     ),
     "1902": WITSSymbol(
         code="1902",
@@ -6318,7 +6316,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=2,
+        item_number=2
     ),
     "1903": WITSSymbol(
         code="1903",
@@ -6329,7 +6327,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=3,
+        item_number=3
     ),
     "1904": WITSSymbol(
         code="1904",
@@ -6340,7 +6338,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=4,
+        item_number=4
     ),
     "1905": WITSSymbol(
         code="1905",
@@ -6351,7 +6349,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=5,
+        item_number=5
     ),
     "1906": WITSSymbol(
         code="1906",
@@ -6362,7 +6360,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=6,
+        item_number=6
     ),
     "1907": WITSSymbol(
         code="1907",
@@ -6373,7 +6371,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=7,
+        item_number=7
     ),
     "1908": WITSSymbol(
         code="1908",
@@ -6384,7 +6382,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=8,
+        item_number=8
     ),
     "1909": WITSSymbol(
         code="1909",
@@ -6395,7 +6393,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=9,
+        item_number=9
     ),
     "1910": WITSSymbol(
         code="1910",
@@ -6406,7 +6404,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=10,
+        item_number=10
     ),
     "1911": WITSSymbol(
         code="1911",
@@ -6417,7 +6415,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=11,
+        item_number=11
     ),
     "1912": WITSSymbol(
         code="1912",
@@ -6428,7 +6426,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=12,
+        item_number=12
     ),
     "1913": WITSSymbol(
         code="1913",
@@ -6439,7 +6437,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=13,
+        item_number=13
     ),
     "1914": WITSSymbol(
         code="1914",
@@ -6450,7 +6448,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=14,
+        item_number=14
     ),
     "1915": WITSSymbol(
         code="1915",
@@ -6461,7 +6459,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=15,
+        item_number=15
     ),
     "1916": WITSSymbol(
         code="1916",
@@ -6472,7 +6470,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=16,
+        item_number=16
     ),
     "1917": WITSSymbol(
         code="1917",
@@ -6483,7 +6481,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=17,
+        item_number=17
     ),
     "1918": WITSSymbol(
         code="1918",
@@ -6494,7 +6492,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=18,
+        item_number=18
     ),
     "1919": WITSSymbol(
         code="1919",
@@ -6505,7 +6503,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=19,
+        item_number=19
     ),
     "1920": WITSSymbol(
         code="1920",
@@ -6516,7 +6514,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=20,
+        item_number=20
     ),
     "1921": WITSSymbol(
         code="1921",
@@ -6527,7 +6525,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=21,
+        item_number=21
     ),
     "1922": WITSSymbol(
         code="1922",
@@ -6538,7 +6536,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=22,
+        item_number=22
     ),
     "1923": WITSSymbol(
         code="1923",
@@ -6549,7 +6547,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=23,
+        item_number=23
     ),
     "1924": WITSSymbol(
         code="1924",
@@ -6560,7 +6558,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=24,
+        item_number=24
     ),
     "1925": WITSSymbol(
         code="1925",
@@ -6571,7 +6569,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=25,
+        item_number=25
     ),
     "1926": WITSSymbol(
         code="1926",
@@ -6582,7 +6580,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=26,
+        item_number=26
     ),
     "1927": WITSSymbol(
         code="1927",
@@ -6593,7 +6591,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=27,
+        item_number=27
     ),
     "1928": WITSSymbol(
         code="1928",
@@ -6604,7 +6602,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=28,
+        item_number=28
     ),
     "1929": WITSSymbol(
         code="1929",
@@ -6615,7 +6613,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=29,
+        item_number=29
     ),
     "1930": WITSSymbol(
         code="1930",
@@ -6626,7 +6624,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=30,
+        item_number=30
     ),
     "1931": WITSSymbol(
         code="1931",
@@ -6637,7 +6635,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=31,
+        item_number=31
     ),
     "1932": WITSSymbol(
         code="1932",
@@ -6648,7 +6646,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=32,
+        item_number=32
     ),
     "1933": WITSSymbol(
         code="1933",
@@ -6659,7 +6657,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=33,
+        item_number=33
     ),
     "1934": WITSSymbol(
         code="1934",
@@ -6670,7 +6668,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=34,
+        item_number=34
     ),
     "1935": WITSSymbol(
         code="1935",
@@ -6681,7 +6679,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=35,
+        item_number=35
     ),
     "1936": WITSSymbol(
         code="1936",
@@ -6692,7 +6690,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=36,
+        item_number=36
     ),
     "1937": WITSSymbol(
         code="1937",
@@ -6703,7 +6701,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=37,
+        item_number=37
     ),
     "1938": WITSSymbol(
         code="1938",
@@ -6714,7 +6712,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=38,
+        item_number=38
     ),
     "1939": WITSSymbol(
         code="1939",
@@ -6725,7 +6723,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=39,
+        item_number=39
     ),
     "1940": WITSSymbol(
         code="1940",
@@ -6736,7 +6734,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=40,
+        item_number=40
     ),
     "1941": WITSSymbol(
         code="1941",
@@ -6747,7 +6745,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=41,
+        item_number=41
     ),
     "1942": WITSSymbol(
         code="1942",
@@ -6758,7 +6756,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=42,
+        item_number=42
     ),
     "1943": WITSSymbol(
         code="1943",
@@ -6769,7 +6767,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=43,
+        item_number=43
     ),
     "1944": WITSSymbol(
         code="1944",
@@ -6780,7 +6778,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=44,
+        item_number=44
     ),
     "1945": WITSSymbol(
         code="1945",
@@ -6791,7 +6789,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=45,
+        item_number=45
     ),
     "1946": WITSSymbol(
         code="1946",
@@ -6802,7 +6800,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=46,
+        item_number=46
     ),
     "1947": WITSSymbol(
         code="1947",
@@ -6813,7 +6811,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=47,
+        item_number=47
     ),
     "1948": WITSSymbol(
         code="1948",
@@ -6824,7 +6822,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=48,
+        item_number=48
     ),
     "1949": WITSSymbol(
         code="1949",
@@ -6835,7 +6833,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=49,
+        item_number=49
     ),
     "1950": WITSSymbol(
         code="1950",
@@ -6846,7 +6844,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=50,
+        item_number=50
     ),
     "1951": WITSSymbol(
         code="1951",
@@ -6857,7 +6855,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=51,
+        item_number=51
     ),
     "1952": WITSSymbol(
         code="1952",
@@ -6868,7 +6866,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=52,
+        item_number=52
     ),
     "1953": WITSSymbol(
         code="1953",
@@ -6879,7 +6877,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=53,
+        item_number=53
     ),
     "1954": WITSSymbol(
         code="1954",
@@ -6890,7 +6888,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=54,
+        item_number=54
     ),
     "1955": WITSSymbol(
         code="1955",
@@ -6901,7 +6899,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=55,
+        item_number=55
     ),
     "1956": WITSSymbol(
         code="1956",
@@ -6912,7 +6910,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=56,
+        item_number=56
     ),
     "1957": WITSSymbol(
         code="1957",
@@ -6923,7 +6921,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=57,
+        item_number=57
     ),
     "1958": WITSSymbol(
         code="1958",
@@ -6934,7 +6932,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=58,
+        item_number=58
     ),
     "1959": WITSSymbol(
         code="1959",
@@ -6945,7 +6943,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=59,
+        item_number=59
     ),
     "1960": WITSSymbol(
         code="1960",
@@ -6956,7 +6954,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=60,
+        item_number=60
     ),
     "1961": WITSSymbol(
         code="1961",
@@ -6967,7 +6965,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=19,
-        item_number=61,
+        item_number=61
     ),
     "1962": WITSSymbol(
         code="1962",
@@ -6978,7 +6976,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=62,
+        item_number=62
     ),
     "1963": WITSSymbol(
         code="1963",
@@ -6989,7 +6987,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=19,
-        item_number=63,
+        item_number=63
     ),
     "1964": WITSSymbol(
         code="1964",
@@ -7000,7 +6998,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=64,
+        item_number=64
     ),
     "1965": WITSSymbol(
         code="1965",
@@ -7011,7 +7009,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=19,
-        item_number=65,
+        item_number=65
     ),
     "1966": WITSSymbol(
         code="1966",
@@ -7022,7 +7020,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=66,
+        item_number=66
     ),
     "1967": WITSSymbol(
         code="1967",
@@ -7033,7 +7031,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=67,
+        item_number=67
     ),
     "1968": WITSSymbol(
         code="1968",
@@ -7044,7 +7042,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=68,
+        item_number=68
     ),
     "1969": WITSSymbol(
         code="1969",
@@ -7055,7 +7053,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=69,
+        item_number=69
     ),
     "1970": WITSSymbol(
         code="1970",
@@ -7066,7 +7064,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=19,
-        item_number=70,
+        item_number=70
     ),
     "1971": WITSSymbol(
         code="1971",
@@ -7077,7 +7075,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=71,
+        item_number=71
     ),
     "1972": WITSSymbol(
         code="1972",
@@ -7088,7 +7086,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=72,
+        item_number=72
     ),
     "1973": WITSSymbol(
         code="1973",
@@ -7099,7 +7097,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=73,
+        item_number=73
     ),
     "1974": WITSSymbol(
         code="1974",
@@ -7110,7 +7108,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=19,
-        item_number=74,
+        item_number=74
     ),
     "1975": WITSSymbol(
         code="1975",
@@ -7121,7 +7119,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=75,
+        item_number=75
     ),
     "1976": WITSSymbol(
         code="1976",
@@ -7132,7 +7130,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=76,
+        item_number=76
     ),
     "1977": WITSSymbol(
         code="1977",
@@ -7143,7 +7141,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=77,
+        item_number=77
     ),
     "1978": WITSSymbol(
         code="1978",
@@ -7154,7 +7152,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=78,
+        item_number=78
     ),
     "1979": WITSSymbol(
         code="1979",
@@ -7165,7 +7163,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=19,
-        item_number=79,
+        item_number=79
     ),
     "1980": WITSSymbol(
         code="1980",
@@ -7176,7 +7174,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=19,
-        item_number=80,
+        item_number=80
     ),
     "1981": WITSSymbol(
         code="1981",
@@ -7187,7 +7185,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=81,
+        item_number=81
     ),
     "1982": WITSSymbol(
         code="1982",
@@ -7198,7 +7196,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=82,
+        item_number=82
     ),
     "1983": WITSSymbol(
         code="1983",
@@ -7209,7 +7207,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=83,
+        item_number=83
     ),
     "1984": WITSSymbol(
         code="1984",
@@ -7220,7 +7218,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=84,
+        item_number=84
     ),
     "1985": WITSSymbol(
         code="1985",
@@ -7231,7 +7229,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=85,
+        item_number=85
     ),
     "1986": WITSSymbol(
         code="1986",
@@ -7242,7 +7240,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=86,
+        item_number=86
     ),
     "1987": WITSSymbol(
         code="1987",
@@ -7253,7 +7251,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=87,
+        item_number=87
     ),
     "1988": WITSSymbol(
         code="1988",
@@ -7264,7 +7262,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=88,
+        item_number=88
     ),
     "1989": WITSSymbol(
         code="1989",
@@ -7275,7 +7273,7 @@ WITS_RECORD_19_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=19,
-        item_number=89,
+        item_number=89
     ),
 }
 
@@ -7290,7 +7288,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=1,
+        item_number=1
     ),
     "2002": WITSSymbol(
         code="2002",
@@ -7301,7 +7299,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=2,
+        item_number=2
     ),
     "2003": WITSSymbol(
         code="2003",
@@ -7312,7 +7310,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=3,
+        item_number=3
     ),
     "2004": WITSSymbol(
         code="2004",
@@ -7323,7 +7321,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=4,
+        item_number=4
     ),
     "2005": WITSSymbol(
         code="2005",
@@ -7334,7 +7332,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=5,
+        item_number=5
     ),
     "2006": WITSSymbol(
         code="2006",
@@ -7345,7 +7343,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=6,
+        item_number=6
     ),
     "2007": WITSSymbol(
         code="2007",
@@ -7356,7 +7354,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=7,
+        item_number=7
     ),
     "2008": WITSSymbol(
         code="2008",
@@ -7367,7 +7365,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=20,
-        item_number=8,
+        item_number=8
     ),
     "2009": WITSSymbol(
         code="2009",
@@ -7378,7 +7376,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=20,
-        item_number=9,
+        item_number=9
     ),
     "2010": WITSSymbol(
         code="2010",
@@ -7389,7 +7387,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=10,
+        item_number=10
     ),
     "2011": WITSSymbol(
         code="2011",
@@ -7400,7 +7398,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=11,
+        item_number=11
     ),
     "2012": WITSSymbol(
         code="2012",
@@ -7411,7 +7409,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=12,
+        item_number=12
     ),
     "2013": WITSSymbol(
         code="2013",
@@ -7422,7 +7420,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=13,
+        item_number=13
     ),
     "2014": WITSSymbol(
         code="2014",
@@ -7433,7 +7431,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=14,
+        item_number=14
     ),
     "2015": WITSSymbol(
         code="2015",
@@ -7444,7 +7442,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=20,
-        item_number=15,
+        item_number=15
     ),
     "2016": WITSSymbol(
         code="2016",
@@ -7455,7 +7453,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=16,
+        item_number=16
     ),
     "2017": WITSSymbol(
         code="2017",
@@ -7466,7 +7464,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=20,
-        item_number=17,
+        item_number=17
     ),
     "2018": WITSSymbol(
         code="2018",
@@ -7477,7 +7475,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=18,
+        item_number=18
     ),
     "2019": WITSSymbol(
         code="2019",
@@ -7488,7 +7486,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=19,
+        item_number=19
     ),
     "2020": WITSSymbol(
         code="2020",
@@ -7499,7 +7497,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=20,
+        item_number=20
     ),
     "2021": WITSSymbol(
         code="2021",
@@ -7510,7 +7508,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=21,
+        item_number=21
     ),
     "2022": WITSSymbol(
         code="2022",
@@ -7521,7 +7519,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=22,
+        item_number=22
     ),
     "2023": WITSSymbol(
         code="2023",
@@ -7532,7 +7530,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=23,
+        item_number=23
     ),
     "2024": WITSSymbol(
         code="2024",
@@ -7543,7 +7541,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=24,
+        item_number=24
     ),
     "2025": WITSSymbol(
         code="2025",
@@ -7554,7 +7552,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=20,
-        item_number=25,
+        item_number=25
     ),
     "2026": WITSSymbol(
         code="2026",
@@ -7565,7 +7563,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=20,
-        item_number=26,
+        item_number=26
     ),
     "2027": WITSSymbol(
         code="2027",
@@ -7576,7 +7574,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=27,
+        item_number=27
     ),
     "2028": WITSSymbol(
         code="2028",
@@ -7587,7 +7585,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=28,
+        item_number=28
     ),
     "2029": WITSSymbol(
         code="2029",
@@ -7598,7 +7596,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=29,
+        item_number=29
     ),
     "2030": WITSSymbol(
         code="2030",
@@ -7609,7 +7607,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=30,
+        item_number=30
     ),
     "2031": WITSSymbol(
         code="2031",
@@ -7620,7 +7618,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=31,
+        item_number=31
     ),
     "2032": WITSSymbol(
         code="2032",
@@ -7631,7 +7629,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=32,
+        item_number=32
     ),
     "2033": WITSSymbol(
         code="2033",
@@ -7642,7 +7640,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=33,
+        item_number=33
     ),
     "2034": WITSSymbol(
         code="2034",
@@ -7653,7 +7651,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=34,
+        item_number=34
     ),
     "2035": WITSSymbol(
         code="2035",
@@ -7664,7 +7662,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=35,
+        item_number=35
     ),
     "2036": WITSSymbol(
         code="2036",
@@ -7675,7 +7673,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=36,
+        item_number=36
     ),
     "2037": WITSSymbol(
         code="2037",
@@ -7686,7 +7684,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=37,
+        item_number=37
     ),
     "2038": WITSSymbol(
         code="2038",
@@ -7697,7 +7695,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=38,
+        item_number=38
     ),
     "2039": WITSSymbol(
         code="2039",
@@ -7708,7 +7706,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=20,
-        item_number=39,
+        item_number=39
     ),
     "2040": WITSSymbol(
         code="2040",
@@ -7719,7 +7717,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=40,
+        item_number=40
     ),
     "2041": WITSSymbol(
         code="2041",
@@ -7730,7 +7728,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=41,
+        item_number=41
     ),
     "2042": WITSSymbol(
         code="2042",
@@ -7741,7 +7739,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=42,
+        item_number=42
     ),
     "2043": WITSSymbol(
         code="2043",
@@ -7752,7 +7750,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=43,
+        item_number=43
     ),
     "2044": WITSSymbol(
         code="2044",
@@ -7763,7 +7761,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=44,
+        item_number=44
     ),
     "2045": WITSSymbol(
         code="2045",
@@ -7774,7 +7772,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=45,
+        item_number=45
     ),
     "2046": WITSSymbol(
         code="2046",
@@ -7785,7 +7783,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=46,
+        item_number=46
     ),
     "2047": WITSSymbol(
         code="2047",
@@ -7796,7 +7794,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=47,
+        item_number=47
     ),
     "2048": WITSSymbol(
         code="2048",
@@ -7807,7 +7805,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=48,
+        item_number=48
     ),
     "2049": WITSSymbol(
         code="2049",
@@ -7818,7 +7816,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.DEGC,
         fps_units=WITSUnits.DEGF,
         record_type=20,
-        item_number=49,
+        item_number=49
     ),
     "2050": WITSSymbol(
         code="2050",
@@ -7829,7 +7827,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=50,
+        item_number=50
     ),
     "2051": WITSSymbol(
         code="2051",
@@ -7840,7 +7838,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=51,
+        item_number=51
     ),
     "2052": WITSSymbol(
         code="2052",
@@ -7851,7 +7849,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=52,
+        item_number=52
     ),
     "2053": WITSSymbol(
         code="2053",
@@ -7862,7 +7860,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=53,
+        item_number=53
     ),
     "2054": WITSSymbol(
         code="2054",
@@ -7873,7 +7871,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=54,
+        item_number=54
     ),
     "2055": WITSSymbol(
         code="2055",
@@ -7884,7 +7882,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=55,
+        item_number=55
     ),
     "2056": WITSSymbol(
         code="2056",
@@ -7895,7 +7893,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=56,
+        item_number=56
     ),
     "2057": WITSSymbol(
         code="2057",
@@ -7906,7 +7904,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=57,
+        item_number=57
     ),
     "2058": WITSSymbol(
         code="2058",
@@ -7917,7 +7915,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=58,
+        item_number=58
     ),
     "2059": WITSSymbol(
         code="2059",
@@ -7928,7 +7926,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=20,
-        item_number=59,
+        item_number=59
     ),
     "2060": WITSSymbol(
         code="2060",
@@ -7939,7 +7937,7 @@ WITS_RECORD_20_SYMBOLS = {
         metric_units=WITSUnits.PERCENT,
         fps_units=WITSUnits.PERCENT,
         record_type=20,
-        item_number=60,
+        item_number=60
     ),
 }
 
@@ -7954,7 +7952,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=1,
+        item_number=1
     ),
     "2102": WITSSymbol(
         code="2102",
@@ -7965,7 +7963,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=2,
+        item_number=2
     ),
     "2103": WITSSymbol(
         code="2103",
@@ -7976,7 +7974,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=3,
+        item_number=3
     ),
     "2104": WITSSymbol(
         code="2104",
@@ -7987,7 +7985,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=4,
+        item_number=4
     ),
     "2105": WITSSymbol(
         code="2105",
@@ -7998,7 +7996,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=5,
+        item_number=5
     ),
     "2106": WITSSymbol(
         code="2106",
@@ -8009,7 +8007,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=6,
+        item_number=6
     ),
     "2107": WITSSymbol(
         code="2107",
@@ -8020,7 +8018,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=7,
+        item_number=7
     ),
     "2108": WITSSymbol(
         code="2108",
@@ -8031,7 +8029,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=8,
+        item_number=8
     ),
     "2109": WITSSymbol(
         code="2109",
@@ -8042,7 +8040,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=9,
+        item_number=9
     ),
     "2110": WITSSymbol(
         code="2110",
@@ -8053,7 +8051,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=10,
+        item_number=10
     ),
     "2111": WITSSymbol(
         code="2111",
@@ -8064,7 +8062,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=11,
+        item_number=11
     ),
     "2112": WITSSymbol(
         code="2112",
@@ -8075,7 +8073,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=12,
+        item_number=12
     ),
     "2113": WITSSymbol(
         code="2113",
@@ -8086,7 +8084,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=13,
+        item_number=13
     ),
     "2114": WITSSymbol(
         code="2114",
@@ -8097,7 +8095,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=14,
+        item_number=14
     ),
     "2115": WITSSymbol(
         code="2115",
@@ -8108,7 +8106,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=15,
+        item_number=15
     ),
     "2116": WITSSymbol(
         code="2116",
@@ -8119,7 +8117,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=16,
+        item_number=16
     ),
     "2117": WITSSymbol(
         code="2117",
@@ -8130,7 +8128,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=17,
+        item_number=17
     ),
     "2118": WITSSymbol(
         code="2118",
@@ -8141,7 +8139,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=18,
+        item_number=18
     ),
     "2119": WITSSymbol(
         code="2119",
@@ -8152,7 +8150,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=19,
+        item_number=19
     ),
     "2120": WITSSymbol(
         code="2120",
@@ -8163,7 +8161,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=20,
+        item_number=20
     ),
     "2121": WITSSymbol(
         code="2121",
@@ -8174,7 +8172,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=21,
-        item_number=21,
+        item_number=21
     ),
     "2122": WITSSymbol(
         code="2122",
@@ -8185,7 +8183,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=21,
-        item_number=22,
+        item_number=22
     ),
     "2123": WITSSymbol(
         code="2123",
@@ -8196,7 +8194,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.METERS,
         fps_units=WITSUnits.FEET,
         record_type=21,
-        item_number=23,
+        item_number=23
     ),
     "2124": WITSSymbol(
         code="2124",
@@ -8207,7 +8205,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=24,
+        item_number=24
     ),
     "2125": WITSSymbol(
         code="2125",
@@ -8218,7 +8216,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=25,
+        item_number=25
     ),
     "2126": WITSSymbol(
         code="2126",
@@ -8229,7 +8227,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.MHR,
         fps_units=WITSUnits.FHR,
         record_type=21,
-        item_number=26,
+        item_number=26
     ),
     "2127": WITSSymbol(
         code="2127",
@@ -8240,7 +8238,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=21,
-        item_number=27,
+        item_number=27
     ),
     "2128": WITSSymbol(
         code="2128",
@@ -8251,7 +8249,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.KDN,
         fps_units=WITSUnits.KLB,
         record_type=21,
-        item_number=28,
+        item_number=28
     ),
     "2129": WITSSymbol(
         code="2129",
@@ -8262,7 +8260,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.RPM,
         fps_units=WITSUnits.RPM,
         record_type=21,
-        item_number=29,
+        item_number=29
     ),
     "2130": WITSSymbol(
         code="2130",
@@ -8273,7 +8271,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.RPM,
         fps_units=WITSUnits.RPM,
         record_type=21,
-        item_number=30,
+        item_number=30
     ),
     "2131": WITSSymbol(
         code="2131",
@@ -8284,7 +8282,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.LPM,
         fps_units=WITSUnits.GPM,
         record_type=21,
-        item_number=31,
+        item_number=31
     ),
     "2132": WITSSymbol(
         code="2132",
@@ -8295,7 +8293,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.KGM3,
         fps_units=WITSUnits.PPG,
         record_type=21,
-        item_number=32,
+        item_number=32
     ),
     "2133": WITSSymbol(
         code="2133",
@@ -8306,7 +8304,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.KPA,
         fps_units=WITSUnits.PSI,
         record_type=21,
-        item_number=33,
+        item_number=33
     ),
     "2134": WITSSymbol(
         code="2134",
@@ -8317,7 +8315,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=34,
+        item_number=34
     ),
     "2135": WITSSymbol(
         code="2135",
@@ -8328,7 +8326,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=35,
+        item_number=35
     ),
     "2136": WITSSymbol(
         code="2136",
@@ -8339,7 +8337,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=36,
+        item_number=36
     ),
     "2137": WITSSymbol(
         code="2137",
@@ -8350,7 +8348,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=37,
+        item_number=37
     ),
     "2138": WITSSymbol(
         code="2138",
@@ -8361,7 +8359,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=38,
+        item_number=38
     ),
     "2139": WITSSymbol(
         code="2139",
@@ -8372,7 +8370,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=39,
+        item_number=39
     ),
     "2140": WITSSymbol(
         code="2140",
@@ -8383,7 +8381,7 @@ WITS_RECORD_21_SYMBOLS = {
         metric_units=WITSUnits.UNITLESS,
         fps_units=WITSUnits.UNITLESS,
         record_type=21,
-        item_number=40,
+        item_number=40
     ),
 }
 
@@ -8419,11 +8417,8 @@ def get_symbol_by_code(code: str) -> Optional[WITSSymbol]:
 
 def get_symbols_by_record_type(record_type: int) -> Dict[str, WITSSymbol]:
     """Get all symbols for a specific record type."""
-    return {
-        code: symbol
-        for code, symbol in WITS_SYMBOLS.items()
-        if symbol.record_type == record_type
-    }
+    return {code: symbol for code, symbol in WITS_SYMBOLS.items() 
+            if symbol.record_type == record_type}
 
 
 def get_record_types() -> List[int]:
@@ -8440,7 +8435,6 @@ def search_symbols(query: str) -> Dict[str, WITSSymbol]:
     """Search symbols by name or description."""
     query = query.lower()
     return {
-        code: symbol
-        for code, symbol in WITS_SYMBOLS.items()
+        code: symbol for code, symbol in WITS_SYMBOLS.items()
         if query in symbol.name.lower() or query in symbol.description.lower()
     }

@@ -10,7 +10,7 @@
 ### Using uv (Recommended)
 
 ```bash
-git clone https://github.com/yourusername/witskit
+git clone https://github.com/Critlist/witskit
 cd witskit
 uv pip install -e ".[dev]"  # Install with development dependencies
 ```

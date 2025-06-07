@@ -57,10 +57,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/witskit"
-Documentation = "https://github.com/yourusername/witskit#readme"
-Repository = "https://github.com/yourusername/witskit"
-Issues = "https://github.com/yourusername/witskit/issues"
+Homepage = "https://github.com/Critlist/witskit"
+Documentation = "https://github.com/Critlist/witskit#readme"
+Repository = "https://github.com/Critlist/witskit"
+Issues = "https://github.com/Critlist/witskit/issues"
 
 [project.scripts]
 witskit = "witskit.cli:app"

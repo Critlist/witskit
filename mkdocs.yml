@@ -1,8 +1,8 @@
 site_name: WitsKit
 site_description: Python toolkit for WITS (Wellsite Information Transfer Standard) data
-site_url: https://github.com/yourusername/witskit
-repo_url: https://github.com/yourusername/witskit
-repo_name: yourusername/witskit
+site_url: https://github.com/Critlist/witskit
+repo_url: https://github.com/Critlist/witskit
+repo_name: Critlist/witskit
 
 theme:
   name: material

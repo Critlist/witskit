@@ -31,7 +31,7 @@
 **For Development:**
 
 ```bash
-git clone https://github.com/yourusername/witskit
+git clone https://github.com/Critlist/witskit
 cd witskit
 pip install -e .
 ```
@@ -45,7 +45,7 @@ pip install witskit
 **With uv (recommended):**
 
 ```bash
-git clone https://github.com/yourusername/witskit
+git clone https://github.com/Critlist/witskit
 cd witskit
 uv pip install -e .
 ```

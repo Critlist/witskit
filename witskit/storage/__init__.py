@@ -10,10 +10,10 @@ from .sql_writer import SQLWriter, DatabaseConfig
 from .schema import WITSFrame, WITSDataPoint, WITSSymbolDefinition
 
 __all__: list[str] = [
-    "BaseStorage", 
+    "BaseStorage",
     "SQLWriter",
     "DatabaseConfig",
     "WITSFrame",
-    "WITSDataPoint", 
+    "WITSDataPoint",
     "WITSSymbolDefinition",
-] 
+]

@@ -24,6 +24,7 @@ from .decoder.wits_decoder import (
 from .models.symbols import WITS_SYMBOLS
 from .models.unit_converter import UnitConverter, ConversionError
 from .transport.tcp_reader import TCPReader
+from .transport.requesting_tcp_reader import RequestingTCPReader
 from .transport.serial_reader import SerialReader
 from .transport.file_reader import FileReader
 from witskit import __version__
@@ -31,6 +32,7 @@ from witskit import __version__
 # Optional SQL storage imports
 try:
     from .storage.sql_writer import SQLWriter, DatabaseConfig
+
     SQL_AVAILABLE = True
 except ImportError:
     SQL_AVAILABLE = False
@@ -52,7 +54,9 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def main(
     version: bool = typer.Option(
-        False, "--version", "-V", 
+        False,
+        "--version",
+        "-V",
         help="Show the version and exit.",
         callback=version_callback,
         is_eager=True,
@@ -460,7 +464,7 @@ def _show_available_units() -> None:
                 else:
                     desc, system = "Degrees Fahrenheit", "FPS"
             else:
-                desc= unit.value
+                desc = unit.value
                 system = "Both" if unit == WITSUnits.UNITLESS else "Mixed"
 
             table.add_row(unit.name, desc, system)
@@ -554,7 +558,7 @@ def symbols_command(
             }
             title: str = f"Record {record_type} Symbols matching '{search}'"
         else:
-            title= f"All Symbols matching '{search}'"
+            title = f"All Symbols matching '{search}'"
     elif record_type:
         symbols_to_show = get_symbols_by_record_type(record_type)
         title = f"Record {record_type}: {get_record_description(record_type)}"
@@ -674,9 +678,14 @@ def stream_command(
     max_frames: Optional[int] = typer.Option(
         None, "--max-frames", "-n", help="Maximum number of frames to process"
     ),
+    request_mode: bool = typer.Option(
+        False, "--request", help="Use request mode for TCP (send initial request to trigger streaming)"
+    ),
     # SQL storage options
     sql_db: Optional[str] = typer.Option(
-        None, "--sql-db", help="Store data in SQL database (sqlite:///path.db, postgresql://...)"
+        None,
+        "--sql-db",
+        help="Store data in SQL database (sqlite:///path.db, postgresql://...)",
     ),
     sql_batch_size: int = typer.Option(
         100, "--sql-batch-size", help="Batch size for SQL inserts"
@@ -693,6 +702,9 @@ def stream_command(
         # Stream from TCP server
         witskit stream tcp://192.168.1.100:12345
 
+        # Stream from TCP server with request mode (for request/response servers)
+        witskit stream tcp://localhost:8686 --request
+
         # Stream from serial port
         witskit stream serial:///dev/ttyUSB0 --baudrate 19200
 
@@ -700,22 +712,24 @@ def stream_command(
         witskit stream file://sample.wits
 
         # Store in SQLite database
-        witskit stream tcp://localhost:12345 --sql-db sqlite:///drilling_data.db
+        witskit stream tcp://localhost:8686 --request --sql-db sqlite:///drilling_data.db
 
         # Store in PostgreSQL with batch processing
         witskit stream tcp://localhost:12345 --sql-db postgresql://user:pass@localhost/wits --sql-batch-size 50
 
         # Limit to 10 frames and save as JSON
-        witskit stream tcp://localhost:12345 --max-frames 10 --output results.json
+        witskit stream tcp://localhost:8686 --request --max-frames 10 --output results.json
     """
 
     # Initialize SQL writer if requested
     sql_writer = None
     if sql_db:
         if not SQL_AVAILABLE:
-            rprint("❌ [red]SQL storage not available. Install with: pip install witskit[sql][/red]")
+            rprint(
+                "❌ [red]SQL storage not available. Install with: pip install witskit[sql][/red]"
+            )
             raise typer.Exit(1)
-        
+
         try:
             # Parse database URL and create config
             if sql_db.startswith("sqlite:///"):
@@ -724,30 +738,35 @@ def stream_command(
             elif sql_db.startswith("postgresql://"):
                 config = DatabaseConfig(
                     database_type="postgresql",
-                    database_url=sql_db.replace("postgresql://", "postgresql+asyncpg://"),
-                    echo_sql=sql_echo
+                    database_url=sql_db.replace(
+                        "postgresql://", "postgresql+asyncpg://"
+                    ),
+                    echo_sql=sql_echo,
                 )
             elif sql_db.startswith("mysql://"):
                 config = DatabaseConfig(
-                    database_type="mysql", 
+                    database_type="mysql",
                     database_url=sql_db.replace("mysql://", "mysql+aiomysql://"),
-                    echo_sql=sql_echo
+                    echo_sql=sql_echo,
                 )
             else:
                 rprint(f"❌ [red]Unsupported database URL: {sql_db}[/red]")
                 raise typer.Exit(1)
-            
+
             sql_writer = SQLWriter(config)
             import asyncio
+
             asyncio.run(sql_writer.initialize())
-            rprint(f"🗄️ [green]Connected to SQL database: {config.database_type}[/green]")
-        
+            rprint(
+                f"🗄️ [green]Connected to SQL database: {config.database_type}[/green]"
+            )
+
         except Exception as e:
             rprint(f"❌ [red]Failed to connect to database: {e}[/red]")
             raise typer.Exit(1)
 
     # Parse the source URL
-    reader: Union[TCPReader, SerialReader, FileReader, None] = None
+    reader: Union[TCPReader, RequestingTCPReader, SerialReader, FileReader, None] = None
     try:
         if source.startswith("tcp://"):
             # Parse tcp://host:port
@@ -756,14 +775,21 @@ def stream_command(
                 raise ValueError("TCP source must include port: tcp://host:port")
             host, port_str = url_part.rsplit(":", 1)
             port = int(port_str)
-            reader = TCPReader(host, port)
-            rprint(f"🌐 [cyan]Connecting to TCP {host}:{port}...[/cyan]")
+            
+            if request_mode:
+                reader = RequestingTCPReader(host, port)
+                rprint(f"🌐 [cyan]Connecting to TCP {host}:{port} (request mode)...[/cyan]")
+            else:
+                reader = TCPReader(host, port)
+                rprint(f"🌐 [cyan]Connecting to TCP {host}:{port}...[/cyan]")
 
         elif source.startswith("serial://"):
             # Parse serial:///dev/ttyUSB0
             serial_port = source[9:]  # Remove 'serial://'
             reader = SerialReader(serial_port, baudrate)
-            rprint(f"🔌 [cyan]Opening serial port {serial_port} at {baudrate} baud...[/cyan]")
+            rprint(
+                f"🔌 [cyan]Opening serial port {serial_port} at {baudrate} baud...[/cyan]"
+            )
         elif source.startswith("file://"):
             # Parse file://path/to/file.wits
             file_path: str = source[7:]  # Remove 'file://'
@@ -774,6 +800,17 @@ def stream_command(
 
         else:
             raise ValueError("Source must start with tcp://, serial://, or file://")
+
+        # Show startup information
+        rprint(f"\n🚀 [bold green]Starting WITS Stream Processing[/bold green]")
+        rprint(f"📡 Source: {source}")
+        if request_mode:
+            rprint("📤 [cyan]Request mode enabled - sending initial request[/cyan]")
+        if sql_writer:
+            rprint(f"💾 [cyan]Database storage enabled[/cyan]")
+        if max_frames:
+            rprint(f"🔢 [cyan]Processing up to {max_frames} frames[/cyan]")
+        rprint("   [dim]Press Ctrl+C to stop streaming...[/dim]\n")
 
         # Stream and process frames
         frame_count = 0
@@ -801,13 +838,16 @@ def stream_command(
                     # Add to SQL batch if SQL storage is enabled
                     if sql_writer and sql_batch is not None:
                         sql_batch.append(result)
-                        
+
                         # Process batch when it reaches the batch size
                         if len(sql_batch) >= sql_batch_size:
                             try:
                                 import asyncio
+
                                 asyncio.run(sql_writer.store_frames(sql_batch))
-                                rprint(f"💾 [dim]Stored batch of {len(sql_batch)} frames to database[/dim]")
+                                rprint(
+                                    f"💾 [dim]Stored batch of {len(sql_batch)} frames to database[/dim]"
+                                )
                                 sql_batch.clear()
                             except Exception as e:
                                 rprint(f"⚠️ [yellow]SQL storage error: {e}[/yellow]")
@@ -820,29 +860,80 @@ def stream_command(
                         for dp in result.data_points:
                             rprint(f"  {dp.symbol_code}: {dp.parsed_value} {dp.unit}")
                     else:  # table format
+                        # Show frame header with statistics
+                        success_rate = (frame_count / frame_count) * 100 if frame_count > 0 else 0
                         rprint(
-                            f"\n🔄 [bold]Frame {frame_count}[/bold] - {result.timestamp.strftime('%H:%M:%S')}"
+                            f"\n📦 [bold cyan]Frame {frame_count}[/bold cyan] - [dim]{result.timestamp.strftime('%H:%M:%S')}[/dim] "
+                            f"[green]({len(result.data_points)} points)[/green]"
                         )
+                        
+                        if sql_writer:
+                            rprint(f"   💾 [dim]Storing to database...[/dim]")
+                        
                         if result.data_points:
-                            table = Table()
-                            table.add_column("Symbol", style="cyan")
-                            table.add_column("Name", style="green")
-                            table.add_column("Value", style="yellow")
-                            table.add_column("Unit", style="blue")
+                            # Create a beautiful table like in demo
+                            table = Table(
+                                title=f"🛠️ WITS Data Frame {frame_count}",
+                                title_style="bold blue"
+                            )
+                            table.add_column("Symbol", style="cyan", width=8)
+                            table.add_column("Name", style="green", width=12)
+                            table.add_column("Value", style="yellow bold", width=12)
+                            table.add_column("Unit", style="blue", width=8)
+                            table.add_column("Description", style="dim", width=20)
 
+                            # Show only top 8 most important parameters for readability
+                            important_symbols = ["0105", "0106", "0108", "0113", "0120", "0121", "0114", "0116"]
+                            
+                            # First show important symbols
+                            shown_count = 0
+                            for symbol_code in important_symbols:
+                                if shown_count >= 8:
+                                    break
+                                for dp in result.data_points:
+                                    if dp.symbol_code == symbol_code:
+                                        table.add_row(
+                                            dp.symbol_code,
+                                            dp.symbol_name,
+                                            str(dp.parsed_value),
+                                            dp.unit,
+                                            dp.symbol_description[:20] + "..." if len(dp.symbol_description) > 20 else dp.symbol_description,
+                                        )
+                                        shown_count += 1
+                                        break
+                            
+                            # Then show remaining symbols up to limit
                             for dp in result.data_points:
-                                table.add_row(
-                                    dp.symbol_code,
-                                    dp.symbol_name,
-                                    str(dp.parsed_value),
-                                    dp.unit,
-                                )
+                                if shown_count >= 8:
+                                    break
+                                if dp.symbol_code not in important_symbols:
+                                    table.add_row(
+                                        dp.symbol_code,
+                                        dp.symbol_name,
+                                        str(dp.parsed_value),
+                                        dp.unit,
+                                        dp.symbol_description[:20] + "..." if len(dp.symbol_description) > 20 else dp.symbol_description,
+                                    )
+                                    shown_count += 1
+
                             console.print(table)
+                            
+                            # Show summary if there are more points
+                            if len(result.data_points) > shown_count:
+                                rprint(f"   [dim]... and {len(result.data_points) - shown_count} more data points[/dim]")
+                        
+                        else:
+                            rprint("   [yellow]⚠️  No data points decoded[/yellow]")
 
                         if result.errors:
-                            rprint(
-                                f"⚠️ [yellow]Errors: {', '.join(result.errors)}[/yellow]"
-                            )
+                            rprint(f"   [yellow]⚠️  {len(result.errors)} warnings: {', '.join(result.errors[:2])}[/yellow]")
+                            if len(result.errors) > 2:
+                                rprint(f"   [dim]... and {len(result.errors) - 2} more[/dim]")
+                        
+                        # Show running statistics every 5 frames or if it's the first few
+                        if frame_count <= 3 or frame_count % 5 == 0:
+                            avg_points = sum(len(r.data_points) for r in all_results) / len(all_results) if all_results else 0
+                            rprint(f"   [dim]📊 Stats: {frame_count} frames, avg {avg_points:.1f} points/frame[/dim]")
 
                 except Exception as e:
                     rprint(f"❌ [red]Frame {frame_count + 1} decode error: {e}[/red]")
@@ -856,19 +947,23 @@ def stream_command(
             if sql_writer and sql_batch and len(sql_batch) > 0:
                 try:
                     import asyncio
+
                     asyncio.run(sql_writer.store_frames(sql_batch))
-                    rprint(f"💾 [green]Stored final batch of {len(sql_batch)} frames to database[/green]")
+                    rprint(
+                        f"💾 [green]Stored final batch of {len(sql_batch)} frames to database[/green]"
+                    )
                 except Exception as e:
                     rprint(f"⚠️ [yellow]Final SQL batch error: {e}[/yellow]")
-            
+
             # Close SQL connection
             if sql_writer:
                 try:
                     import asyncio
+
                     asyncio.run(sql_writer.close())
                 except Exception as e:
                     rprint(f"⚠️ [yellow]SQL close error: {e}[/yellow]")
-            
+
             if reader is not None:
                 reader.close()
 
@@ -884,7 +979,24 @@ def stream_command(
                 json.dump(output_data, f, indent=2)
             rprint(f"\n💾 [green]Saved {frame_count} frames to {output}[/green]")
 
-        rprint(f"\n✅ [green]Processed {frame_count} frames total[/green]")
+        # Show final statistics
+        if frame_count > 0:
+            total_points = sum(len(r.data_points) for r in all_results)
+            avg_points = total_points / frame_count if frame_count > 0 else 0
+            unique_symbols = set()
+            for r in all_results:
+                for dp in r.data_points:
+                    unique_symbols.add(dp.symbol_code)
+            
+            rprint(f"\n📊 [bold green]Stream Processing Complete[/bold green]")
+            rprint(f"   Frames processed: {frame_count}")
+            rprint(f"   Total data points: {total_points}")
+            rprint(f"   Average points/frame: {avg_points:.1f}")
+            rprint(f"   Unique symbols: {len(unique_symbols)}")
+            if sql_writer:
+                rprint(f"   💾 [green]Data stored to database[/green]")
+        else:
+            rprint(f"\n❌ [yellow]No frames processed[/yellow]")
 
     except Exception as e:
         rprint(f"❌ [red]Error: {e}[/red]")
@@ -895,9 +1007,14 @@ def stream_command(
 
 @app.command("sql-query")
 def sql_query_command(
-    database: str = typer.Argument(..., help="Database URL (sqlite:///path.db, postgresql://...)"),
+    database: str = typer.Argument(
+        ..., help="Database URL (sqlite:///path.db, postgresql://...)"
+    ),
     symbols: Optional[str] = typer.Option(
-        None, "--symbols", "-s", help="Comma-separated symbol codes to query (e.g., 0108,0113)"
+        None,
+        "--symbols",
+        "-s",
+        help="Comma-separated symbol codes to query (e.g., 0108,0113)",
     ),
     start_time: Optional[str] = typer.Option(
         None, "--start", help="Start time (ISO format: 2024-01-01T10:00:00)"
@@ -914,9 +1031,7 @@ def sql_query_command(
     format: str = typer.Option(
         "table", "--format", "-f", help="Output format: table, json, csv"
     ),
-    output: Optional[Path] = typer.Option(
-        None, "--output", "-o", help="Output file"
-    ),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Output file"),
     list_symbols: bool = typer.Option(
         False, "--list-symbols", help="List available symbols in database"
     ),
@@ -942,7 +1057,9 @@ def sql_query_command(
         witskit sql-query sqlite:///drilling_data.db --symbols "0108" --format csv --output depth_data.csv
     """
     if not SQL_AVAILABLE:
-        rprint("❌ [red]SQL functionality not available. Install with: pip install witskit[sql][/red]")
+        rprint(
+            "❌ [red]SQL functionality not available. Install with: pip install witskit[sql][/red]"
+        )
         raise typer.Exit(1)
 
     try:
@@ -953,27 +1070,29 @@ def sql_query_command(
         elif database.startswith("postgresql://"):
             config = DatabaseConfig(
                 database_type="postgresql",
-                database_url=database.replace("postgresql://", "postgresql+asyncpg://")
+                database_url=database.replace("postgresql://", "postgresql+asyncpg://"),
             )
         elif database.startswith("mysql://"):
             config = DatabaseConfig(
                 database_type="mysql",
-                database_url=database.replace("mysql://", "mysql+aiomysql://")
+                database_url=database.replace("mysql://", "mysql+aiomysql://"),
             )
         else:
             rprint(f"❌ [red]Unsupported database URL: {database}[/red]")
             raise typer.Exit(1)
 
         sql_writer = SQLWriter(config)
-        
+
         async def run_query():
             await sql_writer.initialize()
-            
+
             try:
                 if list_symbols:
                     symbols_list = await sql_writer.get_available_symbols(source)
                     if symbols_list:
-                        rprint(f"📊 [cyan]Available symbols ({len(symbols_list)}):[/cyan]")
+                        rprint(
+                            f"📊 [cyan]Available symbols ({len(symbols_list)}):[/cyan]"
+                        )
                         for symbol_code in sorted(symbols_list):
                             # Get symbol info from WITS_SYMBOLS
                             symbol_info = WITS_SYMBOLS.get(symbol_code)
@@ -1006,7 +1125,7 @@ def sql_query_command(
                     except ValueError:
                         rprint(f"❌ [red]Invalid start time format: {start_time}[/red]")
                         return
-                
+
                 if end_time:
                     try:
                         end_dt = datetime.fromisoformat(end_time)
@@ -1030,7 +1149,7 @@ def sql_query_command(
                     start_time=start_dt,
                     end_time=end_dt,
                     source=source,
-                    limit=limit
+                    limit=limit,
                 ):
                     data_points.append(dp)
 
@@ -1047,65 +1166,88 @@ def sql_query_command(
                             "symbol_name": dp.symbol_name,
                             "value": dp.parsed_value,
                             "unit": dp.unit,
-                            "source": dp.source
+                            "source": dp.source,
                         }
                         for dp in data_points
                     ]
-                    
+
                     if output:
                         with open(output, "w") as f:
                             json.dump(results, f, indent=2)
-                        rprint(f"💾 [green]Saved {len(results)} records to {output}[/green]")
+                        rprint(
+                            f"💾 [green]Saved {len(results)} records to {output}[/green]"
+                        )
                     else:
                         rprint(json.dumps(results, indent=2))
 
                 elif format == "csv":
                     import csv
+
                     if output:
                         with open(output, "w", newline="") as f:
                             writer = csv.writer(f)
-                            writer.writerow(["timestamp", "symbol_code", "symbol_name", "value", "unit", "source"])
+                            writer.writerow(
+                                [
+                                    "timestamp",
+                                    "symbol_code",
+                                    "symbol_name",
+                                    "value",
+                                    "unit",
+                                    "source",
+                                ]
+                            )
                             for dp in data_points:
-                                writer.writerow([
-                                    dp.timestamp.isoformat(),
-                                    dp.symbol_code,
-                                    dp.symbol_name,
-                                    dp.parsed_value,
-                                    dp.unit,
-                                    dp.source
-                                ])
-                        rprint(f"💾 [green]Saved {len(data_points)} records to {output}[/green]")
+                                writer.writerow(
+                                    [
+                                        dp.timestamp.isoformat(),
+                                        dp.symbol_code,
+                                        dp.symbol_name,
+                                        dp.parsed_value,
+                                        dp.unit,
+                                        dp.source,
+                                    ]
+                                )
+                        rprint(
+                            f"💾 [green]Saved {len(data_points)} records to {output}[/green]"
+                        )
                     else:
                         rprint("timestamp,symbol_code,symbol_name,value,unit,source")
                         for dp in data_points:
-                            rprint(f"{dp.timestamp.isoformat()},{dp.symbol_code},{dp.symbol_name},{dp.parsed_value},{dp.unit},{dp.source}")
+                            rprint(
+                                f"{dp.timestamp.isoformat()},{dp.symbol_code},{dp.symbol_name},{dp.parsed_value},{dp.unit},{dp.source}"
+                            )
 
                 else:  # table format
-                    table = Table(title=f"📊 WITS Data Query Results ({len(data_points)} records)")
+                    table = Table(
+                        title=f"📊 WITS Data Query Results ({len(data_points)} records)"
+                    )
                     table.add_column("Time", style="cyan")
                     table.add_column("Symbol", style="yellow")
                     table.add_column("Name", style="green")
                     table.add_column("Value", style="white")
                     table.add_column("Unit", style="blue")
-                    
+
                     for dp in data_points:
                         table.add_row(
                             dp.timestamp.strftime("%H:%M:%S"),
                             dp.symbol_code,
                             dp.symbol_name,
                             str(dp.parsed_value),
-                            dp.unit
+                            dp.unit,
                         )
-                    
+
                     console.print(table)
-                    
+
                     if output:
-                        rprint(f"💾 [yellow]Note: Use --format json or csv to save table data to file[/yellow]")
+                        rprint(
+                            f"💾 [yellow]Note: Use --format json or csv to save table data to file[/yellow]"
+                        )
 
             finally:
                 await sql_writer.close()
 
         import asyncio
+
         asyncio.run(run_query())
 
     except Exception as e:

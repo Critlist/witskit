@@ -211,3 +211,5 @@ enhanced_wits_analysis_*.json
 # Test Output Files
 # test_real_wits.py
 *_SUMMARY.md
+
+*.db

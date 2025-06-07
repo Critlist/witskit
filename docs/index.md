@@ -11,13 +11,17 @@
 - Parses raw WITS frames into structured, validated Python objects
 - Ships with 724 symbols across 20+ record types—auto-parsed from the spec
 - Includes CLI tools for symbol search, frame decoding, and validation
-- Built to be extended: transports (serial, TCP) and outputs (SQLite, JSON) are plug-and-play
+- **🗄️ SQL Storage**: Stream WITS data directly to SQLite, PostgreSQL, or MySQL databases
+- **📊 Time-series Analysis**: Query and analyze historical drilling data with time-based filtering
+- Built to be extended: transports (serial, TCP) and outputs (SQL, JSON) are plug-and-play
 
 ## 💡 Why Use It?
 
 - 🧠 You get the *full* WITS symbol database, not someone's half-finished Excel copy
 - 🔍 CLI lets you find, filter, and explore symbols without opening the spec (again)
 - 📏 Works in both metric and FPS—because a boat sank and now we have 2 standards
+- 🗄️ **Production-ready SQL storage** for time-series drilling data analysis
+- 📊 **Query historical data** with time filters, symbol selection, and export to CSV/JSON
 - 🧱 Modular and testable, built with real-world telemetry in mind
 - 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
 
@@ -118,6 +122,35 @@ witskit convert 3650.4 M F  # Convert 3650.4 meters to feet
 witskit convert 1000 PSI KPA  # Convert 1000 PSI to kilopascals
 ```
 
+**Stream and store data:**
+
+```bash
+# Stream from TCP and store in SQLite
+witskit stream tcp://192.168.1.100:12345 --sql-db sqlite:///drilling_data.db
+
+# Stream from serial port with batch processing
+witskit stream serial:///dev/ttyUSB0 --sql-db sqlite:///data.db --sql-batch-size 50
+
+# Stream from file (for testing)
+witskit stream file://sample.wits --sql-db postgresql://user:pass@localhost/wits
+```
+
+**Query stored data:**
+
+```bash
+# List available symbols in database
+witskit sql-query sqlite:///drilling_data.db --list-symbols
+
+# Query specific drilling parameters
+witskit sql-query sqlite:///drilling_data.db --symbols "0108,0113" --limit 100
+
+# Time-based analysis
+witskit sql-query sqlite:///drilling_data.db --start "2024-01-01T10:00:00" --end "2024-01-01T12:00:00"
+
+# Export to CSV for further analysis
+witskit sql-query sqlite:///drilling_data.db --symbols "0108" --format csv --output depth_data.csv
+```
+
 ### WITS File Format
 
 Example WITS file format (sample.wits):
@@ -142,6 +175,57 @@ Each frame must include:
 
 Multiple frames can be included in a single file.
 
+## 🗄️ SQL Storage & Time-Series Analysis
+
+WitsKit includes production-ready SQL storage for time-series drilling data analysis:
+
+### Supported Databases
+- **SQLite**: Perfect for development and single-user analysis
+- **PostgreSQL**: Production-ready with advanced time-series capabilities  
+- **MySQL**: Enterprise database support
+
+### Key Features
+- **Optimized Schema**: Time-series optimized tables with proper indexing
+- **Batch Processing**: Configurable batch sizes for high-performance streaming
+- **Time-Based Queries**: Filter data by time ranges with ISO timestamp support
+- **Symbol Management**: Automatic population of WITS symbol definitions
+- **Export Options**: JSON, CSV, and table formats for data analysis
+- **Multi-source Support**: Handle data from multiple drilling rigs simultaneously
+
+### Installation with SQL Support
+
+```bash
+pip install witskit[sql]  # Includes PostgreSQL and MySQL drivers
+```
+
+### Quick Example
+
+```python
+from witskit.storage.sql_writer import SQLWriter, DatabaseConfig
+from datetime import datetime
+
+# Configure database
+config = DatabaseConfig.sqlite("drilling_data.db")
+writer = SQLWriter(config)
+
+# Stream and store data
+await writer.initialize()
+async for frame in stream_source:
+    await writer.store_frame(frame)
+
+# Query historical data
+async for data_point in writer.query_data_points(
+    symbol_codes=["0108", "0113"], 
+    start_time=datetime(2024, 1, 1),
+    limit=1000
+):
+    print(f"{data_point.symbol_name}: {data_point.parsed_value}")
+```
+
+### Documentation
+- [SQL Storage Guide](sql_storage.md) - Complete documentation and examples
+- [API Reference](api/) - Programming API documentation
+
 ## 🧱 Project Layout
 
 ```
@@ -150,8 +234,17 @@ witskit/
 │   ├── models/          # Symbol metadata, Pydantic schemas
 │   ├── decoder/         # WITS frame parsing
 │   ├── transport/       # Serial, TCP, file readers
+│   ├── storage/         # SQL storage backends
+│   │   ├── base.py      # Abstract storage interface
+│   │   ├── schema.py    # Database schema definitions
+│   │   └── sql_writer.py # SQL storage implementation
 │   └── cli.py          # Command-line interface
 ├── tests/              # Unit tests
+├── docs/               # Documentation
+│   ├── sql_storage.md  # Complete SQL storage guide
+│   ├── guide/          # User guides
+│   └── api/            # API documentation
+├── examples/           # Example scripts and demos
 ├── pyproject.toml      # Package configuration
 └── README.md           # This file
 ```
@@ -184,9 +277,11 @@ pytest tests/test_symbols.py -v
 
 - ✅ Symbol parser & decoder engine
 - ✅ Transport support (serial, TCP, file)
-- 🚧 Output formats (SQLite, JSON, maybe Parquet if you're fancy)
+- ✅ **SQL Storage** (SQLite, PostgreSQL, MySQL)
+- ✅ **Time-series analysis** with time-based filtering and export
 - 🔜 Real-time decoding pipeline with WebSocket/MQTT
 - 🔜 Web UI for monitoring decoded streams
+- 🔜 Parquet export for big data analysis
 
 ## 🤝 Contributing
 

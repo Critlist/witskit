@@ -53,10 +53,12 @@ nav:
     - Getting Started: guide/getting-started.md
     - CLI Usage: guide/cli-usage.md
     - WITS Format: guide/wits-format.md
+    - SQL Storage: sql_storage.md
   - API Reference:
     - Decoder: api/decoder.md
     - Models: api/models.md
     - Transport: api/transport.md
+    - Storage: api/storage.md
   - Development:
     - Contributing: development/contributing.md
     - Architecture: development/architecture.md

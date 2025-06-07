@@ -1,7 +1,7 @@
 """Requesting TCP transport reader for streaming WITS data from request/response servers."""
 
 import socket
-from typing import Generator, Optional
+from typing import Generator, Optional, Callable
 from .base import BaseTransport
 
 
@@ -12,17 +12,28 @@ class RequestingTCPReader(BaseTransport):
     to send a request before they start streaming data.
     """
 
-    def __init__(self, host: str, port: int, request_data: bytes = b"&&\r\n") -> None:
+    def __init__(self, host: str, port: int, 
+                 request_data: Optional[bytes] = None,
+                 send_handshake: bool = True,
+                 handshake_interval: int = 30,
+                 custom_handshake: Optional[bytes] = None,
+                 on_error: Optional[Callable[[Exception], None]] = None) -> None:
         """Initialize the requesting TCP reader.
         
         Args:
             host: The host to connect to
             port: The port to connect to
-            request_data: The initial request to send (default: b"&&\r\n")
+            request_data: The initial request to send (default: uses handshake packet)
+            send_handshake: Whether to send automatic handshake packets (default: True)
+            handshake_interval: Interval between handshakes in seconds (default: 30)
+            custom_handshake: Custom handshake packet (default: uses WitsKit standard)
+            on_error: Optional error callback function
         """
+        super().__init__(send_handshake, handshake_interval, custom_handshake, on_error)
         self.host: str = host
         self.port: int = port
-        self.request_data: bytes = request_data
+        # Use handshake packet as default request if none provided
+        self.request_data: bytes = request_data or self.handshake_packet
         self.socket: Optional[socket.socket] = None
 
     def stream(self) -> Generator[str, None, None]:

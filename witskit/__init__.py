@@ -37,6 +37,7 @@ from .models.symbols import (
 from .models.wits_frame import WITSFrame, DecodedData, DecodedFrame
 from .models.unit_converter import UnitConverter, ConversionError
 from . import transport
+from .transport import PasonTCPReader, PasonSerialReader
 
 __all__: list[str] = [
     # Core decoder functionality
@@ -63,6 +64,9 @@ __all__: list[str] = [
     "ConversionError",
     # Transport layer (available as witskit.transport.*)
     "transport",
+    # Pason-compliant readers (direct access)
+    "PasonTCPReader",
+    "PasonSerialReader",
     # Package metadata
     "__version__",
     "__author__",

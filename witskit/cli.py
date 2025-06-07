@@ -23,7 +23,6 @@ from .decoder.wits_decoder import (
 )
 from .models.symbols import WITS_SYMBOLS
 from .models.unit_converter import UnitConverter, ConversionError
-from .models.symbols import WITSUnits
 from .transport.tcp_reader import TCPReader
 from .transport.serial_reader import SerialReader
 from .transport.file_reader import FileReader
@@ -99,7 +98,7 @@ def decode_command(
 
         if len(frames) > 1:
             # Multiple frames - use decode_file
-            results: List[DecodedFrame] = decode_file(
+            results = decode_file(
                 frame_data, use_metric_units=metric, strict_mode=strict, source=source
             )
             # Combine all data points for display
@@ -608,7 +607,7 @@ def validate_command(
         frame_data: str = data.replace("\\n", "\n")
 
     try:
-        from .decoder.wits_decoder import validate_wits_frame
+        from decoder.wits_decoder import validate_wits_frame
 
         is_valid = validate_wits_frame(frame_data)
         if is_valid:
@@ -801,7 +800,7 @@ def demo_command() -> None:
     rprint()
 
     # Decode it
-    result: DecodedFrame = decode_frame(sample_frame, source="demo")
+    result = decode_frame(sample_frame, source="demo")
 
     if result.data_points:
         table = Table(title="📊 Decoded Sample Data")

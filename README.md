@@ -4,6 +4,7 @@
 
 ---
 
+
 ## 🚩 What It Does
 
 - Parses raw WITS frames into structured, validated Python objects
@@ -19,7 +20,14 @@
 - 🧱 Modular and testable, built with real-world telemetry in mind
 - 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
 
+-Please note that I almost kind of know what i'm doing so If I did something incorrectly or badly please feel free to submit a PR.
+-I'm very much still learning and I know this isnt the nicest codebase.
+
 ## 🧑‍💻 Getting Started
+
+### Installation
+
+**For Development:**
 
 ```bash
 git clone https://github.com/yourusername/witskit
@@ -27,7 +35,22 @@ cd witskit
 pip install -e .
 ```
 
-### Decode a WITS Frame
+**For Production (when published):**
+
+```bash
+pip install witskit
+```
+
+**With uv (recommended):**
+
+```bash
+git clone https://github.com/yourusername/witskit
+cd witskit
+uv pip install -e .
+```
+
+### Quick Start - Decode a WITS Frame
+
 ```python
 from witskit import decode_frame
 
@@ -39,7 +62,7 @@ frame = """&&
 
 result = decode_frame(frame)
 for dp in result.data_points:
-    print(f"{dp.symbol_name}: {dp.raw_value} {dp.unit}")
+    print(f"{dp.symbol_name}: {dp.parsed_value} {dp.unit}")
 ```
 
 Output:
@@ -51,19 +74,50 @@ HKLA: 2850.7 KDN
 
 ## 🕹️ CLI Commands
 
-Explore symbol database:
+After installation, the `witskit` command is available globally:
+
+**Try the demo:**
+
 ```bash
-python cli.py symbols --list-records
-python cli.py symbols --search "depth"
-python cli.py symbols --record 8 --search "resistivity"
+witskit demo
 ```
 
-Decode WITS from a file:
+**Explore symbol database:**
+
 ```bash
-python cli.py decode sample.wits
-python cli.py decode sample.wits --fps
-python cli.py decode sample.wits --output results.json
+witskit symbols --list-records
+witskit symbols --search "depth"
+witskit symbols --record 8 --search "resistivity"
 ```
+
+**Decode WITS from a file:**
+
+```bash
+witskit decode sample.wits
+witskit decode sample.wits --fps
+witskit decode sample.wits --output results.json
+```
+
+**Decode WITS directly:**
+
+```bash
+witskit decode "&&\n01083650.40\n!!" --format table
+```
+
+**Validate WITS data:**
+
+```bash
+witskit validate "&&\n01083650.40\n!!"
+```
+
+**Convert units:**
+
+```bash
+witskit convert 3650.4 M F  # Convert 3650.4 meters to feet
+witskit convert 1000 PSI KPA  # Convert 1000 PSI to kilopascals
+```
+
+### WITS File Format
 
 Example WITS file format (sample.wits):
 ```
@@ -80,31 +134,25 @@ Example WITS file format (sample.wits):
 ```
 
 Each frame must include:
+
 - Start line (`&&`)
-- One or more data lines
+- One or more data lines (4-digit symbol code + value)
 - End line (`!!`)
 
 Multiple frames can be included in a single file.
 
-Validate or debug:
-```
-
-bash
-python cli.py validate "&&\n01083650.40\n!!"
-
-```
-
 ## 🧱 Project Layout
 
 ```
-
 witskit/
-├── models/           # Symbol metadata, Pydantic schemas
-├── decoder/          # WITS frame parsing
-├── transport/        # Serial, TCP, etc. (coming soon)
-├── output/          # Export formats (coming soon)
-├── cli.py           # Command-line interface
-└── tests/           # Unit tests
+├── witskit/             # Main package
+│   ├── models/          # Symbol metadata, Pydantic schemas
+│   ├── decoder/         # WITS frame parsing
+│   ├── transport/       # Serial, TCP, file readers
+│   └── cli.py          # Command-line interface
+├── tests/              # Unit tests
+├── pyproject.toml      # Package configuration
+└── README.md           # This file
 ```
 
 ## 📊 Supported Record Types
@@ -125,12 +173,16 @@ Records 5, 22–25 are defined but not implemented. You're not missing much.
 ```bash
 # Run the full test suite
 pytest tests/ -v
+
+# Run specific test categories
+pytest tests/test_decoder.py -v
+pytest tests/test_symbols.py -v
 ```
 
 ## 📈 Roadmap
 
 - ✅ Symbol parser & decoder engine
-- 🚧 Transport support (serial, TCP, file)
+- ✅ Transport support (serial, TCP, file)
 - 🚧 Output formats (SQLite, JSON, maybe Parquet if you're fancy)
 - 🔜 Real-time decoding pipeline with WebSocket/MQTT
 - 🔜 Web UI for monitoring decoded streams

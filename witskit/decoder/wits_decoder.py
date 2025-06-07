@@ -9,14 +9,9 @@ from datetime import datetime
 from typing import List, Literal, Optional, Tuple, Union
 from loguru import logger
 
-try:
-    # Try relative imports first (when used as package)
-    from ..models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
-    from ..models.symbols import get_symbol_by_code, WITS_SYMBOLS
-except ImportError:
-    # Fall back to absolute imports (when running tests)
-    from witskit.models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
-    from witskit.models.symbols import get_symbol_by_code, WITS_SYMBOLS
+# Always use absolute imports to avoid type conflicts
+from ..models import WITSFrame, DecodedData, DecodedFrame, WITSSymbol
+from ..models.symbols import get_symbol_by_code, WITS_SYMBOLS
 
 
 class WITSDecoder:
@@ -191,7 +186,7 @@ class WITSDecoder:
             Tuple of (is_valid, error_message)
         """
         try:
-            WITSFrame(raw_data=raw_frame)
+            WITSFrame(raw_data=raw_frame, source=None)
             return True, None
         except ValueError as e:
             return False, str(e)

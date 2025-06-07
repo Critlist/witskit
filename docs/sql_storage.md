@@ -78,6 +78,7 @@ The SQL storage uses a normalized, timeseries-optimized schema:
 ### Tables
 
 **wits_symbols** - Symbol definitions (metadata)
+
 - `symbol_code` (Primary Key): 4-digit WITS symbol code
 - `name`: Human-readable symbol name
 - `description`: Detailed description
@@ -86,6 +87,7 @@ The SQL storage uses a normalized, timeseries-optimized schema:
 - `record_type`: WITS record type
 
 **wits_frames** - Frame metadata
+
 - `id` (Primary Key): Auto-increment frame ID
 - `timestamp`: Frame timestamp
 - `source`: Data source identifier
@@ -93,6 +95,7 @@ The SQL storage uses a normalized, timeseries-optimized schema:
 - `created_at`: Database insertion time
 
 **wits_data_points** - Individual measurements (main timeseries table)
+
 - `id` (Primary Key): Auto-increment ID
 - `frame_id`: Reference to wits_frames
 - `symbol_code`: Reference to wits_symbols
@@ -104,6 +107,7 @@ The SQL storage uses a normalized, timeseries-optimized schema:
 - `unit`: Measurement unit
 
 **wits_sources** - Source tracking and statistics
+
 - `source` (Primary Key): Source identifier
 - `first_seen`, `last_seen`: Activity timestamps
 - `total_frames`, `total_data_points`: Statistics
@@ -112,6 +116,7 @@ The SQL storage uses a normalized, timeseries-optimized schema:
 ### Indexes
 
 The schema includes optimized indexes for timeseries queries:
+
 - Primary timeseries: `(symbol_code, timestamp)`
 - Source-specific: `(symbol_code, source, timestamp)`
 - Time range: `(timestamp, symbol_code)`
@@ -156,11 +161,13 @@ asyncio.run(store_data())
 ### Database Configurations
 
 **SQLite**
+
 ```python
 config = DatabaseConfig.sqlite("path/to/database.db", echo=False)
 ```
 
 **PostgreSQL**
+
 ```python
 config = DatabaseConfig.postgresql(
     host="localhost",
@@ -185,6 +192,7 @@ config = DatabaseConfig.mysql(
 ### Advanced Querying
 
 **Time-based filtering**
+
 ```python
 from datetime import datetime, timedelta
 
@@ -199,6 +207,7 @@ async for dp in sql_writer.query_data_points(
 ```
 
 **Source filtering**
+
 ```python
 # Query data from specific source
 async for dp in sql_writer.query_data_points(
@@ -209,6 +218,7 @@ async for dp in sql_writer.query_data_points(
 ```
 
 **Frame-based queries**
+
 ```python
 # Query complete frames with all data points
 async for frame in sql_writer.query_frames(
@@ -350,6 +360,7 @@ witskit sql-query sqlite:///drilling_data.db \
 ### Common Issues
 
 **Import Errors**
+
 ```bash
 # Install SQL dependencies
 pip install witskit[sql]
@@ -360,6 +371,7 @@ pip install witskit[mysql]     # MySQL
 ```
 
 **Connection Issues**
+
 ```bash
 # Test database connection
 witskit sql-query <database_url> --list-symbols
@@ -369,6 +381,7 @@ witskit stream <source> --sql-db <database_url> --sql-echo
 ```
 
 **Performance Issues**
+
 - Increase batch size: `--sql-batch-size 200`
 - Use connection pooling for production
 - Add indexes for custom query patterns
@@ -377,6 +390,7 @@ witskit stream <source> --sql-db <database_url> --sql-echo
 ### Monitoring
 
 Monitor database performance:
+
 ```sql
 -- SQLite: Check database size
 SELECT page_count * page_size AS size_bytes FROM pragma_page_count(), pragma_page_size();

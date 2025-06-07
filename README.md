@@ -4,7 +4,7 @@
 
 
 <sub>
-Please note: I’m still learning, so if you spot something incorrect or suboptimal, feel free to submit a PR. The codebase isn’t perfect yet, but I’m working on it!
+*Please note: I’m still learning, so if you spot something incorrect or suboptimal, feel free to submit a PR. The codebase isn’t perfect yet, but I’m working on it!
 </sub>
 
 
@@ -151,7 +151,7 @@ witskit/
 ├── witskit/             # Main package
 │   ├── models/          # Symbol metadata, Pydantic schemas
 │   ├── decoder/         # WITS frame parsing
-│   ├── transport/       # Serial, TCP, file readers
+│   ├── transport/       # Serial, TCP, file readers (WIP)
 │   └── cli.py          # Command-line interface
 ├── tests/              # Unit tests
 ├── pyproject.toml      # Package configuration
@@ -185,8 +185,8 @@ pytest tests/test_symbols.py -v
 ## 📈 Roadmap
 
 - ✅ Symbol parser & decoder engine
-- ✅ Transport support (serial, TCP, file)
-- 🚧 Output formats (SQLite, JSON, maybe Parquet if you're fancy)
+- ✅ Transport support (serial, TCP, file) (WIP)
+- 🚧 Output formats (SQLite, JSON, maybe Parquet if you're fancy) (WIP)
 - 🔜 Real-time decoding pipeline with WebSocket/MQTT
 - 🔜 Web UI for monitoring decoded streams
 

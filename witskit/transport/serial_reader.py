@@ -1,7 +1,7 @@
-
 from typing import Generator
 import serial
 from .base import BaseTransport
+
 
 class SerialReader(BaseTransport):
     def __init__(self, port: str, baudrate: int = 9600) -> None:

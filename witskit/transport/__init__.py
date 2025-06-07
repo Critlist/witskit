@@ -12,7 +12,7 @@ from .file_reader import FileReader
 
 __all__: list[str] = [
     "BaseTransport",
-    "TCPReader", 
+    "TCPReader",
     "SerialReader",
     "FileReader",
-] 
+]

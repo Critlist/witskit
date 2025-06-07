@@ -13,14 +13,14 @@ class TCPReader(BaseTransport):
         """Stream WITS frames from TCP connection."""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.host, self.port))
-        
+
         buffer = ""
         while True:
             try:
                 chunk: str = self.socket.recv(1024).decode("utf-8", errors="ignore")
                 if not chunk:  # Connection closed
                     break
-                    
+
                 buffer += chunk
                 while "&&" in buffer and "!!" in buffer:
                     start: int = buffer.index("&&")

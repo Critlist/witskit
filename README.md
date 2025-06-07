@@ -265,7 +265,7 @@ This project uses:
 - SQLAlchemy for SQL storage
 - asyncpg/aiomysql for async database drivers
 
-PRs welcome. Bonus points if you've ever debugged WITS over a flaky serial cable.
+PRs welcome. Bonus points if you've ever debugged WITS Comms while on standby waiting for the Rig to pick up tools. 
 
 ## 📚 References
 
@@ -279,4 +279,4 @@ MIT. Do what you want with it—just don't sell it back to Halliburton.
 
 ---
 
-Made by someone who got tired of writing one-off decode tools. If you work with WITS data, WitsKit's here to make your life less painful.
+Made by someone who got bored and wanted a tool to create a diferent approach to WITS data transfer. If you work with WITS data, WitsKit's here to make your life less painful.

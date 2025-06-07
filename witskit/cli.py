@@ -679,7 +679,9 @@ def stream_command(
         None, "--max-frames", "-n", help="Maximum number of frames to process"
     ),
     request_mode: bool = typer.Option(
-        False, "--request", help="Use request mode for TCP (send initial request to trigger streaming)"
+        False,
+        "--request",
+        help="Use request mode for TCP (send initial request to trigger streaming)",
     ),
     # SQL storage options
     sql_db: Optional[str] = typer.Option(
@@ -775,10 +777,12 @@ def stream_command(
                 raise ValueError("TCP source must include port: tcp://host:port")
             host, port_str = url_part.rsplit(":", 1)
             port = int(port_str)
-            
+
             if request_mode:
                 reader = RequestingTCPReader(host, port)
-                rprint(f"🌐 [cyan]Connecting to TCP {host}:{port} (request mode)...[/cyan]")
+                rprint(
+                    f"🌐 [cyan]Connecting to TCP {host}:{port} (request mode)...[/cyan]"
+                )
             else:
                 reader = TCPReader(host, port)
                 rprint(f"🌐 [cyan]Connecting to TCP {host}:{port}...[/cyan]")
@@ -861,20 +865,22 @@ def stream_command(
                             rprint(f"  {dp.symbol_code}: {dp.parsed_value} {dp.unit}")
                     else:  # table format
                         # Show frame header with statistics
-                        success_rate = (frame_count / frame_count) * 100 if frame_count > 0 else 0
+                        success_rate = (
+                            (frame_count / frame_count) * 100 if frame_count > 0 else 0
+                        )
                         rprint(
                             f"\n📦 [bold cyan]Frame {frame_count}[/bold cyan] - [dim]{result.timestamp.strftime('%H:%M:%S')}[/dim] "
                             f"[green]({len(result.data_points)} points)[/green]"
                         )
-                        
+
                         if sql_writer:
                             rprint(f"   💾 [dim]Storing to database...[/dim]")
-                        
+
                         if result.data_points:
                             # Create a beautiful table like in demo
                             table = Table(
                                 title=f"🛠️ WITS Data Frame {frame_count}",
-                                title_style="bold blue"
+                                title_style="bold blue",
                             )
                             table.add_column("Symbol", style="cyan", width=8)
                             table.add_column("Name", style="green", width=12)
@@ -883,8 +889,17 @@ def stream_command(
                             table.add_column("Description", style="dim", width=20)
 
                             # Show only top 8 most important parameters for readability
-                            important_symbols = ["0105", "0106", "0108", "0113", "0120", "0121", "0114", "0116"]
-                            
+                            important_symbols = [
+                                "0105",
+                                "0106",
+                                "0108",
+                                "0113",
+                                "0120",
+                                "0121",
+                                "0114",
+                                "0116",
+                            ]
+
                             # First show important symbols
                             shown_count = 0
                             for symbol_code in important_symbols:
@@ -897,11 +912,15 @@ def stream_command(
                                             dp.symbol_name,
                                             str(dp.parsed_value),
                                             dp.unit,
-                                            dp.symbol_description[:20] + "..." if len(dp.symbol_description) > 20 else dp.symbol_description,
+                                            (
+                                                dp.symbol_description[:20] + "..."
+                                                if len(dp.symbol_description) > 20
+                                                else dp.symbol_description
+                                            ),
                                         )
                                         shown_count += 1
                                         break
-                            
+
                             # Then show remaining symbols up to limit
                             for dp in result.data_points:
                                 if shown_count >= 8:
@@ -912,28 +931,45 @@ def stream_command(
                                         dp.symbol_name,
                                         str(dp.parsed_value),
                                         dp.unit,
-                                        dp.symbol_description[:20] + "..." if len(dp.symbol_description) > 20 else dp.symbol_description,
+                                        (
+                                            dp.symbol_description[:20] + "..."
+                                            if len(dp.symbol_description) > 20
+                                            else dp.symbol_description
+                                        ),
                                     )
                                     shown_count += 1
 
                             console.print(table)
-                            
+
                             # Show summary if there are more points
                             if len(result.data_points) > shown_count:
-                                rprint(f"   [dim]... and {len(result.data_points) - shown_count} more data points[/dim]")
-                        
+                                rprint(
+                                    f"   [dim]... and {len(result.data_points) - shown_count} more data points[/dim]"
+                                )
+
                         else:
                             rprint("   [yellow]⚠️  No data points decoded[/yellow]")
 
                         if result.errors:
-                            rprint(f"   [yellow]⚠️  {len(result.errors)} warnings: {', '.join(result.errors[:2])}[/yellow]")
+                            rprint(
+                                f"   [yellow]⚠️  {len(result.errors)} warnings: {', '.join(result.errors[:2])}[/yellow]"
+                            )
                             if len(result.errors) > 2:
-                                rprint(f"   [dim]... and {len(result.errors) - 2} more[/dim]")
-                        
+                                rprint(
+                                    f"   [dim]... and {len(result.errors) - 2} more[/dim]"
+                                )
+
                         # Show running statistics every 5 frames or if it's the first few
                         if frame_count <= 3 or frame_count % 5 == 0:
-                            avg_points = sum(len(r.data_points) for r in all_results) / len(all_results) if all_results else 0
-                            rprint(f"   [dim]📊 Stats: {frame_count} frames, avg {avg_points:.1f} points/frame[/dim]")
+                            avg_points = (
+                                sum(len(r.data_points) for r in all_results)
+                                / len(all_results)
+                                if all_results
+                                else 0
+                            )
+                            rprint(
+                                f"   [dim]📊 Stats: {frame_count} frames, avg {avg_points:.1f} points/frame[/dim]"
+                            )
 
                 except Exception as e:
                     rprint(f"❌ [red]Frame {frame_count + 1} decode error: {e}[/red]")
@@ -987,7 +1023,7 @@ def stream_command(
             for r in all_results:
                 for dp in r.data_points:
                     unique_symbols.add(dp.symbol_code)
-            
+
             rprint(f"\n📊 [bold green]Stream Processing Complete[/bold green]")
             rprint(f"   Frames processed: {frame_count}")
             rprint(f"   Total data points: {total_points}")

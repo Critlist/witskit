@@ -101,5 +101,7 @@ witskit = { workspace = true }
 [dependency-groups]
 dev = [
     "pytest>=8.4.0",
+    "twine>=6.1.0",
+    "validate-pyproject>=0.24.1",
     "witskit",
 ]

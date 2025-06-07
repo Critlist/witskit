@@ -8,13 +8,17 @@ from .base import BaseTransport
 
 
 class TCPReader(BaseTransport):
-    def __init__(self, host: str, port: int,
-                 send_handshake: bool = True,
-                 handshake_interval: int = 30,
-                 custom_handshake: Optional[bytes] = None,
-                 on_error: Optional[Callable[[Exception], None]] = None) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        send_handshake: bool = True,
+        handshake_interval: int = 30,
+        custom_handshake: Optional[bytes] = None,
+        on_error: Optional[Callable[[Exception], None]] = None,
+    ) -> None:
         """Initialize TCP reader with handshaking support.
-        
+
         Args:
             host: The host to connect to
             port: The port to connect to
@@ -36,7 +40,7 @@ class TCPReader(BaseTransport):
         while not self._stop_handshake.wait(self.handshake_interval):
             if not self._connection_active.is_set():
                 continue
-                
+
             try:
                 if self.socket:
                     self.socket.send(self.handshake_packet)
@@ -51,16 +55,15 @@ class TCPReader(BaseTransport):
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
             self._connection_active.set()
-            
+
             # Start handshake thread if enabled
             if self.send_handshake:
                 self._stop_handshake.clear()
                 self._handshake_thread = threading.Thread(
-                    target=self._handshake_worker, 
-                    daemon=True
+                    target=self._handshake_worker, daemon=True
                 )
                 self._handshake_thread.start()
-                
+
                 # Send initial handshake
                 self.socket.send(self.handshake_packet)
 
@@ -76,11 +79,11 @@ class TCPReader(BaseTransport):
                         start: int = buffer.index("&&")
                         end: int = buffer.index("!!") + 2
                         frame = buffer[start:end]
-                        
+
                         # Filter out our own handshake packets
                         if not self._is_handshake_packet(frame):
                             yield frame
-                            
+
                         buffer = buffer[end:]
                 except ConnectionResetError:
                     break
@@ -92,20 +95,20 @@ class TCPReader(BaseTransport):
                     break
         finally:
             self._cleanup()
-    
+
     def _is_handshake_packet(self, frame: str) -> bool:
         """Check if frame is our own handshake packet."""
         return "1984WITSKIT" in frame and "0111-9999" in frame
-    
+
     def _cleanup(self) -> None:
         """Clean up resources."""
         self._connection_active.clear()
-        
+
         # Stop handshake thread
         if self._handshake_thread and self._handshake_thread.is_alive():
             self._stop_handshake.set()
             self._handshake_thread.join(timeout=2)
-        
+
         # Close socket
         if self.socket:
             try:

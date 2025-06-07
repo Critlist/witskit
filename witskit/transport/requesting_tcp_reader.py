@@ -7,19 +7,23 @@ from .base import BaseTransport
 
 class RequestingTCPReader(BaseTransport):
     """TCP reader that sends an initial request to trigger data streaming.
-    
+
     Some WITS servers operate in request/response mode and wait for a client
     to send a request before they start streaming data.
     """
 
-    def __init__(self, host: str, port: int, 
-                 request_data: Optional[bytes] = None,
-                 send_handshake: bool = True,
-                 handshake_interval: int = 30,
-                 custom_handshake: Optional[bytes] = None,
-                 on_error: Optional[Callable[[Exception], None]] = None) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        request_data: Optional[bytes] = None,
+        send_handshake: bool = True,
+        handshake_interval: int = 30,
+        custom_handshake: Optional[bytes] = None,
+        on_error: Optional[Callable[[Exception], None]] = None,
+    ) -> None:
         """Initialize the requesting TCP reader.
-        
+
         Args:
             host: The host to connect to
             port: The port to connect to
@@ -40,7 +44,7 @@ class RequestingTCPReader(BaseTransport):
         """Stream WITS frames from TCP connection with initial request."""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.host, self.port))
-        
+
         # Send initial request to trigger streaming
         self.socket.send(self.request_data)
 
@@ -67,4 +71,4 @@ class RequestingTCPReader(BaseTransport):
         """Close the TCP connection."""
         if self.socket:
             self.socket.close()
-            self.socket = None 
+            self.socket = None

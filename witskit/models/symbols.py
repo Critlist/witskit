@@ -9,7 +9,7 @@ Based on the WITS (Wellsite Information Transfer Standard) specification.
 
 from enum import Enum
 from typing import Dict, Optional, Union, List
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class WITSDataType(str, Enum):
@@ -117,8 +117,7 @@ class WITSSymbol(BaseModel):
     record_type: int
     item_number: int
 
-    class Config:
-        frozen = True  # Make immutable
+    model_config = ConfigDict(frozen=True)  # Make immutable
 
 
 # Record type descriptions

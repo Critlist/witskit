@@ -502,12 +502,27 @@ name = "witskit"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "annotated-types" },
+    { name = "black" },
+    { name = "click" },
+    { name = "colorama" },
+    { name = "iniconfig" },
     { name = "loguru" },
+    { name = "markdown-it-py" },
+    { name = "mdurl" },
+    { name = "packaging" },
+    { name = "pluggy" },
     { name = "pydantic" },
+    { name = "pydantic-core" },
+    { name = "pygments" },
     { name = "pyserial" },
     { name = "pytest" },
     { name = "rich" },
+    { name = "shellingham" },
     { name = "typer" },
+    { name = "typing-extensions" },
+    { name = "typing-inspection" },
+    { name = "win32-setctime" },
 ]
 
 [package.optional-dependencies]
@@ -521,16 +536,31 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "annotated-types", specifier = "==0.7.0" },
+    { name = "black", specifier = ">=25.1.0" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.0.0" },
-    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "click", specifier = "==8.2.1" },
+    { name = "colorama", specifier = "==0.4.6" },
+    { name = "iniconfig", specifier = "==2.1.0" },
+    { name = "loguru", specifier = "==0.7.3" },
+    { name = "markdown-it-py", specifier = "==3.0.0" },
+    { name = "mdurl", specifier = "==0.1.2" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.5.0" },
-    { name = "pydantic", specifier = ">=2.11.5" },
-    { name = "pyserial", specifier = ">=3.5" },
-    { name = "pytest", specifier = ">=8.4.0" },
+    { name = "packaging", specifier = "==25.0" },
+    { name = "pluggy", specifier = "==1.6.0" },
+    { name = "pydantic", specifier = "==2.11.5" },
+    { name = "pydantic-core", specifier = "==2.33.2" },
+    { name = "pygments", specifier = "==2.19.1" },
+    { name = "pyserial", specifier = "==3.5" },
+    { name = "pytest", specifier = "==8.4.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0.0" },
-    { name = "rich", specifier = ">=14.0.0" },
+    { name = "rich", specifier = "==14.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
-    { name = "typer", specifier = ">=0.16.0" },
+    { name = "shellingham", specifier = "==1.5.4" },
+    { name = "typer", specifier = "==0.16.0" },
+    { name = "typing-extensions", specifier = "==4.14.0" },
+    { name = "typing-inspection", specifier = "==0.4.1" },
+    { name = "win32-setctime", specifier = "==1.2.0" },
 ]
 provides-extras = ["dev"]

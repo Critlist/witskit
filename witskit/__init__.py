@@ -17,26 +17,41 @@ __author__ = "WitsKit Team"
 __license__ = "MIT"
 
 # Public API exports
-from .decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame
-from .models.symbols import WITSSymbol, WITS_SYMBOLS, get_symbol_by_code, search_symbols
+from .decoder.wits_decoder import WITSDecoder, decode_frame, validate_wits_frame, decode_file, split_multiple_frames
+from .models.symbols import WITSSymbol, WITS_SYMBOLS, WITSUnits, get_symbol_by_code, search_symbols, get_record_types, get_symbols_by_record_type, get_record_description
 from .models.wits_frame import WITSFrame, DecodedData, DecodedFrame
+from .models.unit_converter import UnitConverter, ConversionError
+from . import transport
 
 __all__: list[str] = [
     # Core decoder functionality
     "WITSDecoder",
     "decode_frame", 
     "validate_wits_frame",
+    "decode_file",
+    "split_multiple_frames",
     
     # Symbol management
     "WITSSymbol",
     "WITS_SYMBOLS",
+    "WITSUnits",
     "get_symbol_by_code",
     "search_symbols",
+    "get_record_types",
+    "get_symbols_by_record_type", 
+    "get_record_description",
     
     # Data models
     "WITSFrame",
     "DecodedData", 
     "DecodedFrame",
+    
+    # Unit conversion
+    "UnitConverter",
+    "ConversionError",
+    
+    # Transport layer (available as witskit.transport.*)
+    "transport",
     
     # Package metadata
     "__version__",

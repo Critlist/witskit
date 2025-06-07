@@ -15,26 +15,13 @@ from datetime import datetime
 
 from .models.symbols import WITSSymbol, WITSUnits
 from .models.wits_frame import DecodedFrame
-
-try:
-    from .decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
-    from .models.symbols import WITS_SYMBOLS
-    from .models.unit_converter import UnitConverter, ConversionError
-    from .models.symbols import WITSUnits
-    from .transport.tcp_reader import TCPReader
-    from .transport.serial_reader import SerialReader
-    from .transport.file_reader import FileReader
-except ImportError:
-    import sys
-    import os
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from .decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
-    from .models.symbols import WITS_SYMBOLS
-    from .models.unit_converter import UnitConverter, ConversionError
-    from .models.symbols import WITSUnits
-    from .transport.tcp_reader import TCPReader
-    from .transport.serial_reader import SerialReader
-    from .transport.file_reader import FileReader
+from .decoder.wits_decoder import WITSDecoder, decode_frame, decode_file, split_multiple_frames
+from .models.symbols import WITS_SYMBOLS
+from .models.unit_converter import UnitConverter, ConversionError
+from .models.symbols import WITSUnits
+from .transport.tcp_reader import TCPReader
+from .transport.serial_reader import SerialReader
+from .transport.file_reader import FileReader
 
 app = typer.Typer(
     name="witskit",

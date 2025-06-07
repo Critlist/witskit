@@ -26,6 +26,7 @@ from .models.unit_converter import UnitConverter, ConversionError
 from .transport.tcp_reader import TCPReader
 from .transport.serial_reader import SerialReader
 from .transport.file_reader import FileReader
+from witskit import __version__
 
 app = typer.Typer(
     name="witskit",
@@ -33,6 +34,27 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 console = Console()
+
+
+def version_callback(value: bool) -> None:
+    if value:
+        typer.echo(f"WitsKit Version: {__version__}")
+        raise typer.Exit()
+
+
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        False, "--version", "-V", 
+        help="Show the version and exit.",
+        callback=version_callback,
+        is_eager=True,
+    )
+):
+    """
+    WitsKit - Python SDK for WITS data processing
+    """
+    pass
 
 
 @app.command("decode")

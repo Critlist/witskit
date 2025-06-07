@@ -248,7 +248,7 @@ pytest tests/test_symbols.py -v
 ## 📈 Roadmap
 
 - ✅ Symbol parser & decoder engine
-- ✅ Transport support (serial, TCP, file) (WIP)
+- 🚧 Transport support (serial, TCP, file) (WIP)
 - ✅ **SQL Storage** (SQLite, PostgreSQL, MySQL)
 - ✅ **Time-series analysis** with time-based filtering and export
 - 🔜 Real-time decoding pipeline with WebSocket/MQTT

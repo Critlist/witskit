@@ -61,7 +61,7 @@ def main(
 def decode_command(
     data: str = typer.Argument(..., help="WITS frame data or path to file"),
     metric: bool = typer.Option(
-        True, "--metric/--fps", help="Use metric units (default) or FPS units"
+        False, "--metric/--fps", help="Use metric units or FPS units (default)"
     ),
     strict: bool = typer.Option(
         False, "--strict", help="Enable strict mode (fail on unknown symbols)"
@@ -92,11 +92,11 @@ def decode_command(
         # Decode from file
         witskit decode data.wits --output results.json
 
-        # Use FPS units instead of metric
-        witskit decode data.wits --fps
+        # Use metric units instead of FPS (default)
+        witskit decode data.wits --metric
 
-        # Decode with metric units then convert all to FPS
-        witskit decode data.wits --metric --convert-to-fps
+        # Decode with FPS units then convert all to metric
+        witskit decode data.wits --fps --convert-to-metric
     """
 
     # Validate conversion options
@@ -650,7 +650,7 @@ def stream_command(
         help="Data source: tcp://host:port, serial:///dev/ttyUSB0, or file://path/to/file.wits",
     ),
     metric: bool = typer.Option(
-        True, "--metric/--fps", help="Use metric units (default) or FPS units"
+        False, "--metric/--fps", help="Use metric units or FPS units (default)"
     ),
     strict: bool = typer.Option(
         False, "--strict", help="Enable strict mode (fail on unknown symbols)"

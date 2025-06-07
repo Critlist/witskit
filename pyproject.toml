@@ -75,3 +75,12 @@ include = [
     "/README.md",
     "/LICENSE",
 ]
+
+[tool.uv.sources]
+witskit = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "witskit",
+]

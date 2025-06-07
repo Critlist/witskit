@@ -21,12 +21,12 @@ class WITSDecoder:
     Supports WITS Level 0 (ASCII) format with extensible symbol definitions.
     """
 
-    def __init__(self, use_metric_units: bool = True, strict_mode: bool = False):
+    def __init__(self, use_metric_units: bool = False, strict_mode: bool = False):
         """
         Initialize the WITS decoder.
 
         Args:
-            use_metric_units: If True, use metric units, otherwise use FPS units
+            use_metric_units: If True, use metric units, otherwise use FPS units (default)
             strict_mode: If True, raise errors for unknown symbols, otherwise log warnings
         """
         self.use_metric_units: bool = use_metric_units
@@ -195,7 +195,7 @@ class WITSDecoder:
 # Convenience functions for direct usage
 def decode_frame(
     raw_frame: str,
-    use_metric_units: bool = True,
+    use_metric_units: bool = False,
     strict_mode: bool = False,
     source: Optional[str] = None,
 ) -> DecodedFrame:
@@ -204,7 +204,7 @@ def decode_frame(
 
     Args:
         raw_frame: Raw WITS frame string
-        use_metric_units: If True, use metric units, otherwise use FPS units
+        use_metric_units: If True, use metric units, otherwise use FPS units (default)
         strict_mode: If True, raise errors for unknown symbols
         source: Optional source identifier
 
@@ -281,7 +281,7 @@ def split_multiple_frames(data: str) -> List[str]:
 
 def decode_file(
     file_data: str,
-    use_metric_units: bool = True,
+    use_metric_units: bool = False,
     strict_mode: bool = False,
     source: Optional[str] = None,
 ) -> List[DecodedFrame]:
@@ -290,7 +290,7 @@ def decode_file(
 
     Args:
         file_data: Raw file content
-        use_metric_units: If True, use metric units, otherwise use FPS units
+        use_metric_units: If True, use metric units, otherwise use FPS units (default)
         strict_mode: If True, raise errors for unknown symbols
         source: Optional source identifier
 

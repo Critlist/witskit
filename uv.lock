@@ -979,6 +979,12 @@ test = [
     { name = "pytest-cov" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "witskit" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.0.0" },
@@ -1000,3 +1006,9 @@ requires-dist = [
     { name = "typer", specifier = ">=0.16.0" },
 ]
 provides-extras = ["dev", "test", "docs"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.0" },
+    { name = "witskit", editable = "." },
+]

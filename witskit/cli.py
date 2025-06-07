@@ -453,7 +453,7 @@ def _show_available_units() -> None:
                 else:
                     desc, system = "Degrees Fahrenheit", "FPS"
             else:
-                desc: str = unit.value
+                desc= unit.value
                 system = "Both" if unit == WITSUnits.UNITLESS else "Mixed"
 
             table.add_row(unit.name, desc, system)
@@ -545,9 +545,9 @@ def symbols_command(
                 for code, symbol in symbols_to_show.items()
                 if symbol.record_type == record_type
             }
-            title = f"Record {record_type} Symbols matching '{search}'"
+            title: str = f"Record {record_type} Symbols matching '{search}'"
         else:
-            title: str = f"All Symbols matching '{search}'"
+            title= f"All Symbols matching '{search}'"
     elif record_type:
         symbols_to_show = get_symbols_by_record_type(record_type)
         title = f"Record {record_type}: {get_record_description(record_type)}"
@@ -626,10 +626,10 @@ def validate_command(
         with open(data, "r") as f:
             frame_data: str = f.read()
     else:
-        frame_data: str = data.replace("\\n", "\n")
+        frame_data = data.replace("\\n", "\n")
 
     try:
-        from decoder.wits_decoder import validate_wits_frame
+        from .decoder.wits_decoder import validate_wits_frame
 
         is_valid = validate_wits_frame(frame_data)
         if is_valid:
@@ -687,7 +687,7 @@ def stream_command(
     """
 
     # Parse the source URL
-    reader = None
+    reader: Union[TCPReader, SerialReader, FileReader, None] = None
     try:
         if source.startswith("tcp://"):
             # Parse tcp://host:port
@@ -701,10 +701,9 @@ def stream_command(
 
         elif source.startswith("serial://"):
             # Parse serial:///dev/ttyUSB0
-            port = source[9:]  # Remove 'serial://'
-            reader = SerialReader(port, baudrate)
-            rprint(f"🔌 [cyan]Opening serial port {port} at {baudrate} baud...[/cyan]")
-
+            serial_port = source[9:]  # Remove 'serial://'
+            reader = SerialReader(serial_port, baudrate)
+            rprint(f"🔌 [cyan]Opening serial port {serial_port} at {baudrate} baud...[/cyan]")
         elif source.startswith("file://"):
             # Parse file://path/to/file.wits
             file_path: str = source[7:]  # Remove 'file://'
@@ -721,6 +720,8 @@ def stream_command(
         all_results = []
 
         try:
+            if reader is None:
+                raise ValueError("Failed to initialize data source reader.")
             for frame in reader.stream():
                 if max_frames and frame_count >= max_frames:
                     break
@@ -776,7 +777,8 @@ def stream_command(
             rprint(f"\n⏹️ [yellow]Stopped by user after {frame_count} frames[/yellow]")
 
         finally:
-            reader.close()
+            if reader is not None:
+                reader.close()
 
         # Save output if requested
         if output and all_results:

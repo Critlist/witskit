@@ -7,24 +7,25 @@ This demonstrates how to stream WITS data from TCP, decode it, and display resul
 
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Add the current directory to Python path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from transport.tcp_reader import TCPReader
-from transport.file_reader import FileReader
-from decoder.wits_decoder import decode_frame
+from witskit.transport.tcp_reader import TCPReader
+from witskit.transport.file_reader import FileReader
+from witskit.decoder.wits_decoder import decode_frame
 
 
-def tcp_example():
+def tcp_example() -> None:
     """Example using TCP reader."""
     print("🌐 TCP Reader Example")
     print("====================")
 
-    reader = TCPReader("127.0.0.1", 12345)
+    reader: TCPReader = TCPReader("127.0.0.1", 12345)
 
     try:
-        frame_count = 0
+        frame_count: int = 0
         for frame in reader.stream():
             if frame_count >= 5:  # Limit for demo
                 break
@@ -57,18 +58,18 @@ def tcp_example():
         print("🔌 Connection closed")
 
 
-def file_example():
+def file_example() -> None:
     """Example using file reader."""
     print("\n📁 File Reader Example")
     print("=======================")
 
     # Check if sample file exists
-    sample_files = [
+    sample_files: list[str] = [
         "sample.wits",
         "sample_comprehensive.wits",
         "sample_comprehensive_v2.wits",
     ]
-    sample_file = None
+    sample_file: Optional[str] = None
 
     for file in sample_files:
         if Path(file).exists():
@@ -80,10 +81,10 @@ def file_example():
         return
 
     print(f"📖 Reading from {sample_file}")
-    reader = FileReader(sample_file)
+    reader: FileReader = FileReader(sample_file)
 
     try:
-        frame_count = 0
+        frame_count: int = 0
         for frame in reader.stream():
             if frame_count >= 3:  # Limit for demo
                 break

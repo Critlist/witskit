@@ -18,9 +18,10 @@ finally:
 
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Add current directory to Python path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 print("🔬 Verifying Exact Usage Pattern")
 print("=" * 35)
@@ -30,8 +31,8 @@ print("\n1️⃣ Testing imports...")
 try:
     # Note: We use local imports since this isn't installed as witskit package
     # In real usage with installed package, you'd use: from witskit.transport.tcp_reader import TCPReader
-    from transport.tcp_reader import TCPReader
-    from decoder.wits_decoder import decode_frame
+    from witskit.transport.tcp_reader import TCPReader
+    from witskit.decoder.wits_decoder import decode_frame
 
     print("✅ Imports successful")
 except ImportError as e:
@@ -39,12 +40,12 @@ except ImportError as e:
     sys.exit(1)
 
 print("\n2️⃣ Creating TCPReader...")
-reader = TCPReader("127.0.0.1", 12345)
+reader: TCPReader = TCPReader("127.0.0.1", 12345)
 print("✅ TCPReader created")
 
 print("\n3️⃣ Testing stream pattern...")
 try:
-    frame_count = 0
+    frame_count: int = 0
     for frame in reader.stream():
         print(f"📦 Received frame {frame_count + 1}")
         result = decode_frame(frame)
@@ -68,10 +69,10 @@ print("\n4️⃣ Alternative: File-based testing...")
 print("(Since TCP server isn't running, let's use FileReader)")
 
 # Use FileReader to demonstrate the same pattern with actual data
-from transport.file_reader import FileReader
+from witskit.transport.file_reader import FileReader
 
-sample_files = ["sample.wits", "sample_comprehensive.wits"]
-sample_file = None
+sample_files: list[str] = ["sample.wits", "sample_comprehensive.wits"]
+sample_file: Optional[str] = None
 
 for file in sample_files:
     if Path(file).exists():
@@ -80,11 +81,11 @@ for file in sample_files:
 
 if sample_file:
     print(f"📁 Using {sample_file} for demonstration")
-    reader = FileReader(sample_file)
+    file_reader: FileReader = FileReader(sample_file)
 
     try:
         frame_count = 0
-        for frame in reader.stream():
+        for frame in file_reader.stream():
             print(f"\n📦 Frame {frame_count + 1}:")
             result = decode_frame(frame)
             print(f"✅ Decoded {len(result.data_points)} data points")
@@ -103,7 +104,7 @@ if sample_file:
     except Exception as e:
         print(f"❌ Error: {e}")
     finally:
-        reader.close()
+        file_reader.close()
         print("📁 File reader closed")
 else:
     print("❌ No sample files found")

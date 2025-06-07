@@ -14,10 +14,8 @@ from .symbols import (
 )
 from .wits_frame import WITSFrame, DecodedData, DecodedFrame
 from .unit_converter import UnitConverter, ConversionError
-from typing import List
 
-# __all__: list[str] = [
-__all__: List[str] = [
+__all__: list[str] = [
     # Symbols and related functions
     "WITSSymbol",
     "WITS_SYMBOLS",

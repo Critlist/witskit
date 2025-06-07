@@ -14,7 +14,7 @@ class TCPReader(BaseTransport):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.host, self.port))
 
-        buffer = ""
+        buffer: str = ""
         while True:
             try:
                 chunk: str = self.socket.recv(1024).decode("utf-8", errors="ignore")
@@ -26,7 +26,7 @@ class TCPReader(BaseTransport):
                     start: int = buffer.index("&&")
                     end: int = buffer.index("!!") + 2
                     yield buffer[start:end]
-                    buffer: str = buffer[end:]
+                    buffer = buffer[end:]
             except ConnectionResetError:
                 break
             except Exception as e:

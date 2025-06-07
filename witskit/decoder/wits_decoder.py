@@ -255,7 +255,7 @@ def split_multiple_frames(data: str) -> List[str]:
     current_frame = []
 
     for line in lines:
-        line: str = line.strip()
+        line = line.strip()
         if not line:
             continue
 

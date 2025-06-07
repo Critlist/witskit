@@ -13,9 +13,10 @@ All components are integrated and working as requested.
 
 import sys
 from pathlib import Path
+from typing import Optional, Generator
 
 # Add current directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 print("🛠️ WitsKit Complete Transport Demo")
 print("=" * 50)
@@ -25,10 +26,10 @@ print("\n1️⃣ Transport Classes Implementation")
 print("-" * 35)
 
 try:
-    from transport.base import BaseTransport
-    from transport.tcp_reader import TCPReader
-    from transport.serial_reader import SerialReader
-    from transport.file_reader import FileReader
+    from witskit.transport.base import BaseTransport
+    from witskit.transport.tcp_reader import TCPReader
+    from witskit.transport.serial_reader import SerialReader
+    from witskit.transport.file_reader import FileReader
 
     print("✅ BaseTransport - Abstract base class")
     print("✅ TCPReader - For tcp://host:port connections")
@@ -43,7 +44,7 @@ print("\n2️⃣ Decoder Integration")
 print("-" * 25)
 
 try:
-    from decoder.wits_decoder import decode_frame
+    from witskit.decoder.wits_decoder import decode_frame
 
     print("✅ decode_frame - Converts raw WITS to structured data")
 except ImportError as e:
@@ -54,12 +55,12 @@ except ImportError as e:
 print("\n3️⃣ FileReader Demo")
 print("-" * 20)
 
-sample_files = [
+sample_files: list[str] = [
     "sample.wits",
     "sample_comprehensive.wits",
     "sample_comprehensive_v2.wits",
 ]
-sample_file = None
+sample_file: Optional[str] = None
 
 for file in sample_files:
     if Path(file).exists():
@@ -68,16 +69,16 @@ for file in sample_files:
 
 if sample_file:
     print(f"📁 Reading from {sample_file}")
-    reader = FileReader(sample_file)
+    reader: FileReader = FileReader(sample_file)
 
     try:
-        frame_count = 0
+        frame_count: int = 0
         for frame in reader.stream():
             if frame_count >= 1:  # Just show one frame
                 break
 
             print(f"\n📦 Raw WITS frame preview:")
-            lines = frame.split("\n")
+            lines: list[str] = frame.split("\n")
             for i, line in enumerate(lines[:5]):  # Show first 5 lines
                 print(f"   {line}")
             if len(lines) > 5:
@@ -110,14 +111,14 @@ print("\n4️⃣ TCP Connection Example")
 print("-" * 28)
 
 print("🌐 Creating TCPReader for 127.0.0.1:12345")
-tcp_reader = TCPReader("127.0.0.1", 12345)
+tcp_reader: TCPReader = TCPReader("127.0.0.1", 12345)
 
 try:
     print("🔌 Attempting connection...")
     # Just show we can create the reader and attempt streaming
-    stream = tcp_reader.stream()
+    stream: Generator[str, None, None] = tcp_reader.stream()
     # Try to get one frame (will fail with no server)
-    frame = next(stream)
+    frame: str = next(stream)
     print("✅ Connected and received frame!")
 except ConnectionRefusedError:
     print("⚠️ Connection refused (expected - no server running)")

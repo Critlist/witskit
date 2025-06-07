@@ -33,7 +33,7 @@ class WITSFrame(BaseModel):
         if not v.strip():
             raise ValueError("WITS frame cannot be empty")
 
-        lines = v.strip().split("\n")
+        lines: List[str] = v.strip().split("\n")
         if len(lines) < 3:  # Minimum: start, data, end
             raise ValueError("WITS frame must have at least start, data, and end lines")
 

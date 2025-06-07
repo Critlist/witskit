@@ -26,8 +26,6 @@
 - 🧱 Modular and testable, built with real-world telemetry in mind
 - 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
 
--Please note that I almost kind of know what i'm doing so If I did something incorrectly or badly please feel free to submit a PR.
--I'm very much still learning and I know this isnt the nicest codebase.
 
 ## 🧑‍💻 Getting Started
 

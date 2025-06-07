@@ -39,7 +39,7 @@ cd witskit
 pip install -e .
 ```
 
-**For Production (when published):**
+**WitsKit is now available on PyPI :**
 
 ```bash
 pip install witskit

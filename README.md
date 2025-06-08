@@ -265,7 +265,7 @@ This project uses:
 - SQLAlchemy for SQL storage
 - asyncpg/aiomysql for async database drivers
 
-PRs welcome. Bonus points if you've ever debugged WITS Comms while on standby waiting for the Rig to pick up tools. 
+PRs welcome. Bonus points if you've ever troubleshot WITS Comms while on standby waiting for the Rig to pick up tools. 
 
 ## 📚 References
 
@@ -275,8 +275,8 @@ PRs welcome. Bonus points if you've ever debugged WITS Comms while on standby wa
 
 ## 📄 License
 
-MIT. Do what you want with it—just don't sell it back to Halliburton.
+MIT. Do what you want with it. If you've found this repo and think it might be useful to you then we should be friends. 
 
 ---
 
-Made by someone who got bored and wanted a tool to create a diferent approach to WITS data transfer. If you work with WITS data, WitsKit's here to make your life less painful.
+Made by someone who got bored and wanted a tool to create a diferent approach to WITS0 data transfer that's not mid-grade WITSML. If you work with WITS data, WitsKit's here to make your life less painful.

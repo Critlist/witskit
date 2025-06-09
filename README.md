@@ -242,6 +242,18 @@ pytest tests/ -v
 pytest tests/test_decoder.py -v
 pytest tests/test_symbols.py -v
 ```
+## 🚧 Project Status
+
+### Known Issues
+- Unit Test for TCP connection are failing due to MOCK 
+but work with real time data
+- MySQL and PostgreSQL still need testing, but SQLite is fully operational
+- Serial Comm support is still untested and unverified.
+
+### Under Development
+- WebSocket transport layer for real-time monitoring
+- Proper Pason integration for 2 way handshake and send on recieve. 
+
 
 ## 📈 Roadmap
 

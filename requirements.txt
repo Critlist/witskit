@@ -23,4 +23,4 @@ typer==0.16.0
 typing-extensions==4.14.0
 typing-inspection==0.4.1
 win32-setctime==1.2.0
--e file:///C:/02.Programming/witskit
+pip install -e .

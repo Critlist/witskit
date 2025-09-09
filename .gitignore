@@ -242,3 +242,5 @@ node_modules/
 # tasks.json
 # tasks/ 
 .env.example
+CLAUDE.md
+PROJECT_STATUS_ASSESSMENT.md

@@ -25,7 +25,7 @@ from witskit.transport.file_reader import FileReader
 async def demo_comprehensive_sql():
     """Comprehensive demo of SQL storage capabilities."""
 
-    print("🗂️ WITS SQL Storage Comprehensive Demo")
+    print("WITS SQL Storage Comprehensive Demo")
     print("=" * 60)
 
     # Create database
@@ -34,9 +34,9 @@ async def demo_comprehensive_sql():
     sql_writer = SQLWriter(config)
 
     try:
-        print("📁 Initializing SQLite database...")
+        print("Initializing SQLite database...")
         await sql_writer.initialize()
-        print("✅ Database ready with schema and symbol definitions")
+        print("Database ready with schema and symbol definitions")
 
         # Simulate multiple data sources with sample data
         sources_data = [
@@ -63,7 +63,7 @@ async def demo_comprehensive_sql():
             },
         ]
 
-        print(f"\n📊 Storing data from {len(sources_data)} different sources...")
+        print(f"\nStoring data from {len(sources_data)} different sources...")
 
         all_frames = []
         for source_info in sources_data:
@@ -84,14 +84,14 @@ async def demo_comprehensive_sql():
             await sql_writer.store_frames(batch)
             print(f"  💾 Stored batch {i//batch_size + 1}: {len(batch)} frames")
 
-        print(f"✅ Stored {len(all_frames)} total frames")
+        print(f"Stored {len(all_frames)} total frames")
 
         # Query and analyze the data
         print("\n🔍 Data Analysis:")
 
         # 1. Get overview
         symbols = await sql_writer.get_available_symbols()
-        print(f"  📈 Available symbols: {', '.join(symbols)}")
+        print(f"  Available symbols: {', '.join(symbols)}")
 
         min_time, max_time = await sql_writer.get_time_range()
         if min_time and max_time:
@@ -106,7 +106,7 @@ async def demo_comprehensive_sql():
             print(f"  {source}: {len(source_symbols)} symbols")
 
         # 3. Query specific drilling parameters
-        print("\n📊 Depth Analysis (Symbol 0108):")
+        print("\nDepth Analysis (Symbol 0108):")
         depth_data = []
         async for dp in sql_writer.query_data_points(symbol_codes=["0108"], limit=20):
             depth_data.append(dp)
@@ -118,7 +118,7 @@ async def demo_comprehensive_sql():
             min_depth = min(depths)
             max_depth = max(depths)
             print(f"  📏 Depth range: {min_depth} - {max_depth} feet")
-            print(f"  📊 Data points: {len(depth_data)}")
+            print(f"  Data points: {len(depth_data)}")
 
         # 4. Time-based query (last 30 seconds)
         print("\n⏰ Recent Data (last 30 seconds):")
@@ -129,7 +129,7 @@ async def demo_comprehensive_sql():
         ):
             recent_data.append(dp)
 
-        print(f"  📈 Found {len(recent_data)} recent measurements")
+        print(f"  Found {len(recent_data)} recent measurements")
 
         # 5. Export sample data
         print("\n💾 Exporting sample data...")
@@ -150,7 +150,7 @@ async def demo_comprehensive_sql():
             with open("depth_export.json", "w") as f:
                 json.dump(export_data, f, indent=2)
             print(
-                f"  📄 Exported {len(export_data)} depth measurements to depth_export.json"
+                f"  Exported {len(export_data)} depth measurements to depth_export.json"
             )
 
         # 6. Frame-based queries (complete drilling records)
@@ -176,10 +176,10 @@ async def demo_comprehensive_sql():
 
     finally:
         await sql_writer.close()
-        print(f"\n🗂️ Database saved as: {db_path}")
+        print(f"\nDatabase saved as: {db_path}")
 
     print("\n" + "=" * 60)
-    print("✅ Comprehensive demo complete!")
+    print("Comprehensive demo complete!")
     print("\nYou can now explore the data using:")
     print(f"  witskit sql-query sqlite:///{db_path} --list-symbols")
     print(f"  witskit sql-query sqlite:///{db_path} --symbols '0108,0113' --limit 20")
@@ -191,7 +191,7 @@ async def demo_comprehensive_sql():
 async def demo_file_integration():
     """Demo integration with existing file transport."""
 
-    print("\n📁 File Integration Demo")
+    print("\nFile Integration Demo")
     print("=" * 40)
 
     # Check for sample files
@@ -200,7 +200,7 @@ async def demo_file_integration():
     available_files = [f for f in sample_files if Path(f).exists()]
 
     if not available_files:
-        print("⚠️ No sample files found, skipping file integration demo")
+        print("No sample files found, skipping file integration demo")
         return
 
     db_path = "file_integration_demo.db"
@@ -209,10 +209,10 @@ async def demo_file_integration():
 
     try:
         await sql_writer.initialize()
-        print("📁 Processing sample files...")
+        print("Processing sample files...")
 
         for file_path in available_files:
-            print(f"  📄 Processing {file_path}...")
+            print(f"  Processing {file_path}...")
 
             file_reader = FileReader(file_path)
             frames_processed = 0
@@ -232,18 +232,18 @@ async def demo_file_integration():
                         batch.clear()
 
                 except Exception as e:
-                    print(f"    ⚠️ Error processing frame: {e}")
+                    print(f"    Error processing frame: {e}")
 
             # Store remaining batch
             if batch:
                 await sql_writer.store_frames(batch)
 
             file_reader.close()
-            print(f"    ✅ Processed {frames_processed} frames")
+            print(f"    Processed {frames_processed} frames")
 
         # Query the combined data
         symbols = await sql_writer.get_available_symbols()
-        print(f"\n📊 Combined dataset: {len(symbols)} unique symbols")
+        print(f"\nCombined dataset: {len(symbols)} unique symbols")
 
         # Show data by source
         for file_path in available_files:
@@ -253,7 +253,7 @@ async def demo_file_integration():
 
     finally:
         await sql_writer.close()
-        print(f"📁 File integration database: {db_path}")
+        print(f"File integration database: {db_path}")
 
 
 if __name__ == "__main__":

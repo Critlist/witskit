@@ -24,19 +24,19 @@ from witskit.transport.file_reader import FileReader
 async def demo_sql_storage():
     """Demonstrate SQL storage functionality."""
 
-    print("🛠️ WITS SQL Storage Demo")
+    print("WITS SQL Storage Demo")
     print("=" * 50)
 
     # 1. Create database configuration (SQLite for simplicity)
     db_path = "demo_drilling_data.db"
     config = DatabaseConfig.sqlite(db_path, echo=True)
 
-    print(f"📁 Creating SQLite database: {db_path}")
+    print(f"Creating SQLite database: {db_path}")
 
     # 2. Initialize SQL writer
     sql_writer = SQLWriter(config)
     await sql_writer.initialize()
-    print("✅ Database initialized with tables and symbol definitions")
+    print("Database initialized with tables and symbol definitions")
 
     try:
         # 3. Load and store sample WITS data
@@ -61,7 +61,7 @@ async def demo_sql_storage():
 !!""",
         ]
 
-        print("\n📊 Processing sample WITS frames...")
+        print("\nProcessing sample WITS frames...")
 
         # Decode and store frames
         decoded_frames = []
@@ -76,7 +76,7 @@ async def demo_sql_storage():
 
         # Store all frames in batch
         await sql_writer.store_frames(decoded_frames)
-        print(f"✅ Stored {len(decoded_frames)} frames to database")
+        print(f"Stored {len(decoded_frames)} frames to database")
 
         # 4. Query stored data
         print("\n🔍 Querying stored data...")
@@ -90,7 +90,7 @@ async def demo_sql_storage():
         print(f"Data time range: {min_time} to {max_time}")
 
         # Query specific symbols
-        print("\n📈 Querying depth and temperature data...")
+        print("\nQuerying depth and temperature data...")
         depth_data = []
         async for data_point in sql_writer.query_data_points(
             symbol_codes=["0108"], limit=10  # Depth symbol
@@ -130,7 +130,7 @@ async def demo_sql_storage():
         await sql_writer.close()
         print("\n🧹 Database connection closed")
 
-    print(f"\n✅ Demo complete! Database saved as: {db_path}")
+    print(f"\nDemo complete! Database saved as: {db_path}")
     print("You can now query this database using:")
     print(f"  witskit sql-query sqlite:///{db_path} --list-symbols")
     print(f"  witskit sql-query sqlite:///{db_path} --symbols 0108,0113 --limit 10")
@@ -140,13 +140,13 @@ async def demo_file_streaming():
     """Demonstrate streaming from WITS file and storing to SQL."""
 
     print("\n" + "=" * 50)
-    print("📁 File Streaming to SQL Demo")
+    print("File Streaming to SQL Demo")
     print("=" * 50)
 
     # Check if sample file exists
     sample_file = Path("sample.wits")
     if not sample_file.exists():
-        print(f"❌ Sample file {sample_file} not found")
+        print(f"Sample file {sample_file} not found")
         return
 
     # Create database
@@ -178,7 +178,7 @@ async def demo_file_streaming():
                     batch.clear()
 
             except Exception as e:
-                print(f"  ⚠️ Error processing frame {frames_processed + 1}: {e}")
+                print(f"  Error processing frame {frames_processed + 1}: {e}")
 
         # Store remaining batch
         if batch:
@@ -187,7 +187,7 @@ async def demo_file_streaming():
 
         file_reader.close()
 
-        print(f"✅ Processed {frames_processed} frames from file")
+        print(f"Processed {frames_processed} frames from file")
 
         # Query the results
         symbols = await sql_writer.get_available_symbols()

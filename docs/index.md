@@ -2,8 +2,6 @@
 
 **WitsKit** is a Python toolkit for decoding and working with WITS (Wellsite Information Transfer Standard) data.
 
-
-
 ## What It Does
 
 - Parses raw WITS frames into structured, validated Python objects
@@ -15,14 +13,13 @@
 
 ## Why Use It?
 
-- You get the full WITS symbol database, not someone's half-finished Excel copy
+- You get the full WITS symbol database.
 - CLI lets you find, filter, and explore symbols without opening the spec
 - Works in both metric and FPS
 - Production-ready SQL storage for time-series drilling data analysis
 - Query historical data with time filters, symbol selection, and export to CSV/JSON
 - Modular and testable, built with real-world telemetry in mind
-- Type-checked with `pydantic`, so your data actually means what you think it does
-
+- Type-checked with `pydantic`
 
 ## Getting Started
 
@@ -67,13 +64,14 @@ for dp in result.data_points:
 ```
 
 Output:
+
 ```
 DBTM: 3650.4 M
 ROPA: 3.5 M/HR
 HKLA: 2850.7 KDN
 ```
 
-## 🕹️ CLI Commands
+## CLI Commands
 
 After installation, the `witskit` command is available globally:
 
@@ -150,6 +148,7 @@ witskit sql-query sqlite:///drilling_data.db --symbols "0108" --format csv --out
 ### WITS File Format
 
 Example WITS file format (sample.wits):
+
 ```
 &&
 01083650.40
@@ -171,16 +170,18 @@ Each frame must include:
 
 Multiple frames can be included in a single file.
 
-## 🗄️ SQL Storage & Time-Series Analysis
+## SQL Storage & Time-Series Analysis
 
 WitsKit includes production-ready SQL storage for time-series drilling data analysis:
 
 ### Supported Databases
+
 - **SQLite**: Perfect for development and single-user analysis
 - **PostgreSQL**: Production-ready with advanced time-series capabilities  
 - **MySQL**: Enterprise database support
 
 ### Key Features
+
 - **Optimized Schema**: Time-series optimized tables with proper indexing
 - **Batch Processing**: Configurable batch sizes for high-performance streaming
 - **Time-Based Queries**: Filter data by time ranges with ISO timestamp support
@@ -219,10 +220,11 @@ async for data_point in writer.query_data_points(
 ```
 
 ### Documentation
+
 - [SQL Storage Guide](sql_storage.md) - Complete documentation and examples
 - [API Reference](api/) - Programming API documentation
 
-## 🧱 Project Layout
+## Project Layout
 
 ```
 witskit/
@@ -245,7 +247,7 @@ witskit/
 └── README.md           # This file
 ```
 
-## 📊 Supported Record Types
+## Supported Record Types
 
 | Record | Category | Description | Symbols |
 |--------|----------|-------------|---------|
@@ -258,7 +260,7 @@ witskit/
 
 Records 5, 22–25 are defined but not implemented. You're not missing much.
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run the full test suite
@@ -269,17 +271,17 @@ pytest tests/test_decoder.py -v
 pytest tests/test_symbols.py -v
 ```
 
-## 📈 Roadmap
+## Roadmap
 
-- ✅ Symbol parser & decoder engine
-- ✅ Transport support (serial, TCP, file)
-- ✅ **SQL Storage** (SQLite, PostgreSQL, MySQL)
-- ✅ **Time-series analysis** with time-based filtering and export
-- 🔜 Real-time decoding pipeline with WebSocket/MQTT
-- 🔜 Web UI for monitoring decoded streams
-- 🔜 Parquet export for big data analysis
+- Symbol parser & decoder engine
+- Transport support (serial, TCP, file)
+- **SQL Storage** (SQLite, PostgreSQL, MySQL)
+- **Time-series analysis** with time-based filtering and export
+- Real-time decoding pipeline with WebSocket/MQTT (planned)
+- Web UI for monitoring decoded streams (planned)
+- Parquet export for big data analysis (planned)
 
-## 🤝 Contributing
+## Contributing
 
 This project uses:
 
@@ -291,13 +293,13 @@ This project uses:
 
 PRs welcome. Bonus points if you've ever debugged WITS over a flaky serial cable.
 
-## 📚 References
+## References
 
 - [WITS Specification](https://witsml.org)
 - [SPE Petrowiki](https://petrowiki.spe.org)
 - [SLB Oilfield Glossary](https://glossary.oilfield.slb.com)
 
-## 📄 License
+## License
 
 MIT. Do what you want with it—just don't sell it back to Halliburton.
 

@@ -24,6 +24,7 @@ pip install witskit[sql]  # Includes PostgreSQL and MySQL drivers
 ```
 
 This installs additional dependencies:
+
 - SQLAlchemy for database abstraction
 - asyncpg for PostgreSQL async support
 - aiomysql for MySQL async support
@@ -147,6 +148,7 @@ uv pip install -e ".[dev,sql,test,docs]"
 ```
 
 This will install:
+
 - Core WitsKit functionality
 - SQL storage support (PostgreSQL, MySQL, SQLite)
 - Development tools (black, ruff, mypy)

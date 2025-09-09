@@ -22,6 +22,7 @@ A WITS frame consists of:
 ```
 
 This frame contains:
+
 - **0108**: Depth Below Tool (3650.40 meters)
 - **0113**: Rate of Penetration Average (23.38 m/hr)
 
@@ -37,6 +38,7 @@ This frame contains:
 ```
 
 Additional parameters:
+
 - **0114**: Flow Rate In (12.5 L/min)
 - **0121**: Weight on Bit (12.5 kN)
 
@@ -129,15 +131,18 @@ result = decode_frame(frame_data, use_metric_units=False)
 WITS symbols have different data types:
 
 ### Numeric Values
+
 - **Floating point**: `3650.40`, `23.38`
 - **Integer**: `1`, `0`
 - **Scientific notation**: `1.23E+03`
 
 ### Text Values
+
 - **String data**: Formation names, equipment status
 - **Enumerated values**: Predefined text options
 
 ### Boolean Values
+
 - **Binary flags**: `0` (false) or `1` (true)
 - **Status indicators**: Equipment on/off states
 
@@ -146,6 +151,7 @@ WITS symbols have different data types:
 ### Missing Data
 
 When a parameter is not available:
+
 - Value may be omitted from frame
 - Or sent as empty value
 - WitsKit handles both cases gracefully
@@ -163,6 +169,7 @@ WitsKit provides error handling and validation options.
 ### Precision
 
 Values maintain original precision:
+
 ```
 01083650.4     # 1 decimal place
 01083650.40    # 2 decimal places
@@ -181,6 +188,7 @@ Values maintain original precision:
 ### Common Issues
 
 #### Missing Delimiters
+
 ```
 # Invalid - missing start delimiter
 01083650.40
@@ -192,6 +200,7 @@ Values maintain original precision:
 ```
 
 #### Invalid Symbol Codes
+
 ```
 &&
 10803650.40  # Invalid - 5 digits
@@ -200,6 +209,7 @@ abc3650.40   # Invalid - non-numeric
 ```
 
 #### Malformed Values
+
 ```
 &&
 0108abc      # Invalid - non-numeric value for numeric symbol
@@ -209,6 +219,7 @@ abc3650.40   # Invalid - non-numeric
 ## Real-World Examples
 
 ### Basic Drilling Frame
+
 ```
 &&
 01083650.40    # Depth: 3650.40 m
@@ -220,6 +231,7 @@ abc3650.40   # Invalid - non-numeric
 ```
 
 ### MWD Logging Frame
+
 ```
 &&
 02083652.10    # Measured Depth: 3652.10 m
@@ -231,6 +243,7 @@ abc3650.40   # Invalid - non-numeric
 ```
 
 ### Mixed Data Frame
+
 ```
 &&
 01083650.40    # Drilling depth
@@ -291,24 +304,28 @@ if symbol:
 ## Best Practices
 
 ### Frame Construction
+
 1. Always include start/end delimiters
 2. Use consistent decimal precision
 3. Include timestamp information when possible
 4. Group related parameters in frames
 
 ### Data Validation
+
 1. Validate symbol codes against WITS specification
 2. Check value ranges for reasonableness
 3. Handle missing data gracefully
 4. Implement error logging
 
 ### Performance
+
 1. Process frames in batches for high-volume data
 2. Use appropriate data storage for historical analysis
 3. Consider compression for long-term storage
 4. Implement buffering for real-time streams
 
 ### Error Handling
+
 1. Validate frame format before processing
 2. Handle partial frames gracefully
 3. Log parsing errors with context
@@ -350,4 +367,4 @@ for frame in reader.stream():
             print(f"Current depth: {dp.parsed_value} {dp.unit}")
 ```
 
-This guide provides a comprehensive understanding of the WITS format and how to work with it using WitsKit. For more advanced usage, see the [API documentation](../api/) and [examples](../../examples/). 
+This guide provides a comprehensive understanding of the WITS format and how to work with it using WitsKit. For more advanced usage, see the [API documentation](../api/) and [examples](../../examples/).

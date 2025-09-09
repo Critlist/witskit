@@ -29,7 +29,7 @@ except ImportError:
 
 app = typer.Typer(
     name="witskit",
-    help="🛠️ Modern Python SDK for WITS drilling data processing",
+    help="Modern Python SDK for WITS drilling data processing",
     no_args_is_help=True
 )
 console = Console()
@@ -65,7 +65,7 @@ def decode_command(
     
     # Validate conversion options
     if convert_to_metric and convert_to_fps:
-        rprint("[red]❌ Error: Cannot convert to both metric and FPS units")
+        rprint("[red]Error: Cannot convert to both metric and FPS units")
         raise typer.Exit(1)
     
     # Check if data is a file path
@@ -159,10 +159,10 @@ def decode_command(
             
             if converted_count > 0:
                 units_type = "metric" if convert_to_metric else "FPS"
-                rprint(f"✅ [green]Converted {converted_count} values to {units_type} units")
+                rprint(f"[green]Converted {converted_count} values to {units_type} units")
             
             if conversion_errors:
-                rprint(f"⚠️ [yellow]Conversion warnings:")
+                rprint(f"[yellow]Conversion warnings:")
                 for error in conversion_errors[:5]:  # Show first 5 errors
                     rprint(f"[yellow]  • {error}")
                 if len(conversion_errors) > 5:
@@ -174,7 +174,7 @@ def decode_command(
             if output:
                 with open(output, 'w') as f:
                     json.dump(output_data, f, indent=2)
-                rprint(f"✅ Results saved to {output}")
+                rprint(f"Results saved to {output}")
             else:
                 rprint(json.dumps(output_data, indent=2))
         
@@ -184,7 +184,7 @@ def decode_command(
         
         else:  # table format
             if result.data_points:
-                table = Table(title="🛠️ Decoded WITS Data")
+                table = Table(title="Decoded WITS Data")
                 table.add_column("Symbol", style="cyan")
                 table.add_column("Name", style="green")
                 table.add_column("Value", style="yellow")
@@ -209,16 +209,16 @@ def decode_command(
                 if result.errors:
                     rprint(f"[red]Errors: {len(result.errors)}")
             else:
-                rprint("[yellow]⚠️ No data points decoded")
+                rprint("[yellow]No data points decoded")
         
         # Show errors if any
         if result.errors:
-            rprint(f"\n[red]❌ Errors encountered:")
+            rprint(f"\n[red]Errors encountered:")
             for error in result.errors:
                 rprint(f"[red]  • {error}")
     
     except Exception as e:
-        rprint(f"[red]❌ Error: {str(e)}")
+        rprint(f"[red]Error: {str(e)}")
         raise typer.Exit(1)
 
 
@@ -264,20 +264,20 @@ def convert_command(
         try:
             from_wits_unit = getattr(WITSUnits, from_unit.upper())
         except AttributeError:
-            rprint(f"[red]❌ Unknown source unit: {from_unit}")
+            rprint(f"[red]Unknown source unit: {from_unit}")
             rprint("[dim]Use --list-units to see available units")
             raise typer.Exit(1)
         
         try:
             to_wits_unit = getattr(WITSUnits, to_unit.upper())
         except AttributeError:
-            rprint(f"[red]❌ Unknown target unit: {to_unit}")
+            rprint(f"[red]Unknown target unit: {to_unit}")
             rprint("[dim]Use --list-units to see available units")
             raise typer.Exit(1)
         
         # Check if conversion is supported
         if not UnitConverter.is_convertible(from_wits_unit, to_wits_unit):
-            rprint(f"[red]❌ Conversion from {from_unit} to {to_unit} is not supported")
+            rprint(f"[red]Conversion from {from_unit} to {to_unit} is not supported")
             rprint("[dim]These units are not in the same category (pressure, rate, etc.)")
             raise typer.Exit(1)
         
@@ -321,16 +321,16 @@ def convert_command(
         rprint(f"\n[dim]Category: {category}")
         
     except ConversionError as e:
-        rprint(f"[red]❌ Conversion error: {str(e)}")
+        rprint(f"[red]Conversion error: {str(e)}")
         raise typer.Exit(1)
     except Exception as e:
-        rprint(f"[red]❌ Error: {str(e)}")
+        rprint(f"[red]Error: {str(e)}")
         raise typer.Exit(1)
 
 
 def _show_available_units():
     """Display all available units organized by category."""
-    rprint("🔧 [bold cyan]Available WITS Units\n")
+    rprint("[bold cyan]Available WITS Units\n")
     
     # Group units by category
     unit_categories = {
@@ -350,7 +350,7 @@ def _show_available_units():
     }
     
     for category, units in unit_categories.items():
-        table = Table(title=f"📊 {category}")
+        table = Table(title=f"{category}")
         table.add_column("Unit Code", style="cyan")
         table.add_column("Description", style="green")
         table.add_column("System", style="yellow")
@@ -417,7 +417,7 @@ def symbols_command(
     
     # List all record types
     if list_records:
-        rprint("📊 [bold cyan]WITS Record Types\n")
+        rprint("[bold cyan]WITS Record Types\n")
         
         table = Table(title="Available WITS Record Types")
         table.add_column("Record", style="cyan", width=8)
@@ -457,7 +457,7 @@ def symbols_command(
         
         total_symbols = len(WITS_SYMBOLS)
         total_records = len(get_record_types())
-        rprint(f"\n📈 [bold green]Total: {total_records} record types, {total_symbols} symbols")
+        rprint(f"\n[bold green]Total: {total_records} record types, {total_symbols} symbols")
         rprint(f"[dim]Use --record <number> to see symbols for a specific record type")
         return
     
@@ -484,12 +484,12 @@ def symbols_command(
         title = "All WITS Symbols"
     
     if not symbols_to_show:
-        rprint("[yellow]⚠️ No symbols found matching criteria")
+        rprint("[yellow]No symbols found matching criteria")
         rprint("[dim]Try using --list-records to see available record types")
         return
     
     # Create table
-    table = Table(title=f"📊 {title} ({len(symbols_to_show)} found)")
+    table = Table(title=f"{title} ({len(symbols_to_show)} found)")
     table.add_column("Code", style="cyan", width=6)
     table.add_column("Rec", style="dim cyan", width=4)
     table.add_column("Name", style="green", width=12) 
@@ -520,9 +520,9 @@ def symbols_command(
         rprint(f"\n[dim]💡 Large result set. Use --search to filter or --record to focus on specific record types")
     
     if record_type:
-        rprint(f"\n[dim]📖 Record {record_type} contains {len(symbols_to_show)} symbols for {get_record_description(record_type)}")
+        rprint(f"\n[dim]Record {record_type} contains {len(symbols_to_show)} symbols for {get_record_description(record_type)}")
     else:
-        rprint(f"\n[dim]📖 Showing {len(symbols_to_show)} of {len(WITS_SYMBOLS)} total symbols across {len(get_record_types())} record types")
+        rprint(f"\n[dim]Showing {len(symbols_to_show)} of {len(WITS_SYMBOLS)} total symbols across {len(get_record_types())} record types")
 
 
 @app.command("validate")
@@ -553,13 +553,13 @@ def validate_command(
         
         is_valid = validate_wits_frame(frame_data)
         if is_valid:
-            rprint("✅ [green]Valid WITS frame format")
+            rprint("[green]Valid WITS frame format")
         else:
-            rprint("❌ [red]Invalid WITS frame format")
+            rprint("[red]Invalid WITS frame format")
             raise typer.Exit(1)
     
     except Exception as e:
-        rprint(f"❌ [red]Validation error: {str(e)}")
+        rprint(f"[red]Validation error: {str(e)}")
         raise typer.Exit(1)
 
 
@@ -568,7 +568,7 @@ def demo_command():
     """
     Run a demonstration with sample WITS data.
     """
-    rprint("🛠️ [bold cyan]WITS Kit Demo")
+    rprint("[bold cyan]WITS Kit Demo")
     rprint("Decoding sample drilling data...\n")
     
     # Sample WITS frame with common drilling parameters
@@ -589,7 +589,7 @@ def demo_command():
     result = decode_frame(sample_frame, source="demo")
     
     if result.data_points:
-        table = Table(title="📊 Decoded Sample Data")
+        table = Table(title="Decoded Sample Data")
         table.add_column("Symbol", style="cyan")
         table.add_column("Name", style="green")
         table.add_column("Value", style="yellow")
@@ -607,14 +607,14 @@ def demo_command():
         
         console.print(table)
         
-        rprint(f"\n✅ [green]Successfully decoded {len(result.data_points)} parameters")
+        rprint(f"\n[green]Successfully decoded {len(result.data_points)} parameters")
         
         if result.errors:
-            rprint(f"⚠️ [yellow]{len(result.errors)} warnings/errors:")
+            rprint(f"[yellow]{len(result.errors)} warnings/errors:")
             for error in result.errors:
                 rprint(f"[yellow]  • {error}")
     else:
-        rprint("❌ [red]No data could be decoded")
+        rprint("[red]No data could be decoded")
 
 
 if __name__ == "__main__":

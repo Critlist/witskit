@@ -219,4 +219,4 @@ def test_integration() -> None:
 if __name__ == "__main__":
     # Run a simple test
     test_integration()
-    print("✅ Basic integration test passed!")
+    print("Basic integration test passed!")

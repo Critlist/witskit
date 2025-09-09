@@ -179,6 +179,7 @@ config = DatabaseConfig.postgresql(
 ```
 
 **MySQL**
+
 ```python
 config = DatabaseConfig.mysql(
     host="localhost",
@@ -402,4 +403,4 @@ FROM pg_tables WHERE schemaname = 'public';
 -- MySQL: Check table sizes  
 SELECT table_name, ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'Size (MB)'
 FROM information_schema.TABLES WHERE table_schema = 'wits_data';
-``` 
+```

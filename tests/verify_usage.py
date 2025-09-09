@@ -23,33 +23,33 @@ from typing import Optional
 # Add current directory to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-print("🔬 Verifying Exact Usage Pattern")
+print("Verifying Exact Usage Pattern")
 print("=" * 35)
 
 # Test the exact import pattern you requested
-print("\n1️⃣ Testing imports...")
+print("\nTesting imports...")
 try:
     # Note: We use local imports since this isn't installed as witskit package
     # In real usage with installed package, you'd use: from witskit.transport.tcp_reader import TCPReader
     from witskit.transport.tcp_reader import TCPReader
     from witskit.decoder.wits_decoder import decode_frame
 
-    print("✅ Imports successful")
+    print("Imports successful")
 except ImportError as e:
-    print(f"❌ Import error: {e}")
+    print(f"Import error: {e}")
     sys.exit(1)
 
-print("\n2️⃣ Creating TCPReader...")
+print("\nCreating TCPReader...")
 reader: TCPReader = TCPReader("127.0.0.1", 12345)
-print("✅ TCPReader created")
+print("TCPReader created")
 
-print("\n3️⃣ Testing stream pattern...")
+print("\nTesting stream pattern...")
 try:
     frame_count: int = 0
     for frame in reader.stream():
-        print(f"📦 Received frame {frame_count + 1}")
+        print(f"Received frame {frame_count + 1}")
         result = decode_frame(frame)
-        print(f"✅ Decoded: {len(result.data_points)} data points")
+        print(f"Decoded: {len(result.data_points)} data points")
         print(result)
 
         frame_count += 1
@@ -57,15 +57,15 @@ try:
             break
 
 except ConnectionRefusedError:
-    print("⚠️ Connection refused (expected - no WITS server running)")
-    print("✅ Connection handling works correctly")
+    print("Connection refused (expected - no WITS server running)")
+    print("Connection handling works correctly")
 except Exception as e:
-    print(f"❌ Unexpected error: {e}")
+    print(f"Unexpected error: {e}")
 finally:
     reader.close()
-    print("🔌 Reader closed properly")
+    print("Reader closed properly")
 
-print("\n4️⃣ Alternative: File-based testing...")
+print("\nAlternative: File-based testing...")
 print("(Since TCP server isn't running, let's use FileReader)")
 
 # Use FileReader to demonstrate the same pattern with actual data
@@ -80,15 +80,15 @@ for file in sample_files:
         break
 
 if sample_file:
-    print(f"📁 Using {sample_file} for demonstration")
+    print(f"Using {sample_file} for demonstration")
     file_reader: FileReader = FileReader(sample_file)
 
     try:
         frame_count = 0
         for frame in file_reader.stream():
-            print(f"\n📦 Frame {frame_count + 1}:")
+            print(f"\nFrame {frame_count + 1}:")
             result = decode_frame(frame)
-            print(f"✅ Decoded {len(result.data_points)} data points")
+            print(f"Decoded {len(result.data_points)} data points")
 
             # Show some data points
             for i, dp in enumerate(result.data_points[:3]):
@@ -102,16 +102,16 @@ if sample_file:
                 break
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
     finally:
         file_reader.close()
-        print("📁 File reader closed")
+        print("File reader closed")
 else:
-    print("❌ No sample files found")
+    print("No sample files found")
 
-print("\n🎉 VERIFICATION COMPLETE")
+print("\nVERIFICATION COMPLETE")
 print("=" * 25)
-print("✅ The exact usage pattern you requested is fully implemented:")
+print("The exact usage pattern you requested is fully implemented:")
 print()
 print("from transport.tcp_reader import TCPReader")
 print("from decoder.wits_decoder import decode_frame")
@@ -125,4 +125,4 @@ print("        print(result)")
 print("finally:")
 print("    reader.close()")
 print()
-print("🚀 Ready for production use!")
+print("Ready for production use!")

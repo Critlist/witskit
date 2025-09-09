@@ -138,7 +138,7 @@ class WITSDecoder:
                 unit=unit,
                 timestamp=timestamp,
                 source=source,
-            )
+            ) # pyright: ignore[reportCallIssue]
 
             logger.debug(
                 f"Decoded {symbol_code} ({symbol.name}): {raw_value} -> {decoded_data.parsed_value} {unit}"

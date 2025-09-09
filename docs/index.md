@@ -1,34 +1,30 @@
-# 🛠️ WitsKit
+# WitsKit
 
 **WitsKit** is a Python toolkit for decoding and working with WITS (Wellsite Information Transfer Standard) data.
 
-- Please note that I almost kind of know what i'm doing so If I did something incorrectly or badly please feel free to submit a PR. I'm very much still learning and I know this isn't the nicest codebase, but I'm working on it!
----
 
 
-## 🚩 What It Does
+## What It Does
 
 - Parses raw WITS frames into structured, validated Python objects
 - Ships with 724 symbols across 20+ record types—auto-parsed from the spec
 - Includes CLI tools for symbol search, frame decoding, and validation
-- **🗄️ SQL Storage**: Stream WITS data directly to SQLite, PostgreSQL, or MySQL databases
-- **📊 Time-series Analysis**: Query and analyze historical drilling data with time-based filtering
+- SQL Storage: Stream WITS data directly to SQLite, PostgreSQL, or MySQL databases
+- Time-series Analysis: Query and analyze historical drilling data with time-based filtering
 - Built to be extended: transports (serial, TCP) and outputs (SQL, JSON) are plug-and-play
 
-## 💡 Why Use It?
+## Why Use It?
 
-- 🧠 You get the *full* WITS symbol database, not someone's half-finished Excel copy
-- 🔍 CLI lets you find, filter, and explore symbols without opening the spec (again)
-- 📏 Works in both metric and FPS—because a boat sank and now we have 2 standards
-- 🗄️ **Production-ready SQL storage** for time-series drilling data analysis
-- 📊 **Query historical data** with time filters, symbol selection, and export to CSV/JSON
-- 🧱 Modular and testable, built with real-world telemetry in mind
-- 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
+- You get the full WITS symbol database, not someone's half-finished Excel copy
+- CLI lets you find, filter, and explore symbols without opening the spec
+- Works in both metric and FPS
+- Production-ready SQL storage for time-series drilling data analysis
+- Query historical data with time filters, symbol selection, and export to CSV/JSON
+- Modular and testable, built with real-world telemetry in mind
+- Type-checked with `pydantic`, so your data actually means what you think it does
 
--Please note that I almost kind of know what i'm doing so If I did something incorrectly or badly please feel free to submit a PR.
--I'm very much still learning and I know this isnt the nicest codebase.
 
-## 🧑‍💻 Getting Started
+## Getting Started
 
 ### Installation
 

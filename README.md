@@ -1,4 +1,4 @@
-# 🛠️ WitsKit
+# WitsKit
 
 **WitsKit** is a Python toolkit for decoding and working with WITS (Wellsite Information Transfer Standard) data.
 
@@ -7,27 +7,27 @@
 </sub>
 
 
-## 🚩 What It Does
+## What It Does
 
 - Parses raw WITS frames into structured, validated Python objects
 - Ships with 724 symbols across 20+ record types—auto-parsed from the spec
 - Includes CLI tools for symbol search, frame decoding, and validation
-- **🗄️ SQL Storage**: Stream WITS data directly to SQLite, PostgreSQL, or MySQL databases
-- **📊 Time-series Analysis**: Query and analyze historical drilling data with time-based filtering
+- SQL Storage: Stream WITS data directly to SQLite, PostgreSQL, or MySQL databases
+- Time-series Analysis: Query and analyze historical drilling data with time-based filtering
 - Built to be extended: transports (serial, TCP) and outputs (SQL, JSON) are plug-and-play
 
-## 💡 Why Use It?
+## Why Use It?
 
-- 🧠 You get the *full* WITS symbol database, not someone's half-finished Excel copy
-- 🔍 CLI lets you find, filter, and explore symbols without opening the spec (again)
-- 📏 Works in both metric and FPS—because a boat sank and now we have 2 standards
-- 🗄️ **Production-ready SQL storage** for time-series drilling data analysis
-- 📊 **Query historical data** with time filters, symbol selection, and export to CSV/JSON
-- 🧱 Modular and testable, built with real-world telemetry in mind
-- 🔒 Type-checked with `pydantic`, so your data actually means what you think it does
+- You get the full WITS symbol database, not someone's half-finished Excel copy
+- CLI lets you find, filter, and explore symbols without opening the spec
+- Works in both metric and FPS
+- Production-ready SQL storage for time-series drilling data analysis
+- Query historical data with time filters, symbol selection, and export to CSV/JSON
+- Modular and testable, built with real-world telemetry in mind
+- Type-checked with `pydantic`, so your data actually means what you think it does
 
 
-## 🧑‍💻 Getting Started
+## Getting Started
 
 ### Installation
 
@@ -82,7 +82,7 @@ ROPA: 3.5 M/HR
 HKLA: 2850.7 KDN
 ```
 
-## 🕹️ CLI Commands
+## CLI Commands
 
 After installation, the `witskit` command is available globally:
 
@@ -151,7 +151,7 @@ Each frame must include:
 
 Multiple frames can be included in a single file.
 
-## 🗄️ SQL Storage & Time-Series Analysis
+## SQL Storage & Time-Series Analysis
 
 WitsKit includes production-ready SQL storage for time-series drilling data analysis:
 
@@ -193,7 +193,7 @@ async for data_point in writer.query_data_points(
 
 See [docs/sql_storage.md](docs/sql_storage.md) for complete documentation.
 
-## 🧱 Project Layout
+## Project Layout
 
 ```
 witskit/
@@ -219,7 +219,7 @@ witskit/
 └── README.md           # This file
 ```
 
-## 📊 Supported Record Types
+## Supported Record Types
 
 | Record | Category | Description | Symbols |
 |--------|----------|-------------|---------|
@@ -232,7 +232,7 @@ witskit/
 
 Records 5, 22–25 are defined but not implemented. You're not missing much.
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run the full test suite
@@ -242,7 +242,7 @@ pytest tests/ -v
 pytest tests/test_decoder.py -v
 pytest tests/test_symbols.py -v
 ```
-## 🚧 Project Status
+## Project Status
 
 ### Known Issues
 - Unit Test for TCP connection are failing due to MOCK 
@@ -255,17 +255,17 @@ but work with real time data
 - Proper Pason integration for 2 way handshake and send on recieve. 
 
 
-## 📈 Roadmap
+## Roadmap
 
-- ✅ Symbol parser & decoder engine
-- 🚧 Transport support (serial, TCP, file) (WIP)
-- ✅ **SQL Storage** (SQLite, PostgreSQL, MySQL)
-- ✅ **Time-series analysis** with time-based filtering and export
-- 🔜 Real-time decoding pipeline with WebSocket/MQTT
-- 🔜 Web UI for monitoring decoded streams
-- 🔜 Parquet export for big data analysis
+- Symbol parser & decoder engine (done)
+- Transport support (serial, TCP, file) (WIP)
+- SQL Storage (SQLite, PostgreSQL, MySQL) (done)
+- Time-series analysis with time-based filtering and export (done)
+- Real-time decoding pipeline with WebSocket/MQTT (planned)
+- Web UI for monitoring decoded streams (planned)
+- Parquet export for big data analysis (planned)
 
-## 🤝 Contributing
+## Contributing
 
 This project uses:
 
@@ -279,13 +279,13 @@ This project uses:
 
 PRs welcome. Bonus points if you've ever troubleshot WITS Comms while on standby waiting for the Rig to pick up tools. 
 
-## 📚 References
+## References
 
 - [WITS Specification](https://witsml.org)
 - [SPE Petrowiki](https://petrowiki.spe.org)
 - [SLB Oilfield Glossary](https://glossary.oilfield.slb.com)
 
-## 📄 License
+## License
 
 MIT. Do what you want with it. If you've found this repo and think it might be useful to you then we should be friends. 
 
